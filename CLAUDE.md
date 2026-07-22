@@ -1,0 +1,1 @@
+Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and /docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same component.

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#131F24">
+<title>The Walkthrough</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23B7E219'/%3E%3Ccircle cx='50' cy='50' r='16' fill='%23131F24'/%3E%3C/svg%3E">
+<style>
+/* ============ tokens ============ */
+:root{
+  --bg:#131F24;
+  --bg-deep:#0C1519;
+  --panel:#1B2A32;
+  --panel-2:#202F38;
+  --border:#33444E;
+  --border-soft:#28373F;
+  --text:#F1F7FB;
+  --muted:#8FA3AD;
+  --faint:#8A9EA8;
+  --lime:#B7E219;
+  --lime-deep:#8FB405;
+  --green:#58CC02;
+  --green-deep:#46A302;
+  --blue:#49B6FF;      /* Sonnet 5 */
+  --purple:#B478FF;    /* Opus 4.8 */
+  --coral:#FF6F61;     /* Fable 5 */
+  --teal:#2EDACD;      /* Kimi K3 */
+  --pink:#FF7AC0;      /* Codex GPT-5.6 Sol */
+  --amber:#FFC800;     /* Gemini / Antigravity */
+  --grey:#9AA9B2;      /* You / no model */
+  --r-lg:24px;
+  --r-md:16px;
+  --r-sm:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.55;min-height:100vh;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,textarea{font:inherit;color:var(--text)}
+::selection{background:rgba(183,226,25,.3)}
+a{color:var(--blue)}
+
+/* ============ layout shell ============ */
+#app{display:none}
+#app.on{display:block}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr) 340px;gap:0;max-width:1400px;margin:0 auto;min-height:100vh}
+.sidebar{
+  border-right:2px solid var(--border-soft);padding:24px 16px;position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;gap:6px;
+}
+.brand{font-size:1.35rem;font-weight:800;color:var(--lime);letter-spacing:-.02em;padding:8px 12px 20px}
+.brand small{display:block;font-size:.68rem;font-weight:700;color:var(--faint);letter-spacing:.14em;margin-top:2px}
+.nav-item{
+  display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:var(--r-sm);
+  font-weight:800;font-size:.82rem;letter-spacing:.1em;color:var(--muted);
+  border:2px solid transparent;text-align:left;width:100%;transition:background .15s,color .15s;
+}
+.nav-item svg{width:26px;height:26px;flex:none}
+.nav-item:hover{background:var(--panel)}
+.nav-item.active{color:var(--blue);background:rgba(73,182,255,.12);border-color:rgba(73,182,255,.45)}
+.sidebar .spacer{flex:1}
+.side-coins{padding:10px 14px;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.8rem;font-weight:700;letter-spacing:.06em}
+
+/* topbar (mobile) */
+.topbar{display:none;align-items:center;justify-content:space-between;padding:12px 16px;position:sticky;top:0;background:rgba(19,31,36,.92);backdrop-filter:blur(8px);z-index:30;border-bottom:2px solid var(--border-soft)}
+.topbar .brand{padding:0;font-size:1.05rem}
+.topstats{display:flex;align-items:center;gap:14px}
+
+/* bottom nav (mobile) */
+.bottomnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:40;background:var(--bg-deep);border-top:2px solid var(--border-soft);padding:6px 8px calc(6px + env(safe-area-inset-bottom));justify-content:space-around}
+.bottomnav .nav-item{flex-direction:column;gap:3px;font-size:.58rem;letter-spacing:.08em;padding:7px 10px;align-items:center}
+.bottomnav .nav-item svg{width:24px;height:24px}
+
+.main{padding:28px 32px 120px;min-width:0}
+.rail{padding:28px 24px 120px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh;overflow-y:auto}
+
+/* ============ cards & buttons ============ */
+.card{background:var(--panel);border:2px solid var(--border);border-radius:var(--r-lg);padding:20px}
+.card h3{font-size:.78rem;letter-spacing:.14em;color:var(--muted);font-weight:800;margin-bottom:14px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:800;letter-spacing:.08em;font-size:.85rem;text-transform:uppercase;
+  border-radius:14px;padding:13px 22px;transition:transform .08s, filter .15s;user-select:none;
+}
+.btn:active{transform:translateY(3px)}
+.btn-primary{background:var(--lime);color:#131F24;box-shadow:0 4px 0 var(--lime-deep)}
+.btn-primary:active{box-shadow:0 1px 0 var(--lime-deep)}
+.btn-green{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-deep)}
+.btn-green:active{box-shadow:0 1px 0 var(--green-deep)}
+.btn-ghost{background:var(--panel-2);border:2px solid var(--border);box-shadow:0 4px 0 var(--border-soft);color:var(--text)}
+.btn-ghost:active{box-shadow:0 1px 0 var(--border-soft)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none!important}
+.btn.small{padding:9px 14px;font-size:.72rem;border-radius:11px}
+
+/* ============ progress banner (ref 1 black pill) ============ */
+.progress-pill{
+  background:#0B1114;border-radius:var(--r-lg);padding:18px 22px;margin-bottom:22px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;border:2px solid #060a0c;
+}
+.progress-pill .msg{font-weight:800;font-size:1.05rem}
+.progress-pill .sub{color:var(--faint);font-size:.78rem;font-weight:700;letter-spacing:.06em;margin-top:2px}
+.ring{position:relative;width:62px;height:62px;flex:none}
+.ring .disc{width:100%;height:100%;border-radius:50%;background:conic-gradient(var(--lime) calc(var(--pct)*1%), #2A363B 0)}
+.ring .hole{position:absolute;inset:7px;border-radius:50%;background:#0B1114;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem}
+
+/* ============ hero ============ */
+.hero{background:var(--panel);border:2px solid var(--border);border-radius:var(--r-lg);padding:26px;margin-bottom:34px}
+.hero .eyebrow{color:var(--lime);font-weight:800;font-size:.72rem;letter-spacing:.18em;margin-bottom:6px}
+.hero h1{font-size:1.55rem;font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.badge{
+  display:inline-flex;align-items:center;gap:7px;font-size:.7rem;font-weight:800;letter-spacing:.1em;
+  padding:6px 12px;border-radius:999px;border:2px solid var(--border);color:var(--muted);background:var(--panel-2);
+}
+.badge .dot{width:9px;height:9px;border-radius:50%;background:currentColor}
+.badge.model{border-color:currentColor;background:transparent}
+.task-count{color:var(--faint);font-size:.74rem;font-weight:700;letter-spacing:.08em;margin-bottom:8px}
+.task-text{font-size:1.16rem;line-height:1.6;margin-bottom:22px}
+.task-text code, .field-body code, .refbody code{background:var(--bg-deep);border:1px solid var(--border-soft);border-radius:6px;padding:1px 6px;font-size:.9em}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px}
+.gate-note{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+
+/* checklist rows (ref 1) */
+.check-row{
+  display:flex;align-items:flex-start;gap:14px;background:var(--panel-2);border:2px solid var(--border-soft);
+  border-radius:var(--r-md);padding:14px 16px;margin-bottom:10px;width:100%;text-align:left;transition:border-color .15s;
+}
+.check-row:hover{border-color:var(--border)}
+.check-row .tick{
+  width:26px;height:26px;border-radius:50%;border:2px solid var(--faint);flex:none;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.check-row.done .tick{background:var(--lime);border-color:var(--lime);color:#131F24}
+.check-row.done .tick svg{display:block}
+.check-row .tick svg{display:none;width:14px;height:14px}
+.check-row .lbl{flex:1;font-size:.95rem}
+.check-row.done .lbl{color:var(--muted)}
+.check-row .done-tag{color:var(--green);font-size:.74rem;font-weight:800;margin-left:8px;flex:none}
+
+/* ============ the map path ============ */
+.path{max-width:620px;margin:0 auto}
+.unit-divider{display:flex;align-items:center;gap:14px;color:var(--faint);font-weight:800;font-size:.82rem;letter-spacing:.04em;margin:30px 0 22px}
+.unit-divider::before,.unit-divider::after{content:"";flex:1;height:2px;background:var(--border-soft)}
+.node-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:6px;position:relative;padding-top:52px;transform:translateX(var(--off,0))}
+.node{
+  width:74px;height:74px;border-radius:50%;position:relative;flex:none;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.35rem;
+  color:#0d181d;box-shadow:0 6px 0 rgba(0,0,0,.45);transition:transform .1s;
+}
+.node:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.45)}
+.node.future{opacity:.38}
+.node.current{outline:6px solid rgba(255,255,255,.14);outline-offset:5px}
+.node svg{width:30px;height:30px}
+.node-label{margin-top:12px;font-weight:800;font-size:.86rem;color:var(--muted);text-align:center;max-width:230px}
+.node-label small{display:block;color:var(--faint);font-weight:700;font-size:.66rem;letter-spacing:.12em;margin-bottom:1px}
+.bubble{
+  position:absolute;top:2px;left:50%;transform:translateX(-50%);z-index:5;white-space:nowrap;
+  background:var(--bg-deep);border:2px solid var(--border);border-radius:12px;padding:7px 14px;
+  color:var(--lime);font-weight:800;font-size:.72rem;letter-spacing:.14em;
+  animation:bob 1.6s ease-in-out infinite;
+}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%) rotate(45deg);width:11px;height:11px;background:var(--bg-deep);border-right:2px solid var(--border);border-bottom:2px solid var(--border)}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+
+/* ============ rail widgets ============ */
+.ladder-rung{
+  display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:var(--r-sm);
+  border:2px solid var(--border-soft);margin-bottom:8px;width:100%;text-align:left;transition:all .15s;
+}
+.ladder-rung .swatch{width:14px;height:14px;border-radius:50%;flex:none}
+.ladder-rung .nm{font-weight:800;font-size:.88rem}
+.ladder-rung .role{color:var(--faint);font-size:.72rem;font-weight:600}
+.ladder-rung.on{background:var(--panel-2)}
+.ladder-arrow{color:var(--faint);font-size:.74rem;font-weight:700;text-align:center;margin:6px 0 12px}
+.strikes{display:flex;gap:6px;align-items:center;margin:10px 0 12px}
+.strike-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--faint)}
+.strike-dot.hit{background:var(--coral);border-color:var(--coral)}
+.strikes .cap{color:var(--faint);font-size:.72rem;font-weight:700;margin-left:6px;letter-spacing:.06em}
+.ladder-msg{background:var(--bg-deep);border:2px solid var(--border-soft);border-radius:var(--r-sm);padding:12px 14px;font-size:.86rem;color:var(--text);margin-bottom:12px;display:none}
+.ladder-msg.on{display:block}
+.ladder-actions{display:flex;flex-direction:column;gap:8px}
+
+.coins-row{display:flex;gap:14px;margin-bottom:12px}
+.coin{
+  width:52px;height:52px;border-radius:50%;flex:none;position:relative;
+  background:radial-gradient(circle at 32% 30%, #ff9a8e, var(--coral) 62%, #c9483c);
+  border:3px solid #c9483c;display:flex;align-items:center;justify-content:center;
+  font-weight:800;color:#4d130e;font-size:.95rem;box-shadow:0 4px 0 rgba(0,0,0,.4);
+  transition:all .5s;
+}
+.coin.spent{background:var(--panel-2);border-color:var(--border);color:var(--faint);box-shadow:none;transform:scale(.9)}
+.coin.spending{animation:spendCoin .7s ease}
+@keyframes spendCoin{0%{transform:rotateY(0) scale(1)}60%{transform:rotateY(540deg) scale(1.25)}100%{transform:rotateY(720deg) scale(.9)}}
+.coin-cap{font-size:.8rem;color:var(--muted)}
+.rail-links .chev-row{margin-bottom:8px}
+
+/* chevron rows (ref 1 "more things to try") */
+.chev-row{
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  background:var(--panel-2);border:2px solid var(--border-soft);border-radius:var(--r-md);
+  padding:13px 15px;font-weight:700;font-size:.9rem;transition:border-color .15s;
+}
+.chev-row:hover{border-color:var(--border)}
+.chev-row .chev{margin-left:auto;color:var(--faint);flex:none}
+.chev-row .ico{color:var(--muted);flex:none;display:flex}
+
+/* ============ setup / variables screen ============ */
+.setup-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:26px 16px}
+.setup-card{width:100%;max-width:560px;background:var(--panel);border:2px solid var(--border);border-radius:var(--r-lg);padding:28px}
+.setup-card h1{font-size:1.6rem;font-weight:800;margin-bottom:4px}
+.setup-card .sub{color:var(--muted);font-size:.92rem;margin-bottom:22px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:800;font-size:.74rem;letter-spacing:.1em;color:var(--muted);margin-bottom:7px;text-transform:uppercase}
+.field input,.field textarea{
+  width:100%;background:var(--bg-deep);border:2px solid var(--border);border-radius:var(--r-md);
+  padding:13px 15px;font-size:.98rem;outline:none;transition:border-color .15s;resize:vertical;
+}
+.field input:focus,.field textarea:focus{border-color:var(--lime)}
+.field textarea{min-height:84px}
+
+/* ============ modal / sheets ============ */
+.overlay{
+  position:fixed;inset:0;background:rgba(7,12,15,.78);z-index:100;display:none;
+  align-items:flex-end;justify-content:center;padding:0;
+}
+.overlay.on{display:flex}
+.sheet{
+  background:var(--bg);border:2px solid var(--border);border-bottom:none;border-radius:var(--r-lg) var(--r-lg) 0 0;
+  width:100%;max-width:780px;max-height:92vh;overflow-y:auto;padding:26px 26px 60px;position:relative;
+  animation:sheetUp .25s ease;
+}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+.sheet-close{
+  position:sticky;top:0;float:right;width:42px;height:42px;border-radius:12px;background:var(--panel);
+  border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;z-index:5;
+}
+.step-head .stepno{font-weight:800;font-size:.72rem;letter-spacing:.16em;margin-bottom:4px}
+.step-head h2{font-size:1.5rem;font-weight:800;margin-bottom:16px;padding-right:52px}
+.fieldblock{margin-bottom:22px}
+.fieldblock>h4{font-size:.72rem;font-weight:800;letter-spacing:.14em;color:var(--muted);margin-bottom:8px;text-transform:uppercase}
+.field-body{font-size:.96rem}
+.field-body p{margin-bottom:10px}
+.field-body ul{margin:0 0 10px 20px}
+.field-body li{margin-bottom:8px}
+.note-block{background:rgba(255,111,97,.09);border:2px solid rgba(255,111,97,.35);border-radius:var(--r-md);padding:13px 16px;font-size:.93rem;margin-bottom:22px}
+.prompt-block{background:var(--bg-deep);border:2px solid var(--border-soft);border-radius:var(--r-md);margin-bottom:12px;overflow:hidden}
+.prompt-block .ph{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:2px solid var(--border-soft)}
+.prompt-block .ph .t{font-size:.72rem;font-weight:800;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.prompt-block pre{
+  padding:14px 16px;white-space:pre-wrap;word-break:break-word;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem;line-height:1.6;color:#D7E4EA;
+}
+.prompt-block .filled{color:var(--lime)}
+.prompt-block .blank{color:var(--amber)}
+
+/* ============ reference view ============ */
+.ref-title{font-size:1.5rem;font-weight:800;margin-bottom:6px}
+.ref-sub{color:var(--muted);margin-bottom:22px;font-size:.95rem}
+.acc{border:2px solid var(--border);border-radius:var(--r-md);margin-bottom:12px;background:var(--panel);overflow:hidden}
+.acc-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:16px 18px;font-weight:800;font-size:1rem}
+.acc-head .chev{margin-left:auto;color:var(--faint);transition:transform .2s}
+.acc.open .acc-head .chev{transform:rotate(90deg)}
+.acc-body{display:none;padding:4px 20px 20px;border-top:2px solid var(--border-soft)}
+.acc.open .acc-body{display:block}
+.refbody p{margin-bottom:12px;font-size:.95rem}
+.refbody ul{margin:0 0 12px 20px}
+.refbody li{margin-bottom:9px;font-size:.95rem}
+.refbody h5{font-size:.98rem;font-weight:800;margin:16px 0 8px}
+.tbl-wrap{overflow-x:auto;margin-bottom:12px;border:2px solid var(--border-soft);border-radius:var(--r-sm)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.86rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border-soft);vertical-align:top}
+th{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--panel-2)}
+tr:last-child td{border-bottom:none}
+.mchip{display:inline-flex;align-items:center;gap:6px;font-weight:700;white-space:nowrap}
+.mchip .dot{width:8px;height:8px;border-radius:50%;flex:none}
+
+/* ============ finish ============ */
+.finish{max-width:560px;margin:40px auto;text-align:center}
+.finish .trophy{font-size:5rem;margin-bottom:10px;animation:bob2 2s ease-in-out infinite}
+@keyframes bob2{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.finish h1{font-size:1.8rem;font-weight:800;margin-bottom:8px}
+.finish p{color:var(--muted);margin-bottom:22px}
+
+/* ============ toast ============ */
+#toast{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);z-index:200;opacity:0;
+  background:var(--bg-deep);border:2px solid var(--border);border-radius:var(--r-md);padding:14px 20px;
+  font-weight:700;font-size:.9rem;max-width:min(520px,90vw);text-align:center;pointer-events:none;
+  transition:opacity .25s, transform .25s;
+}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.warn{border-color:var(--coral);color:var(--coral)}
+
+/* ============ responsive ============ */
+@media (max-width:1120px){
+  .shell{grid-template-columns:220px minmax(0,1fr)}
+  .rail{display:none}
+  .rail-inline{display:flex;flex-direction:column;gap:16px;margin-bottom:30px}
+}
+@media (min-width:1121px){.rail-inline{display:none}}
+@media (max-width:760px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .topbar{display:flex}
+  .bottomnav{display:flex}
+  .main{padding:18px 16px 130px}
+  .hero{padding:20px}
+  .hero h1{font-size:1.3rem}
+  .task-text{font-size:1.05rem}
+  .node{width:66px;height:66px}
+  .node-wrap{transform:translateX(calc(var(--off,0) * .5))}
+  .sheet{padding:18px 16px 60px}
+  .btn{padding:12px 16px;font-size:.78rem}
+  #toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div id="setupView"></div>
+<div id="app">
+  <div class="topbar">
+    <div class="brand">The Walkthrough</div>
+    <div class="topstats" id="topCoins"></div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">The Walkthrough<small>YOUR WEBSITE PLAYBOOK</small></div>
+      <button class="nav-item" data-nav="home" id="navHome"></button>
+      <button class="nav-item" data-nav="map" id="navMap"></button>
+      <button class="nav-item" data-nav="reference" id="navRef"></button>
+      <div class="spacer"></div>
+      <button class="nav-item" data-nav="vars" id="navVars"></button>
+      <div class="side-coins" id="sideCoins"></div>
+    </aside>
+    <main class="main" id="main"></main>
+    <aside class="rail" id="rail"></aside>
+  </div>
+  <nav class="bottomnav">
+    <button class="nav-item" data-nav="home"></button>
+    <button class="nav-item" data-nav="map"></button>
+    <button class="nav-item" data-nav="reference"></button>
+    <button class="nav-item" data-nav="vars"></button>
+  </nav>
+</div>
+<div class="overlay" id="overlay"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+/* =====================================================================
+   The Walkthrough — v1
+   A single-file interactive guided walkthrough of the visual playbook.
+   All step and reference content is word-for-word from docs/playbook-source.md.
+===================================================================== */
+
+/* ---------- icons ---------- */
+const I = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>',
+  chev:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>',
+  copy:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>'
+};
+
+/* ---------- model colour code ---------- */
+const MODELS = {
+  sonnet:{name:'Sonnet 5', colour:'var(--blue)'},
+  opus:{name:'Opus 4.8', colour:'var(--purple)'},
+  fable:{name:'Fable 5', colour:'var(--coral)'},
+  kimi:{name:'Kimi K3', colour:'var(--teal)'},
+  codex:{name:'Codex (GPT-5.6 Sol)', colour:'var(--pink)'},
+  gemini:{name:'Gemini / Antigravity', colour:'var(--amber)'},
+  you:{name:'You', colour:'var(--grey)'}
+};
+const LADDER = ['sonnet','opus','fable'];
+const LADDER_ROLE = {sonnet:'home base', opus:'the heavy lifter', fable:'the genius'};
+
+function chip(key, label){
+  const m = MODELS[key];
+  return '<span class="mchip" style="color:'+m.colour+'"><span class="dot" style="background:'+m.colour+'"></span>'+(label||m.name)+'</span>';
+}
+
+/* =====================================================================
+   STEP CONTENT — word for word from Parts B–E of the playbook.
+===================================================================== */
+const STEPS = [
+{
+  n:0, name:'Set up your tools', model:'you',
+  badges:{model:'you', effort:'NORMAL', mode:'ASK'},
+  one:'install and connect all seven tools, one time only, before your first project — you will never repeat this step.',
+  why:'every later step assumes the tools are connected. Doing it once now means every future project starts in minutes.',
+  who:'You (grey), with ChatGPT (your tutor) open beside you on its normal setting. No coding models are used yet. Time: one relaxed afternoon. <strong>Mode for the practice lap: ASK-each-time</strong> (Claude Code’s default — touch nothing). Why: the entire point of Step 0 is watching what every single action does; approving each one IS the lesson.',
+  tasks:[
+    {t:'Make a GitHub account at github.com. Create one empty <em>repository</em> — that’s the online home of a project’s code. Call it anything.'},
+    {t:'In that repository’s settings, turn on protection for the <code>main</code> <em>branch</em> (the “real” version of your code). Protection means nothing changes the real version without going through a <em>pull request</em> — a reviewed proposal. If you can’t find the toggle, use the tutor prompt below.', copy:'tutor'},
+    {t:'Download and install Cursor (cursor.com) — the program where code gets written. Sign in. Use “Open Folder / Clone Repository” to open your GitHub repository in it.'},
+    {t:'In Cursor’s settings, find the models section and paste in your Kimi K3 API key — the password string from your Kimi account. After this, “Kimi K3” appears in Cursor’s model picker. Never paste this key anywhere except Cursor’s settings.'},
+    {t:'Open Cursor’s terminal — the text panel at the bottom (View menu → Terminal if hidden). Install Claude Code there and sign in with your Claude Max account. Once it’s running, type <code>/model</code> — you’ll see Sonnet 5, Opus 4.8, and Fable 5. That command is your model switch for all Claude work.'},
+    {t:'Go to coderabbit.ai, sign in with GitHub, and install it on your repository. That’s all — from now on it automatically comments on every pull request you open. You never “run” it.'},
+    {t:'Go to vercel.com, sign in with GitHub, and import your repository. From now on, every pull request automatically gets a private preview link, and anything merged into <code>main</code> goes live.'},
+    {t:'Install Antigravity (Google’s tool) and sign in. Leave it alone for now — it’s only used for checking, much later.'},
+    {t:'In your project, create a folder named <code>docs</code>. This is the <strong>shared notebook</strong>. Models cannot read each other’s chats — the ONLY way they stay coordinated is by reading the files in this folder before every task.'},
+    {t:'In the project’s main folder, create a file named <code>CLAUDE.md</code>, and an identical copy named <code>AGENTS.md</code>, both containing exactly this: <em>“Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and /docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same component.”</em> (Those four files don’t exist yet — Steps 1, 2 and 3 create them. Claude reads CLAUDE.md automatically; the other tools read AGENTS.md.)'},
+    {t:'<strong>Then do the practice lap — do not skip it.</strong> In Claude Code (Sonnet), say: <em>“Create a branch called test, add a file called hello.txt containing the word hi, commit it, push it, and open a pull request.”</em> Then watch: CodeRabbit comments on the pull request, and Vercel attaches a preview link. Press merge on GitHub. That loop — <strong>branch → change → pull request → robot review → your approval → merge</strong> — is the entire game. Every step from here on is that loop with different content.', copy:'lap'}
+  ],
+  prompts:[
+    {id:'tutor', label:'Copy-paste prompt (use in ChatGPT whenever stuck)', noFill:true, text:"I'm on [Mac / Windows]. I'm setting up [tool name]. Right now my screen shows [describe it]. Tell me exactly what to click or type next, one action at a time."},
+    {id:'lap', label:'The practice lap (Claude Code, Sonnet)', text:'Create a branch called test, add a file called hello.txt containing the word hi, commit it, push it, and open a pull request.'}
+  ],
+  gates:['The practice lap worked end to end','I saw the CodeRabbit comment with my own eyes','I saw the Vercel preview link with my own eyes'],
+  then:'go to Step 1.'
+},
+{
+  n:1, name:'Write the plan', model:'fable', coin:true,
+  badges:{model:'fable', effort:'LEAVE THE DIAL', mode:'PLAN'},
+  one:'tell Fable 5 your idea and turn it into a written plan file called SPEC.md that every other model will follow.',
+  why:'every model works from written instructions, and mistakes in the plan multiply into everything built afterwards — so the plan is made by your best brain, once, and saved where all models can read it.',
+  note:'<strong>A sentence you need:</strong> Fable 5 is opened exactly twice per whole project (Rule 2). <strong>This is the first of those two times.</strong>',
+  who:'Fable 5 (coral red). Where: the Claude app, or Claude Code with <code>/model</code> set to Fable 5. Don’t touch any effort dial — Fable manages itself. Time: under one hour, one sitting. <strong>Mode: PLAN.</strong> In Claude Code, press Shift+Tab until the bottom of the panel says plan. Why: the plan IS the product of this step, and plan mode makes it physically impossible for Fable to start building the site early — which is exactly how expensive Fable usage used to vanish. (If you use the Claude app instead, there’s no mode to set; the app can’t touch your files anyway.)',
+  tasks:[
+    {t:'Paste prompt 1 below with your details filled in.', copy:'p1'},
+    {t:'Fable will ask you up to five questions. Answer them honestly — “I don’t know, you decide” is an allowed answer.'},
+    {t:'Paste prompt 2.', copy:'p2'},
+    {t:'Read the SPEC.md it wrote. <strong>Change anything you don’t like — especially the wording.</strong> AI writing is a draft; your taste is final.'},
+    {t:'Switch to ASK-each-time (Shift+Tab) for one action, and ask Claude Code: <em>“Save this as /docs/SPEC.md and commit it with the message &#39;add spec&#39;.”</em> Approve the save when it asks. Why the switch: plan mode can’t write files — saving is the one moment this step needs hands.', copy:'save'}
+  ],
+  prompts:[
+    {id:'p1', label:'Copy-paste prompt 1 (Fable 5)', text:'You are my lead architect. My website idea: [describe it]. It is for: [audience]. The single feeling a visitor should get: [one feeling]. Pages and sections I imagine: [rough list]. Before writing anything, ask me up to 5 questions that would improve the plan.'},
+    {id:'p2', label:'Copy-paste prompt 2 (Fable 5)', text:'Now write /docs/SPEC.md containing: a page map, every section with a one-sentence purpose, draft text for each section, and success criteria for the finished site.'},
+    {id:'save', label:'Save the plan (Claude Code, ASK-each-time)', text:"Save this as /docs/SPEC.md and commit it with the message 'add spec'."}
+  ],
+  gates:['I can describe every section of the site out loud in one sentence each, without looking'],
+  then:'<strong>close Fable 5 completely.</strong> It stays closed until Step 5. Go to Step 2.'
+},
+{
+  n:2, name:'Pick the look', model:'you',
+  badges:{model:'you', effort:'NORMAL', mode:'ASK'},
+  one:'you (not any AI) choose exactly how the site should look and feel, and save that decision as pictures and a file called DESIGN.md.',
+  why:'left alone, every AI model drifts toward the same average design — that is why your old sites looked “AI-generated.” Real reference pictures are the only thing that forces a model off that path. This is the single most important step for premium results.',
+  who:'You (grey) + Midjourney for imagery. Sonnet 5 (blue, normal) only as your note-taker at the end. Time: half a day minimum. Rushing this step wastes every step after it. <strong>Mode: ASK-each-time</strong> for Sonnet’s single file save — trivial here, but the habit is the point.',
+  tasks:[
+    {t:'Browse awwwards.com and godly.website. Find 3–5 sites that create the feeling you want.'},
+    {t:'Screenshot the <strong>specific sections</strong> you love — a hero, a menu, a gallery — not whole pages. Save the screenshots into <code>docs/refs/</code> in your project.'},
+    {t:'In Midjourney, create moodboards: colour worlds, textures, hero imagery. Use its style-reference feature so all images match each other.'},
+    {t:'Choose one display font (for headlines) and one text font (for paragraphs) — properly licensed. Choose your colour palette.'},
+    {t:'Write your <strong>motion language</strong> in ordinary words. Examples: “heavy, slow, cinematic — things settle like stone” or “light, springy, playful — things bounce into place.”'},
+    {t:'Give all your notes to Sonnet 5 with the prompt below, then commit the file it writes.', copy:'design'}
+  ],
+  prompts:[
+    {id:'design', label:'Copy-paste prompt (Sonnet 5)', text:'Turn these notes into /docs/DESIGN.md: fonts [names], colours [values], motion language: [your words], and a banned list: no purple-glow-on-dark, no floating glass cards, no generic 3D blobs, no default component-library look for hero sections.'}
+  ],
+  extra:'<strong>One permanent change from your old habit:</strong> no more AI-generated website mockups as references. An AI’s guess at a website fed into another AI doubles the generic look. Real, human-made award sites only.',
+  gates:['A stranger reading DESIGN.md could describe my vibe in three words that match what’s in my head'],
+  then:'go to Step 3.'
+},
+{
+  n:3, name:'Build the skeleton', model:'opus',
+  badges:{model:'opus', effort:'HIGH', mode:'PLAN → AUTO'},
+  one:'Opus 4.8 sets up the empty but working project — the folder structure, the tools, and the rulebook files — with no visible sections yet.',
+  why:'everything later hangs on this foundation, so it’s built once, carefully, by the strong model, and its rules are written down so no later model can wander off and structure things differently.',
+  who:'Opus 4.8 (purple) on <strong>high</strong> effort — go straight to Opus for this one, don’t start at Sonnet. Where: Claude Code inside Cursor’s terminal (<code>/model</code> → Opus 4.8, pick the high thinking option, or add “think hard about this” to the prompt). Time: an hour or two, mostly waiting. <strong>Mode: PLAN first, then AUTO-accept edits.</strong> Why both: the <em>decisions</em> in a skeleton are the expensive part — plan them, read them, approve them. But the <em>typing</em> is dozens of boilerplate files, and approving each one teaches you nothing; the branch, the preview link, and CodeRabbit are the real safety here, not the yes button.',
+  tasks:[
+    {t:'In Claude Code: <em>“Create a branch called scaffold.”</em>', copy:'branch'},
+    {t:'Press Shift+Tab until you’re in <strong>PLAN mode</strong>. Paste the prompt below with this sentence added at the top: <em>“First present your plan for this scaffold and wait for my approval before building anything.”</em>', copy:'scaffold'},
+    {t:'Read the plan. Paste anything confusing into ChatGPT: <em>“Explain this plan like I’m new — any red flags?”</em> Happy? Approve it.', copy:'explain'},
+    {t:'Switch to <strong>AUTO-accept edits</strong> (Shift+Tab) and let it build. It will still pause before bigger actions like installing packages — read those and say yes consciously; a command is an action on your computer.'},
+    {t:'When it finishes: <em>“Commit everything, push, and open a pull request.”</em>', copy:'commit'},
+    {t:'Open the Vercel preview link — an empty skeleton page should load without errors.'},
+    {t:'Read CodeRabbit’s comments. Paste any you don’t understand into Sonnet: <em>“Explain this like I’m new, and tell me if it matters.”</em> Fix what matters, then merge.', copy:'cr'}
+  ],
+  prompts:[
+    {id:'branch', label:'Claude Code', text:'Create a branch called scaffold.'},
+    {id:'scaffold', label:'Copy-paste prompt (Opus 4.8, high — PLAN mode)', text:"First present your plan for this scaffold and wait for my approval before building anything.\n\nRead /docs/SPEC.md and /docs/DESIGN.md. Think hard about this. Set up a Next.js project with Tailwind, using Motion for small component animations and GSAP for large scroll-driven moments. Add React Three Fiber only if the spec requires 3D. Then write two files: /docs/ARCHITECTURE.md (folder layout, naming rules, where animation code lives) and /docs/MOTION.md containing these hard rules: Motion for small component animations only; GSAP and 3D only inside isolated sections with full cleanup when they unmount; animate transform and opacity only; every animation respects the user's reduced-motion setting; mobile gets its own animation settings from day one via matchMedia. Build a deployable empty skeleton — no real sections yet."},
+    {id:'explain', label:'ChatGPT (if the plan confuses you)', text:"Explain this plan like I'm new — any red flags?"},
+    {id:'commit', label:'Claude Code (when it finishes)', text:'Commit everything, push, and open a pull request.'},
+    {id:'cr', label:'Sonnet (for CodeRabbit comments)', text:"Explain this like I'm new, and tell me if it matters."}
+  ],
+  gates:['The empty skeleton loads on a Vercel preview link','ARCHITECTURE.md and MOTION.md exist in /docs'],
+  then:'switch to Kimi K3 in Cursor’s chat panel. Go to Step 4.'
+},
+{
+  n:4, name:'Build the sections, one at a time', model:'kimi',
+  badges:{model:'kimi', effort:'NORMAL', mode:'ASK'},
+  one:'Kimi K3 builds each visible piece of the site (hero, features, gallery, footer...) one at a time, always copying from one of your reference screenshots.',
+  why:'building one small section at a time, each locked in by a review before the next begins, is what keeps quality high — the opposite of your old “generate the whole site at once, then tweak forever” habit. K3 does this step because it is currently the world’s best model at matching a reference picture.',
+  who:'Kimi K3 (teal), normal setting, in Cursor’s chat panel with K3 selected from the model picker. You (grey) approve each section. Time: this is where most of the project hours go. Repeat the recipe below once per section. <strong>Mode: Cursor’s agent with diff review</strong> — K3 proposes each change as a diff (a before/after view) and you accept or reject it. Why: for looks, <em>your eye</em> is the quality gate, and you don’t yet know K3’s habits — watching is how trust gets earned. After a few sections go smoothly, letting it auto-apply within the branch is fine, because the pull request and the real-phone check still guard the result. Any logic piece that goes to Sonnet: ASK-each-time in Claude Code — small delicate work gets watched.',
+  tasksTitle:'The recipe — repeat for every section:',
+  tasks:[
+    {t:'In Claude Code: <em>“Create a branch called section-hero”</em> (swap in each section’s name).', copy:'branch'},
+    {t:'In Cursor’s chat with K3 selected: attach <strong>one</strong> reference screenshot from <code>docs/refs/</code>, and paste the prompt below with the blanks filled.', copy:'section'},
+    {t:'Look at the result in your dev server (the private local preview — Cursor/K3 will tell you the localhost address). Not right? Tell K3 <em>specifically</em> what’s off: “the heading is much bigger relative to the image in the reference — match that.” It compares screenshots and adjusts.'},
+    {t:'Optional but excellent: in Antigravity (amber), ask its agent to open your dev server and screenshot the section at phone width and desktop width, so you can compare against the reference side by side without squinting.'},
+    {t:'Happy? In Claude Code: <em>“Commit, push, open a pull request.”</em> Read CodeRabbit’s comments. <strong>Open the Vercel preview link on your actual phone and look at it.</strong> Then merge.', copy:'commit'},
+    {t:'Next section — back to action 1.'}
+  ],
+  prompts:[
+    {id:'branch', label:'Claude Code', text:'Create a branch called section-hero'},
+    {id:'section', label:'Copy-paste prompt (Kimi K3)', text:"Read /docs/DESIGN.md and /docs/MOTION.md. Build the [hero] section. Its purpose from the spec: [paste that section's one-sentence purpose and draft text from SPEC.md]. Match the attached reference image's layout and feel. It must work at desktop and phone widths. Use small Motion animations only — no GSAP in this section."},
+    {id:'commit', label:'Claude Code (when happy)', text:'Commit, push, open a pull request.'}
+  ],
+  wrong:[
+    '<strong>K3 gets the LOOK wrong twice</strong> → the problem is your reference, nine times out of ten. Crop the screenshot tighter to exactly the part you mean, or draw an arrow on it. Do not climb the ladder for looks — Opus and Fable are worse than K3 at this.',
+    '<strong>The broken part is LOGIC</strong> (a form, saving data — anything about <em>working</em> rather than <em>looking</em>) → that’s not K3’s lane. Take just that piece to Sonnet 5 (blue, normal) in Claude Code.',
+    '<strong>A section seems to need Opus or Fable</strong> → the section is too big. Split it into two smaller sections instead.',
+    '<strong>Kimi K3 is unavailable</strong> → Sonnet 5 (blue, normal) builds sections instead. The recipe and the reference screenshots stay exactly the same — only the builder changes.'
+  ],
+  gates:['Every section from SPEC.md is merged','Everything looks right on my real phone'],
+  then:'reopen Fable 5 — <strong>the second and final of its two permitted uses.</strong> Go to Step 5.'
+},
+{
+  n:5, name:'The wow moments', model:'fable', coin:true,
+  badges:{model:'fable', effort:'LEAVE THE DIAL', mode:'PLAN → ASK'},
+  one:'Fable 5 builds the two or three signature animations that make the site feel premium (the scroll-driven hero, a pinned sequence, maybe a 3D scene) — then you personally fine-tune the timing by hand on a real phone.',
+  why:'these moments are the hardest code in the project AND the part visitors actually feel. The hardest code goes to the smartest model; the feel goes to the only one with taste — you. This hour of human fiddling is the entire difference between “nice site” and “out of this world.”',
+  note:'<strong>A sentence you need:</strong> this is <strong>the second of Fable 5’s two permitted uses.</strong> After this step, Fable stays closed for the rest of the project, including all maintenance, forever.',
+  who:'Fable 5 (coral red) writes it → Sonnet 5 (blue) cleans it → You (grey) tune it. Where: Claude Code (<code>/model</code> → Fable 5). Time: budget half a day per moment. One branch per moment. <strong>Mode: PLAN first, then ASK-each-time — never auto-accept in this step.</strong> Why: this is the most delicate code in the whole project, it’s the single best learning moment in the whole project, and Fable is expensive — ask-each-time means you catch a wrong direction after one file, not after ten.',
+  tasksTitle:'Do this (repeat per wow moment):',
+  tasks:[
+    {t:'In Claude Code: <em>“Create a branch called wow-hero.”</em>', copy:'branch'},
+    {t:'Shift+Tab to <strong>PLAN mode</strong> and ask: <em>“Before writing any code, describe the structure of the animation you’ll build and how it follows MOTION.md.”</em> Read it. Approve it.', copy:'plan'},
+    {t:'Shift+Tab to <strong>ASK-each-time</strong>, then paste the prompt below with your beats filled in, approving each change as it comes.', copy:'wow'},
+    {t:'When it works: <strong>close Fable.</strong> Switch <code>/model</code> to Sonnet and say: <em>“Clean this up and add plain-English comments explaining what every number in the animation timeline controls.”</em>', copy:'clean'},
+    {t:'<strong>The human part.</strong> Open the preview on a real phone. Change the numbers yourself — duration, delay, easing, overlap. Nudge, scroll, feel, repeat. Whenever curious, ask Sonnet: <em>“What does changing this number do?”</em> (This is also how you learn.)', copy:'curious'},
+    {t:'<em>“Commit, push, open a pull request.”</em> CodeRabbit, real-phone check, merge. Next moment → back to 1.', copy:'commit'}
+  ],
+  prompts:[
+    {id:'branch', label:'Claude Code', text:'Create a branch called wow-hero.'},
+    {id:'plan', label:'PLAN mode (Fable 5)', text:"Before writing any code, describe the structure of the animation you'll build and how it follows MOTION.md."},
+    {id:'wow', label:'Copy-paste prompt (Fable 5)', text:'Read /docs/MOTION.md. Build [the pinned hero scroll sequence]: [describe it beat by beat — for example: “as you scroll, the title splits apart, the product rotates into view, then everything settles into place”]. Use GSAP ScrollTrigger in an isolated component, full cleanup when it unmounts, a mobile variant via matchMedia, and respect the reduced-motion setting.'},
+    {id:'clean', label:'Sonnet (after Fable is closed)', text:'Clean this up and add plain-English comments explaining what every number in the animation timeline controls.'},
+    {id:'curious', label:'Sonnet (while you tune)', text:'What does changing this number do?'},
+    {id:'commit', label:'Claude Code', text:'Commit, push, open a pull request.'}
+  ],
+  gates:['Scrolling feels perfectly smooth (a steady 60 frames per second) on a mid-range phone — not just on my computer'],
+  then:'close Fable 5 for the rest of the project. Back home to Sonnet. Go to Step 6.'
+},
+{
+  n:6, name:'Phone and speed check', model:'sonnet',
+  badges:{model:'sonnet', effort:'NORMAL', mode:'AUTO'},
+  one:'make the site fast and smooth on ordinary phones, and prove it with a score.',
+  why:'most visitors are on phones, and a premium-looking site that stutters reads as cheap. Speed is measurable, so this step has a number to hit.',
+  who:'Sonnet 5 (blue), normal. Climb to Opus 4.8 (purple, high) only if one specific speed problem survives two Sonnet attempts. Where: Claude Code, on a branch. <strong>Mode: AUTO-accept edits.</strong> Why: this is mechanical, well-defined work, and the gate here is a number — the Lighthouse score — not your yes-clicks.',
+  tasks:[
+    {t:'Paste the prompt below.', copy:'perf'},
+    {t:'Test on one iPhone and one mid-range Android if you possibly can.'},
+    {t:'Pull request, CodeRabbit, merge.'}
+  ],
+  prompts:[
+    {id:'perf', label:'Copy-paste prompt (Sonnet 5)', text:'Do a performance pass on the whole site: reduce how many things animate at once on small screens, lazy-load anything heavy such as 3D, verify the reduced-motion setting genuinely calms the entire site, and use next/image for all images. Then run Lighthouse and report the mobile scores.'}
+  ],
+  gates:['The Lighthouse mobile performance score is 90 or higher'],
+  then:'switch companies for fresh eyes. Go to Step 7.'
+},
+{
+  n:7, name:'Fresh-eyes review', model:'codex',
+  badges:{model:'codex', effort:'HIGHEST', mode:'READ-ONLY'},
+  one:'Codex — a model that has never seen this code — inspects everything and reports what the builders missed.',
+  why:'a model reviewing its own work excuses its own mistakes, exactly like a person proofreading their own essay. A different company’s model has no loyalty to the code.',
+  who:'Codex running GPT-5.6 Sol (pink), at the highest effort setting your ChatGPT Plus plan offers. Where: Codex, pointed at your GitHub repository. Then Gemini in Antigravity (amber) for one final sweep. <strong>Mode: READ-ONLY for the review itself, then edits-on-a-branch only for its mechanical-fix list. Never Codex’s full-auto option.</strong> Why: an inspector must not touch anything while inspecting — hands-off is exactly what makes the eyes fresh — and the fixes it <em>is</em> allowed to make stay small, on a branch, behind the same pull-request gate as everything else.',
+  tasks:[
+    {t:'Paste the prompt below into Codex.', copy:'codex'},
+    {t:'Its small mechanical fixes → it opens a branch and pull request → CodeRabbit → you merge.'},
+    {t:'Anything <em>structural</em> it flagged (how the code is organised) → take to Opus 4.8 in Claude Code. Claude owns the architecture; the inspector does not remodel the house.'},
+    {t:'Then in Antigravity: ask a Gemini agent to sweep the entire project in one pass (it can hold all of it at once) for cross-browser problems and leftover junk — <strong>report only, no fixing.</strong> Route its findings to Sonnet or K3 depending on whose lane it is.'}
+  ],
+  prompts:[
+    {id:'codex', label:'Copy-paste prompt (Codex)', text:'Cold-review this repository you have never seen. Hunt specifically for: animation cleanup leaks (GSAP / Three.js), hydration errors, accessibility failures, dead code, performance problems. Rank findings by severity. Fix ONLY small mechanical issues on a branch. For anything structural, describe it but do not restructure.'}
+  ],
+  gates:['Codex’s severity list is empty of high items','The Gemini sweep report has been handled'],
+  then:'go to Step 8.'
+},
+{
+  n:8, name:'Test everything', model:'sonnet',
+  badges:{model:'sonnet', effort:'NORMAL', mode:'AUTO'},
+  one:'robots and you together prove every page works, everyone can use it, and search engines can find it.',
+  why:'“it worked when I looked” is not proof. Tests are proof that survives every future change.',
+  who:'Sonnet 5 (blue, normal) in Claude Code, plus Antigravity (amber), plus you (grey) for one keyboard pass. <strong>Mode: AUTO-accept edits on the branch — but still read and approve the commands that run the tests.</strong> Why: the tests themselves are the gate in this step, so watching every edit adds nothing; a command, though, is an action on your computer, so commands always get a conscious yes.',
+  tasks:[
+    {t:'Sonnet: <em>“Write Playwright tests: every page loads, navigation works, forms submit, no console errors. Run them and fix any failures.”</em>', copy:'tests'},
+    {t:'Sonnet: <em>“Run an accessibility check with axe and fix critical issues: alt text, focus states, colour contrast.”</em> Then, yourself: put the mouse away and go through the whole site using only Tab and Enter. Can you reach and use everything?', copy:'axe'},
+    {t:'Sonnet: <em>“Add SEO basics: title and description for every page, an OpenGraph share image, a sitemap, and a robots file.”</em> Make the share image in Midjourney so it matches your brand.', copy:'seo'},
+    {t:'Antigravity: have its agent click through every page at phone and desktop sizes and save the recording — your proof that everything works.'}
+  ],
+  prompts:[
+    {id:'tests', label:'Sonnet 5', text:'Write Playwright tests: every page loads, navigation works, forms submit, no console errors. Run them and fix any failures.'},
+    {id:'axe', label:'Sonnet 5', text:'Run an accessibility check with axe and fix critical issues: alt text, focus states, colour contrast.'},
+    {id:'seo', label:'Sonnet 5', text:'Add SEO basics: title and description for every page, an OpenGraph share image, a sitemap, and a robots file.'}
+  ],
+  gates:['Tests pass','The keyboard pass works','The Antigravity recording exists'],
+  then:'go to Step 9.'
+},
+{
+  n:9, name:'Ship it', model:'you',
+  badges:{model:'you', effort:'—', mode:'—'},
+  one:'merge the final pull request and the site goes live automatically.',
+  why:null,
+  who:'You (grey). No model needed.',
+  tasks:[
+    {t:'Merge into <code>main</code> on GitHub. Vercel puts it live on its own — that’s what you connected in Step 0.'},
+    {t:'In Vercel, turn on Analytics and Speed Insights so you can see real visitors and real-world speed.'},
+    {t:'Stuck on any setting → ChatGPT tutor prompt from Step 0.', copy:'tutor'}
+  ],
+  prompts:[
+    {id:'tutor', label:'ChatGPT tutor prompt (from Step 0)', noFill:true, text:"I'm on [Mac / Windows]. I'm setting up [tool name]. Right now my screen shows [describe it]. Tell me exactly what to click or type next, one action at a time."}
+  ],
+  gates:['The live URL loads on my phone','Analytics shows my own visit'],
+  then:'go to Step 10 — and stay there forever.'
+},
+{
+  n:10, name:'Keep it alive (forever)', model:'sonnet',
+  badges:{model:'sonnet', effort:'NORMAL', mode:'ASK'},
+  one:'every future change, no matter how small, uses Sonnet 5 and the same loop: branch → change → pull request → CodeRabbit → your check on a real phone → merge.',
+  why:'sites die by accumulating careless changes. The loop makes carelessness impossible.',
+  who:'Sonnet 5 (blue, normal) for everything. Climb the ladder only by Rule 3. <strong>Fable 5 does not exist in maintenance — ever.</strong> <strong>Mode by default: ASK-each-time</strong> for anything touching the live site — small changes deserve small attention. Drop to AUTO-accept only for repetitive chores you have already watched succeed before.',
+  extra:'<strong>One extra rule:</strong> if a change would break something written in MOTION.md or ARCHITECTURE.md, the change goes to Opus 4.8 first, and Opus updates the rulebook file in the same pull request — so the written rules never drift from the real code.',
+  tasks:[],
+  prompts:[],
+  gates:[],
+  then:null
+}
+];
+
+/* =====================================================================
+   REFERENCE DRAWER CONTENT — word for word from Parts B, D and E.
+===================================================================== */
+function modeTable(rows){
+  let h='<div class="tbl-wrap"><table><thead><tr>';
+  rows[0].forEach(c=>h+='<th>'+c+'</th>');
+  h+='</tr></thead><tbody>';
+  rows.slice(1).forEach(r=>{h+='<tr>';r.forEach(c=>h+='<td>'+c+'</td>');h+='</tr>';});
+  return h+'</tbody></table></div>';
+}
+
+const REFERENCE = [
+{ id:'rules', title:'The Three Rules', body:
+  '<p><strong>Rule 1 — Sonnet is home.</strong> Sonnet 5 is your everyday model. Every task starts with Sonnet on its normal setting. Using Opus or Fable is a short visit for a specific hard job; when the job is done, you come straight back to Sonnet.</p>'+
+  '<p><strong>Rule 2 — Fable opens exactly twice per project.</strong> Fable 5 is your smartest and most expensive model, and its usage allowance runs out fast. In a whole project you open it exactly two times: Step 1 (writing the plan) and Step 5 (the big animations). Any other Fable use means you have slipped back into your old habit — the one that kept eating your usage.</p>'+
+  '<p><strong>Rule 3 — Two strikes, then climb.</strong> A model gets two tries at any task. Between try one and try two, you improve your instructions: add the exact error message, add a screenshot, make the task smaller. If try two also fails, you move up one rung of the ladder. You never argue with a model for an hour.</p>'+
+  '<p><strong>The safety net under all three rules:</strong> before giving any model a task, save your game (in Git this is called a <em>commit</em> — see the dictionary). If the model breaks something, do not ask it to fix its own mess. Load your save (<em>revert</em>) and give a smaller, clearer task instead.</p>'
+},
+{ id:'ladder', title:'The Ladder — which Claude do I pick?', body:
+  '<p>Picture three rungs, bottom to top:</p><ul>'+
+  '<li><strong>Bottom rung: '+chip('sonnet')+' (blue) — home base.</strong> You start every task here. About 80% of all work never leaves this rung.</li>'+
+  '<li><strong>Middle rung: '+chip('opus')+' (purple) — the heavy lifter.</strong> You climb here when Sonnet has failed twice, or when the job is big and careful by nature.</li>'+
+  '<li><strong>Top rung: '+chip('fable')+' (coral red) — the genius.</strong> Only Step 1, Step 5, or a genuine emergency where Sonnet AND Opus have each failed twice on the same problem.</li></ul>'+
+  '<p>And one arrow pointing back down, labelled: <strong>“Solved? Go straight back to Sonnet.”</strong></p>'
+},
+{ id:'switching', title:'The Switching Guide (with real examples)', body:
+  modeTable([
+    ['If the task is...','Use','At what effort','Why'],
+    ['Change text, colours, spacing, images', chip('sonnet'),'Normal','Easy work; the cheap model does it perfectly'],
+    ['A small bug (“this button doesn’t work”)', chip('sonnet'),'Normal','Start at home; it usually solves it'],
+    ['Write tests, write comments, explain code to you', chip('sonnet'),'Normal','Routine work'],
+    ['Sonnet got the same task wrong twice', chip('opus'),'Normal','Two strikes — climb one rung'],
+    ['A job that touches many files at once (renaming something used everywhere, reorganising folders)', chip('opus'),'High','Big careful jobs need the stronger model thinking longer'],
+    ['The one-time skeleton build (Step 3)', chip('opus'),'High','Foundation work — start here directly, skip Sonnet for this one'],
+    ['A nasty bug that survived Opus on normal', chip('opus'),'High','Same model, more thinking time'],
+    ['Sonnet failed twice AND Opus failed twice', chip('fable'),'Don’t touch its dial','Genuine emergency — Fable’s third permitted use'],
+    ['Writing the project plan (Step 1)', chip('fable'),'Don’t touch its dial','Planning mistakes multiply into everything after, so use the best brain'],
+    ['The big animations (Step 5)', chip('fable'),'Don’t touch its dial','The hardest, most valuable code in the project'],
+    ['The moment any hard problem is solved', 'Back to '+chip('sonnet'),'Normal','Rule 1 — come home']
+  ])+
+  '<p><strong>How to actually change effort:</strong> in Claude Code, type <code>/model</code> to pick Sonnet, Opus, or Fable. If your version shows a thinking or effort option next to the model, that is the dial — normal for everyday, high when this guide says high. If you cannot find any dial, simply add the words <strong>“think hard about this”</strong> to your request — Claude Code treats that as the instruction to think longer. For Fable 5: it manages its own thinking depth, so never worry about its dial — your only job with Fable is keeping the task small.</p>'+
+  '<p><strong>What effort is:</strong> thinking time before answering. More effort = smarter on genuinely hard problems, but slower, and it burns your usage allowance much faster. More effort does NOT fix vague instructions or an oversized task. Small clear task on normal beats giant task on maximum, every single time.</p>'
+},
+{ id:'modes', title:'The Modes — how much freedom the model gets while it works', body:
+  '<p>Model answers “who.” Effort answers “how hard they think.” <strong>Mode answers “how much are you watching while they work?”</strong> Every coding tool has some version of the same three modes, whatever names it uses. The idea that makes all of this make sense: <strong>the yes-button was never your real safety.</strong> Your real safety is the branch you’re on, the commit behind you, and the pull-request review at the end. Mode only controls how closely you watch <em>during</em> the work.</p>'+
+  '<p><strong>1. PLAN mode (look and think only).</strong> The model can read your project and think, but it physically cannot change a file or run anything. It produces a plan; nothing happens until you approve it.<br><strong>Use it whenever the decision is expensive</strong> — before the skeleton, before a wow animation, whenever “what exactly should we build?” hasn’t been agreed yet.<br><strong>Why:</strong> a wrong plan costs one conversation to fix; wrong code costs hours. Plan mode also makes it impossible for an eager model to “helpfully” start building before you’ve agreed — which is exactly how expensive Fable usage used to vanish.</p>'+
+  '<p><strong>2. ASK-each-time (the normal, default mode).</strong> The model proposes every single file change and every command, and waits for your yes before doing it.<br><strong>Use it while you’re learning, and for delicate code.</strong><br><strong>Why:</strong> watching each change land is how you learn to read code — and on delicate work, you catch a wrong direction after one file instead of after ten.</p>'+
+  '<p><strong>3. AUTO-accept edits.</strong> The model applies file changes by itself without asking each time. It still pauses to ask before bigger actions, like installing packages or running commands.<br><strong>Use it for mechanical, well-defined work on a branch</strong> — scaffolding, performance passes, writing tests.<br><strong>Why:</strong> clicking yes forty times on boilerplate teaches you nothing and protects you from nothing — the branch, the preview link, and CodeRabbit are doing the protecting. Auto-accept just removes friction where your attention adds no value.</p>'+
+  '<p><strong>4. The banned mode: full auto / “skip permissions.”</strong> Some tools offer a mode where nothing is asked at all, commands included.<br><strong>Never use it, at any stage.</strong> One bad command can delete work or leak your API key, and the minutes it saves are never worth that. If a tool offers it, the answer is no.</p>'+
+  '<h5>How to switch, per tool:</h5><ul>'+
+  '<li><strong>Claude Code:</strong> press <strong>Shift+Tab</strong> to cycle between the modes — the current one is shown at the bottom of the panel. (Exact names vary a little by version; the three ideas above are always there.)</li>'+
+  '<li><strong>Cursor (for K3):</strong> the chat panel has a mode picker. The ask-questions-only option is its plan mode. The agent option proposes edits as <strong>diffs</strong> — before/after views you accept or reject one at a time (that’s ask-each-time) — or can be set to apply them automatically (that’s auto-accept).</li>'+
+  '<li><strong>Codex:</strong> when it offers approval levels, pick the review/suggest level for inspecting, and edits-on-a-branch for fixing. Never its full-auto level.</li>'+
+  '<li><strong>Antigravity:</strong> always used report-only in this playbook, which is its read-only posture.</li></ul>'+
+  '<p><strong>The whole section in one line:</strong> PLAN when deciding · ASK when learning or the code is delicate · AUTO when the work is mechanical and a branch + commit sit behind it · full auto never.</p>'
+},
+{ id:'cheat', title:'The one-glance table', body:
+  modeTable([
+    ['Situation','Use','Setting','Mode','Where'],
+    ['Any new coding task', chip('sonnet')+' (blue)','Normal','ASK-each-time','Claude Code in Cursor'],
+    ['Sonnet failed the same task twice', chip('opus')+' (purple)','Normal, then High','ASK-each-time','Claude Code'],
+    ['Big careful job: skeleton, many files at once, stubborn bug', chip('opus')+' (purple)','High','PLAN first, then AUTO','Claude Code'],
+    ['Sonnet and Opus each failed twice', chip('fable')+' (coral)','Leave its dial alone','PLAN first, then ASK','Claude Code, short visit'],
+    ['The project plan — once per project', chip('fable')+' (coral)','Leave its dial alone','PLAN','Claude app / Claude Code'],
+    ['The wow animations — once per project', chip('fable')+' (coral)','Leave its dial alone','PLAN, then ASK','Claude Code'],
+    ['Building a section from a reference image', chip('kimi')+' (teal)','Normal','Agent with diff review','Cursor chat panel'],
+    ['A section’s forms or logic', chip('sonnet')+' (blue)','Normal','ASK-each-time','Claude Code'],
+    ['End-of-project cold review', chip('codex')+' (pink)','Highest available','READ-ONLY, then edits on a branch','Codex'],
+    ['Whole-project sweep, browser screenshots', chip('gemini','Gemini')+' (amber)','—','READ-ONLY (report-only)','Antigravity'],
+    ['“Explain this to me like I’m new”','ChatGPT or Sonnet','Normal','Just chat','Chat']
+  ])
+},
+{ id:'dictionary', title:'Dictionary', body:
+  '<ul>'+
+  '<li><strong>Repository (repo)</strong> — the online home of one project’s code, on GitHub.</li>'+
+  '<li><strong>Branch</strong> — a separate save file of the project where you experiment safely. <code>main</code> is the real version.</li>'+
+  '<li><strong>Commit</strong> — a save point. Made constantly.</li>'+
+  '<li><strong>Push</strong> — send your saves up to GitHub.</li>'+
+  '<li><strong>Pull request (PR)</strong> — a proposal to add your branch’s changes into <code>main</code>. Shows every changed line. CodeRabbit comments on it; you press merge.</li>'+
+  '<li><strong>Merge</strong> — accept a pull request. The change becomes real.</li>'+
+  '<li><strong>Revert</strong> — load an earlier save point, throwing away a bad change.</li>'+
+  '<li><strong>Terminal</strong> — the text window where you type commands. About ten commands cover everything.</li>'+
+  '<li><strong>Claude Code</strong> — Claude living in the terminal; reads your project, edits files, runs commands. <code>/model</code> switches between Sonnet, Opus, Fable.</li>'+
+  '<li><strong>API key</strong> — a password string that lets a tool bill your account. Goes in Cursor’s settings and nowhere else, ever.</li>'+
+  '<li><strong>Dev server / localhost</strong> — your site running privately on your own computer while you build.</li>'+
+  '<li><strong>Effort / thinking / reasoning</strong> — how long a model thinks before answering. See the Switching Guide.</li>'+
+  '<li><strong>Mode</strong> — how much freedom a model has while it works: PLAN (look and think only, can’t touch files), ASK-each-time (proposes every change and waits for your yes), AUTO-accept (applies file edits itself, still asks before bigger actions like commands). Full guide with the whys: the Modes section.</li>'+
+  '<li><strong>Diff</strong> — a before/after view of a proposed change, shown line by line. Cursor shows K3’s work as diffs for you to accept or reject.</li>'+
+  '<li><strong>Full auto / “skip permissions”</strong> — the banned mode where a tool asks nothing at all, commands included. Never used, at any stage.</li>'+
+  '<li><strong>Lighthouse</strong> — a free scoring robot for site speed. You want 90+ on mobile.</li>'+
+  '<li><strong>Playwright</strong> — a robot that clicks through your site checking things work.</li>'+
+  '<li><strong>axe</strong> — a robot that checks accessibility.</li>'+
+  '<li><strong>Hydration error</strong> — a common Next.js bug where the page the server sent and the page the browser built disagree; Codex hunts these in Step 7.</li>'+
+  '<li><strong>GSAP / Motion / React Three Fiber</strong> — the animation and 3D toolkits. The rule that matters: never both GSAP and Motion in the same component (it causes conflicts) — MOTION.md enforces it.</li>'+
+  '</ul>'
+},
+{ id:'wrong', title:'When things go wrong', body:
+  '<ul>'+
+  '<li><strong>“It looks AI-generated.”</strong> You rushed Step 2. Go back, collect better references, tighten DESIGN.md. No model can fix taste that was never written down.</li>'+
+  '<li><strong>“Scrolling stutters on my phone.”</strong> Too many things animating at once. Sonnet: cut animated elements on mobile and check nothing re-renders during scroll.</li>'+
+  '<li><strong>“The model made it worse and now things are broken.”</strong> Stop. Revert to the last save. Give a smaller task with clearer instructions. Two strikes → climb. Never ask a model to fix its own mess on top of the mess.</li>'+
+  '<li><strong>“Two models disagree about how code should be organised.”</strong> Claude (Opus) is the architect and ARCHITECTURE.md is law. The other model’s branch gets redone to match. No exceptions, no negotiation.</li>'+
+  '<li><strong>“My Fable usage is gone again.”</strong> You opened Fable outside Steps 1 and 5. That is the old habit. Rule 2 exists precisely because of it.</li>'+
+  '<li><strong>“CodeRabbit said something I don’t understand.”</strong> Paste it to Sonnet: <em>“Explain this like I’m new, and tell me if it matters.”</em> Most comments are minor; the ones that matter, Sonnet fixes on the same branch.</li>'+
+  '<li><strong>“I don’t know which model this task needs.”</strong> It needs Sonnet. That is always the answer to this question (Rule 1). The ladder exists for what happens after.</li>'+
+  '</ul>'
+},
+{ id:'costs', title:'Costs (USD, checked July 22, 2026)', body:
+  '<p>Already paying: Claude Max 20x ($200/mo) · ChatGPT Plus ($20/mo) · Kimi K3 usage (~$5–20 per site) · Antigravity (free).</p>'+
+  '<p>Added: Cursor Pro ($20) + Midjourney ($10–30) + CodeRabbit (~$12–30) + Vercel Pro ($20) ≈ <strong>$62–90/mo extra</strong>.</p>'+
+  '<p>Do not buy: ChatGPT Pro, Lovable, Bolt, v0, Windsurf, paid Gemini — every one overlaps with something you already own.</p>'
+}
+];
+
+/* =====================================================================
+   STATE
+===================================================================== */
+const KEY = 'walkthrough-v1';
+function defaultState(){
+  const perStep = {};
+  STEPS.forEach(s=>{perStep[s.n]={tasks:s.tasks.map(()=>false),gates:s.gates.map(()=>false),done:false};});
+  return {
+    version:1,
+    vars:{name:'',idea:'',audience:'',feeling:'',sections:''},
+    setupDone:false,
+    currentStep:0,
+    perStep:perStep,
+    ladder:{rung:0,strikes:0},
+    coins:2,
+    coinSpent:{s1:false,s5:false},
+    finished:false,
+    liveUrl:'',
+    view:'home'
+  };
+}
+let S = load();
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return defaultState();
+    const d = defaultState(), s = JSON.parse(raw);
+    // merge saved state over defaults so older/partial saves survive additions
+    const out = Object.assign({}, d, s);
+    out.vars = Object.assign({}, d.vars, s.vars||{});
+    out.ladder = Object.assign({}, d.ladder, s.ladder||{});
+    out.coinSpent = Object.assign({}, d.coinSpent, s.coinSpent||{});
+    out.perStep = {};
+    STEPS.forEach(st=>{
+      const def = d.perStep[st.n], got = (s.perStep||{})[st.n]||{};
+      out.perStep[st.n] = {
+        tasks: def.tasks.map((_,i)=>!!(got.tasks||[])[i]),
+        gates: def.gates.map((_,i)=>!!(got.gates||[])[i]),
+        done: !!got.done
+      };
+    });
+    out.currentStep = Math.min(Math.max(+out.currentStep||0, 0), STEPS.length-1);
+    return out;
+  }catch(e){ return defaultState(); }
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+/* =====================================================================
+   HELPERS
+===================================================================== */
+const $ = sel => document.querySelector(sel);
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function plainText(html){
+  return html.replace(/<[^>]+>/g,'')
+    .replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+}
+function sentence(t){ t = t.trim(); return /[.!?…”"']$/.test(t) ? t : t+'.'; }
+
+const VAR_FILLS = () => ({
+  '[describe it]': S.vars.idea,
+  '[audience]': S.vars.audience,
+  '[one feeling]': S.vars.feeling,
+  '[rough list]': S.vars.sections
+});
+function fillPrompt(text, noFill){
+  let out = text;
+  if(!noFill){
+    const fills = VAR_FILLS();
+    for(const k in fills){ if(fills[k]) out = out.split(k).join(fills[k]); }
+  }
+  return out;
+}
+function promptHtml(text, noFill){
+  // escape, substitute variables (lime), highlight remaining [blanks] (amber)
+  let out = esc(text);
+  if(!noFill){
+    const fills = VAR_FILLS();
+    for(const k in fills){
+      if(fills[k]) out = out.split(esc(k)).join('<span class="filled">'+esc(fills[k])+'</span>');
+    }
+  }
+  out = out.replace(/\[([^\]<]+)\]/g,'<span class="blank">[$1]</span>');
+  return out;
+}
+function copyText(text, msg){
+  const done = ()=> toast(msg || 'Copied — paste it in.');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>{fallbackCopy(text);done();});
+  } else { fallbackCopy(text); done(); }
+}
+function fallbackCopy(text){
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+}
+let toastTimer;
+function toast(msg, warn){
+  const t = $('#toast');
+  t.textContent = msg; t.className = warn ? 'on warn' : 'on';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.className=''; }, 4200);
+}
+
+function step(n){ return STEPS[n]; }
+function ps(n){ return S.perStep[n]; }
+function stepModel(n){
+  // base model, possibly overridden by ladder escalation on the current step
+  if(n===S.currentStep && S.ladder.rung > baseRung(n)) return LADDER[S.ladder.rung];
+  return step(n).badges.model;
+}
+function baseRung(n){
+  const i = LADDER.indexOf(step(n).badges.model);
+  return i>-1 ? i : 0;
+}
+function currentTaskIndex(n){
+  const p = ps(n);
+  for(let i=0;i<p.tasks.length;i++) if(!p.tasks[i]) return i;
+  return -1; // all tasks done -> gate phase
+}
+function doneSteps(){
+  let c=0; for(let i=0;i<=9;i++) if(ps(i).done) c++;
+  return c;
+}
+function pct(){ return Math.round(doneSteps()/10*100); }
+function bannerMsg(){
+  const p = pct();
+  if(p===0) return 'Let’s begin.';
+  if(p<50) return 'On your way.';
+  if(p<100) return 'More than halfway there!';
+  return 'You shipped it!';
+}
+function stuckPrompt(){
+  const n = S.currentStep, st = step(n);
+  const ti = currentTaskIndex(n);
+  const taskText = ti===-1 ? sentence('Finish the step’s gate checklist: '+st.gates.join('; '))
+    : sentence(plainText(st.tasks[ti].t));
+  const b = st.badges;
+  const badges = MODELS[stepModel(n)].name+' / '+b.effort+' / '+b.mode;
+  return "I'm following my website playbook. Step "+n+": "+st.name+". Current task: "+taskText+" Expected model / effort / mode: "+badges+". What's happening instead: [player describes here]. Guide me one small action at a time and wait for me between actions.";
+}
+function escalationPrompt(fromKey, toKey){
+  const n = S.currentStep, st = step(n);
+  const ti = currentTaskIndex(n);
+  const taskText = ti===-1 ? sentence(st.gates.join('; ')) : sentence(plainText(st.tasks[ti].t));
+  const who = fromKey==='you' ? 'I have' : MODELS[fromKey].name+' has';
+  return 'You are '+MODELS[toKey].name+', taking over a task that '+who+' now tried twice without success. Step '+n+': '+st.name+'. The task, made smaller and clearer: '+taskText+' The exact error message: [paste the exact error message]. Screenshot: [attach a screenshot]. Start fresh — do not build on the previous attempt.';
+}
+
+/* =====================================================================
+   RENDER — shell & nav
+===================================================================== */
+function renderNav(){
+  const items = [
+    ['home','You are here',I.home],['map','The map',I.map],['reference','Reference',I.book],['vars','Edit variables',I.gear]
+  ];
+  document.querySelectorAll('[data-nav]').forEach(btn=>{
+    const key = btn.dataset.nav;
+    const it = items.find(x=>x[0]===key);
+    btn.innerHTML = it[2]+'<span>'+it[1].toUpperCase()+'</span>';
+    btn.classList.toggle('active', S.view===key || (key==='map'&&S.view==='home'&&btn.dataset.scrolled==='1'));
+  });
+}
+function coinHtml(size){
+  const spent1 = S.coinSpent.s1, spent2 = S.coinSpent.s5;
+  return '<div class="coin'+(spent1?' spent':'')+'" style="width:'+size+'px;height:'+size+'px" title="Fable coin — Step 1">F5</div>'+
+         '<div class="coin'+(spent2?' spent':'')+'" style="width:'+size+'px;height:'+size+'px" title="Fable coin — Step 5">F5</div>';
+}
+function renderCoins(){
+  $('#topCoins').innerHTML = coinHtml(30);
+  $('#sideCoins').innerHTML = coinHtml(26)+'<span>FABLE COINS</span>';
+}
+
+/* =====================================================================
+   RENDER — home (hero + path)
+===================================================================== */
+function badgeRow(n){
+  const st = step(n);
+  const mk = stepModel(n);
+  const m = MODELS[mk];
+  let h = '<div class="badges">';
+  h += '<span class="badge model" style="color:'+m.colour+'"><span class="dot"></span>MODEL · '+m.name.toUpperCase()+'</span>';
+  h += '<span class="badge">EFFORT · '+st.badges.effort+'</span>';
+  h += '<span class="badge">MODE · '+st.badges.mode+'</span>';
+  return h+'</div>';
+}
+function renderHero(){
+  const n = S.currentStep, st = step(n), p = ps(n);
+  const ti = currentTaskIndex(n);
+  let inner = '<div class="eyebrow">YOU ARE HERE</div>'
+    + '<h1>Step '+n+' — '+st.name+'</h1>'
+    + badgeRow(n);
+
+  if(S.finished && n===10){
+    inner += '<div class="task-text">'+st.one+'</div>';
+    if(st.extra) inner += '<div class="gate-note">'+st.extra+'</div>';
+    inner += '<div class="hero-actions"><button class="btn btn-ghost" id="btnStuck">I’M STUCK</button></div>';
+  } else if(ti>-1){
+    const task = st.tasks[ti];
+    inner += '<div class="task-count">TASK '+(ti+1)+' OF '+st.tasks.length+'</div>'
+      + '<div class="task-text">'+task.t+'</div>'
+      + '<div class="hero-actions">'
+      + (task.copy ? '<button class="btn btn-primary" id="btnCopy">'+I.copy+' COPY THE PROMPT</button>' : '')
+      + '<button class="btn btn-ghost" id="btnStuck">I’M STUCK</button>'
+      + '<button class="btn btn-green" id="btnDone">DONE → NEXT</button>'
+      + '</div>';
+  } else {
+    // gate phase
+    inner += '<div class="gate-note"><strong>You are finished when:</strong> tick each gate honestly — the step can’t complete until they’re all ticked.</div>';
+    st.gates.forEach((g,i)=>{
+      inner += '<button class="check-row'+(p.gates[i]?' done':'')+'" data-gate="'+i+'" aria-pressed="'+!!p.gates[i]+'"><span class="tick">'+I.check+'</span><span class="lbl">'+g+'</span>'+(p.gates[i]?'<span class="done-tag">Done</span>':'')+'</button>';
+    });
+    const allGates = p.gates.every(Boolean);
+    inner += '<div class="hero-actions" style="margin-top:12px">'
+      + '<button class="btn btn-ghost" id="btnStuck">I’M STUCK</button>'
+      + '<button class="btn btn-green" id="btnComplete" '+(allGates?'':'disabled')+'>COMPLETE STEP →</button>'
+      + '</div>';
+  }
+  return '<section class="hero">'+inner+'</section>';
+}
+function renderBanner(){
+  const p = pct();
+  return '<div class="progress-pill"><div><div class="msg">'+bannerMsg()+'</div>'
+    + '<div class="sub">STEP '+S.currentStep+' OF 11 · '+(S.vars.name?esc(S.vars.name).toUpperCase():'YOUR PROJECT')+'</div></div>'
+    + '<div class="ring"><div class="disc" style="--pct:'+p+'"></div><div class="hole">'+p+'%</div></div></div>';
+}
+function renderPath(){
+  const offsets = [0,-64,-32,42,64,32,0,-52,-70,-30,28];
+  let h = '<div class="path" id="mapAnchor">';
+  STEPS.forEach((st,i)=>{
+    const m = MODELS[st.model];
+    const p = ps(i);
+    const isCur = i===S.currentStep && !(S.finished&&i<10);
+    const cls = p.done?'':'future';
+    h += '<div class="unit-divider">STEP '+i+' · '+st.name.toUpperCase()+'</div>';
+    h += '<div class="node-wrap" style="--off:'+offsets[i]+'px">'
+      + (isCur?'<div class="bubble">YOU ARE HERE</div>':'')
+      + '<button class="node '+(isCur?'current':(p.done?'':'future'))+'" data-step="'+i+'" aria-label="Step '+i+': '+st.name+'" style="background:'+m.colour+'">'
+      + (p.done?I.check:(''+i))
+      + '</button>'
+      + '<div class="node-label"><small style="color:'+m.colour+'">'+MODELS[st.model].name.toUpperCase()+'</small>'+st.one.split('—')[0].split('.')[0].slice(0,80)+'…</div>'
+      + '</div>';
+  });
+  return h+'</div>';
+}
+function renderRailWidgets(){
+  const n = S.currentStep;
+  const activeRung = Math.max(S.ladder.rung, baseRung(n));
+  let ladder = '<div class="card"><h3>THE LADDER</h3>';
+  for(let i=LADDER.length-1;i>=0;i--){
+    const k = LADDER[i], m = MODELS[k];
+    ladder += '<button class="ladder-rung'+(i===activeRung?' on':'')+'" data-rung="'+i+'" style="'+(i===activeRung?'border-color:'+m.colour:'')+'">'
+      + '<span class="swatch" style="background:'+m.colour+'"></span>'
+      + '<span><span class="nm" style="color:'+m.colour+'">'+m.name+'</span><br><span class="role">'+LADDER_ROLE[k]+'</span></span>'
+      + '</button>';
+  }
+  ladder += '<div class="ladder-arrow">↓ Solved? Go straight back to Sonnet.</div>';
+  ladder += '<div class="strikes"><span class="strike-dot'+(S.ladder.strikes>0?' hit':'')+'"></span><span class="strike-dot'+(S.ladder.strikes>1?' hit':'')+'"></span><span class="cap">STRIKES ON THIS TASK</span></div>';
+  ladder += '<div class="ladder-msg"></div>';
+  ladder += '<div class="ladder-actions"><button class="btn btn-ghost small" data-act="fail">IT FAILED</button>'
+    + '<button class="btn btn-ghost small" data-act="solve">SOLVED — BACK TO SONNET</button></div></div>';
+
+  let coins = '<div class="card"><h3>FABLE COINS</h3><div class="coins-row">'+coinHtml(52)+'</div>'
+    + '<div class="coin-cap">Fable opens exactly twice per project: Step 1 (writing the plan) and Step 5 (the big animations).</div></div>';
+
+  let links = '<div class="card rail-links"><h3>REFERENCE</h3>';
+  if(S.finished) links += '<button class="chev-row" data-act="finish"><span class="ico">🏆</span>The finish screen<span class="chev">'+I.chev+'</span></button>';
+  REFERENCE.forEach(r=>{
+    links += '<button class="chev-row" data-ref="'+r.id+'"><span class="ico">'+I.book+'</span>'+r.title+'<span class="chev">'+I.chev+'</span></button>';
+  });
+  links += '</div>';
+  return ladder+coins+links;
+}
+function renderHome(){
+  const railInline = '<div class="rail-inline">'+renderRailWidgets()+'</div>';
+  $('#main').innerHTML = renderBanner()+renderHero()+railInline+renderPath();
+  $('#rail').innerHTML = renderRailWidgets();
+  bindHome();
+}
+
+/* =====================================================================
+   RENDER — reference view
+===================================================================== */
+function renderReference(openId){
+  let h = '<div class="ref-title">Reference</div><div class="ref-sub">The rules of the whole system — all of it, always readable. Nothing is locked behind progress.</div>';
+  REFERENCE.forEach(r=>{
+    h += '<div class="acc'+(openId===r.id?' open':'')+'" id="acc-'+r.id+'">'
+      + '<button class="acc-head" data-acc="'+r.id+'" aria-expanded="'+(openId===r.id)+'">'+r.title+'<span class="chev">'+I.chev+'</span></button>'
+      + '<div class="acc-body"><div class="refbody">'+r.body+'</div></div></div>';
+  });
+  $('#main').innerHTML = h;
+  $('#rail').innerHTML = renderRailWidgets();
+  document.querySelectorAll('[data-acc]').forEach(b=>b.addEventListener('click',()=>{
+    const acc = $('#acc-'+b.dataset.acc);
+    acc.classList.toggle('open');
+    b.setAttribute('aria-expanded', acc.classList.contains('open'));
+  }));
+  bindRail();
+  if(openId){ const el = $('#acc-'+openId); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+}
+
+/* =====================================================================
+   RENDER — finish screen
+===================================================================== */
+function renderFinish(){
+  $('#main').innerHTML =
+    '<div class="finish"><div class="trophy">🏆</div>'
+    + '<h1>The site is live.</h1>'
+    + '<p>Steps 0–9 complete, inside the full loop, every gate ticked with your own eyes. Paste the live URL so it’s saved here.</p>'
+    + '<div class="field"><label>LIVE URL</label><input id="liveUrl" type="url" placeholder="https://…" value="'+esc(S.liveUrl||'')+'"></div>'
+    + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px">'
+    + '<button class="btn btn-primary" id="btnNext">START NEXT PROJECT</button>'
+    + '<button class="btn btn-ghost" id="btnStay">KEEP EXPLORING → STEP 10</button></div></div>';
+  $('#rail').innerHTML = renderRailWidgets();
+  bindRail();
+  $('#liveUrl').addEventListener('change',e=>{S.liveUrl=e.target.value;save();});
+  $('#btnNext').addEventListener('click',()=>{
+    // reset task state; keep the variables editable (Step 0 is one-time — next project starts at Step 1)
+    const vars = S.vars, url = S.liveUrl;
+    S = defaultState();
+    S.vars = vars; S.setupDone = true;
+    S.perStep[0].done = true;
+    S.perStep[0].tasks = S.perStep[0].tasks.map(()=>true);
+    S.perStep[0].gates = S.perStep[0].gates.map(()=>true);
+    S.currentStep = 1;
+    save();
+    openSetup(true);
+  });
+  $('#btnStay').addEventListener('click',()=>{ S.view='home'; save(); render(); });
+}
+
+/* =====================================================================
+   RENDER — step card modal
+===================================================================== */
+let lastFocus = null;
+function openStepCard(n, focusSel){
+  const st = step(n), p = ps(n), mk = st.badges.model, m = MODELS[mk];
+  const freshOpen = !$('#overlay').classList.contains('on');
+  if(freshOpen) lastFocus = document.activeElement;
+  let h = '<button class="sheet-close" id="sheetClose" aria-label="Close">✕</button>';
+  h += '<div class="step-head"><div class="stepno" style="color:'+MODELS[st.model].colour+'">STEP '+n+'</div><h2>'+st.name+'</h2></div>';
+  h += '<div class="fieldblock"><h4>In one sentence</h4><div class="field-body">'+st.one+'</div></div>';
+  if(st.why) h += '<div class="fieldblock"><h4>Why this step exists</h4><div class="field-body">'+st.why+'</div></div>';
+  if(st.note) h += '<div class="note-block">'+st.note+'</div>';
+  h += '<div class="fieldblock"><h4>Who does it</h4>'+badgeRowStatic(st)+'<div class="field-body">'+st.who+'</div></div>';
+  if(st.tasks.length){
+    h += '<div class="fieldblock"><h4>'+(st.tasksTitle||'Do this')+'</h4>';
+    st.tasks.forEach((t,i)=>{
+      h += '<button class="check-row'+(p.tasks[i]?' done':'')+'" data-mtask="'+i+'" aria-pressed="'+!!p.tasks[i]+'"><span class="tick">'+I.check+'</span><span class="lbl">'+t.t+'</span>'+(p.tasks[i]?'<span class="done-tag">Done</span>':'')+'</button>';
+    });
+    h += '</div>';
+  }
+  if(st.prompts.length){
+    h += '<div class="fieldblock"><h4>Copy-paste prompts</h4>';
+    st.prompts.forEach(pr=>{
+      h += '<div class="prompt-block"><div class="ph"><span class="t">'+pr.label+'</span>'
+        + '<button class="btn btn-ghost small" data-pcopy="'+pr.id+'">'+I.copy+' COPY</button></div>'
+        + '<pre>'+promptHtml(pr.text, pr.noFill)+'</pre></div>';
+    });
+    h += '</div>';
+  }
+  if(st.extra) h += '<div class="fieldblock"><div class="field-body">'+st.extra+'</div></div>';
+  if(st.gates.length){
+    h += '<div class="fieldblock"><h4>You are finished when</h4>';
+    st.gates.forEach((g,i)=>{
+      h += '<button class="check-row'+(p.gates[i]?' done':'')+'" data-mgate="'+i+'" aria-pressed="'+!!p.gates[i]+'"><span class="tick">'+I.check+'</span><span class="lbl">'+g+'</span>'+(p.gates[i]?'<span class="done-tag">Done</span>':'')+'</button>';
+    });
+    h += '</div>';
+  }
+  if(st.then) h += '<div class="fieldblock"><h4>Then</h4><div class="field-body">'+st.then+'</div></div>';
+  if(st.wrong){
+    h += '<div class="fieldblock"><h4>If it goes wrong</h4><div class="field-body"><ul>';
+    st.wrong.forEach(w=>h+='<li>'+w+'</li>');
+    h += '</ul></div></div>';
+  }
+  const sheet = $('#sheet');
+  sheet.setAttribute('aria-label','Step '+n+' — '+st.name);
+  sheet.innerHTML = h;
+  $('#overlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  const focusTarget = focusSel ? sheet.querySelector(focusSel) : null;
+  (focusTarget || $('#sheetClose')).focus();
+  $('#sheetClose').addEventListener('click', closeSheet);
+  sheet.querySelectorAll('[data-pcopy]').forEach(b=>b.addEventListener('click',()=>{
+    const pr = st.prompts.find(x=>x.id===b.dataset.pcopy);
+    copyText(fillPrompt(pr.text, pr.noFill));
+  }));
+  sheet.querySelectorAll('[data-mtask]').forEach(b=>b.addEventListener('click',()=>{
+    const i = +b.dataset.mtask;
+    p.tasks[i] = !p.tasks[i]; save(); openStepCard(n, '[data-mtask="'+i+'"]'); render();
+  }));
+  sheet.querySelectorAll('[data-mgate]').forEach(b=>b.addEventListener('click',()=>{
+    const i = +b.dataset.mgate;
+    p.gates[i] = !p.gates[i]; save(); openStepCard(n, '[data-mgate="'+i+'"]'); render();
+  }));
+}
+function badgeRowStatic(st){
+  const m = MODELS[st.badges.model];
+  return '<div class="badges">'
+    + '<span class="badge model" style="color:'+m.colour+'"><span class="dot"></span>MODEL · '+m.name.toUpperCase()+'</span>'
+    + '<span class="badge">EFFORT · '+st.badges.effort+'</span>'
+    + '<span class="badge">MODE · '+st.badges.mode+'</span></div>';
+}
+function closeSheet(){
+  $('#overlay').classList.remove('on');
+  document.body.style.overflow = '';
+  if(lastFocus && lastFocus.focus) lastFocus.focus();
+  lastFocus = null;
+}
+
+/* =====================================================================
+   SETUP / VARIABLES SCREEN
+===================================================================== */
+function openSetup(editMode){
+  const v = S.vars;
+  $('#app').classList.remove('on');
+  $('#setupView').innerHTML =
+  '<div class="setup-wrap"><div class="setup-card">'
+  + '<h1>'+(editMode?'Edit variables':'First setup')+'</h1>'
+  + '<div class="sub">'+(editMode?'Change anything — every prompt in the app updates instantly.':'Answer once. Every prompt in the whole app auto-fills these into its brackets from then on.')+'</div>'
+  + '<div class="field"><label>Project name</label><input id="v-name" value="'+esc(v.name)+'" placeholder="my-site"></div>'
+  + '<div class="field"><label>Your site idea (a paragraph)</label><textarea id="v-idea" placeholder="What are you building?">'+esc(v.idea)+'</textarea></div>'
+  + '<div class="field"><label>Who is it for?</label><input id="v-audience" value="'+esc(v.audience)+'" placeholder="The audience"></div>'
+  + '<div class="field"><label>The one feeling a visitor should get</label><input id="v-feeling" value="'+esc(v.feeling)+'" placeholder="e.g. calm confidence"></div>'
+  + '<div class="field"><label>Rough list of pages and sections</label><textarea id="v-sections" placeholder="hero, about, gallery, contact…">'+esc(v.sections)+'</textarea></div>'
+  + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">'
+  + '<button class="btn btn-primary" id="setupGo">'+(editMode?'SAVE CHANGES':'START THE WALKTHROUGH')+'</button>'
+  + (editMode?'<button class="btn btn-ghost" id="setupCancel">CANCEL</button>':'')
+  + '</div></div></div>';
+  $('#setupView').style.display='block';
+  $('#setupGo').addEventListener('click',()=>{
+    S.vars = {
+      name:$('#v-name').value.trim(), idea:$('#v-idea').value.trim(),
+      audience:$('#v-audience').value.trim(), feeling:$('#v-feeling').value.trim(),
+      sections:$('#v-sections').value.trim()
+    };
+    S.setupDone = true; save();
+    $('#setupView').style.display='none'; $('#setupView').innerHTML='';
+    $('#app').classList.add('on');
+    render();
+  });
+  if(editMode) $('#setupCancel').addEventListener('click',()=>{
+    $('#setupView').style.display='none'; $('#setupView').innerHTML='';
+    $('#app').classList.add('on'); render();
+  });
+}
+
+/* =====================================================================
+   MECHANICS — ticking, gates, ladder, coins
+===================================================================== */
+function tickCurrentTask(){
+  const n = S.currentStep;
+  const ti = currentTaskIndex(n);
+  if(ti===-1) return;
+  ps(n).tasks[ti] = true;
+  // a new task = a fresh two tries (strikes are per task)
+  S.ladder = {rung:baseRung(n), strikes:0};
+  ladderMsgText = '';
+  save(); render();
+}
+function completeStep(){
+  const n = S.currentStep, p = ps(n);
+  if(!p.gates.every(Boolean)) return;
+  p.done = true;
+  // Fable coins: Steps 1 and 5 each spend one
+  let coin = false;
+  if(n===1 && !S.coinSpent.s1){ S.coinSpent.s1=true; S.coins--; coin=true; }
+  if(n===5 && !S.coinSpent.s5){ S.coinSpent.s5=true; S.coins--; coin=true; }
+  if(n===9){ S.finished = true; S.currentStep = 10; S.view = 'finish'; }
+  else if(n<10){ S.currentStep = n+1; }
+  S.ladder = {rung:baseRung(S.currentStep), strikes:0};
+  ladderMsgText = '';
+  save();
+  render();
+  // animate + announce on the freshly rendered DOM
+  if(coin) spendAnim(n);
+  else if(n!==9) toast('Step '+n+' complete. On to Step '+S.currentStep+' — '+step(S.currentStep).name+'.');
+}
+function spendAnim(n){
+  const idx = n===1 ? 0 : 1;
+  document.querySelectorAll('.coins-row, #topCoins, #sideCoins').forEach(row=>{
+    const coins = row.querySelectorAll('.coin');
+    if(coins[idx]) coins[idx].classList.add('spending');
+  });
+  toast('Step '+n+' complete — a Fable coin is spent, that’s one of its two openings. On to Step '+S.currentStep+' — '+step(S.currentStep).name+'.');
+}
+function ladderFail(){
+  const n = S.currentStep;
+  const rung = Math.max(S.ladder.rung, baseRung(n));
+  S.ladder.rung = rung;
+  S.ladder.strikes++;
+  if(S.ladder.strikes===1){
+    showLadderMsg('Improve the prompt: add the exact error message and a screenshot, make the task smaller. Try once more.');
+  } else {
+    S.ladder.strikes = 0;
+    if(rung < 2){
+      const from = stepModel(n), to = LADDER[rung+1];
+      S.ladder.rung = rung+1;
+      if(to==='fable' && n!==1 && n!==5){
+        showLadderMsg('Genuine emergency — Fable’s third permitted use (Sonnet AND Opus have each failed twice). Escalation prompt copied.');
+      } else {
+        showLadderMsg('Two strikes — climb one rung. '+MODELS[to].name+' takes over. Escalation prompt copied.');
+      }
+      copyText(escalationPrompt(from,to),'Escalation prompt copied for '+MODELS[to].name+'.');
+    } else {
+      showLadderMsg('Fable has had its two tries. Make the task smaller and clearer — or split it into two smaller tasks. Never argue with a model for an hour.');
+    }
+  }
+  save(); render();
+}
+function ladderSolve(){
+  S.ladder = {rung:0, strikes:0};
+  ladderMsgText = '';
+  save(); render();
+  toast('Solved — back home to Sonnet (Rule 1).');
+}
+let ladderMsgText = '';
+function showLadderMsg(msg){ ladderMsgText = msg; }
+function ladderTap(rung){
+  const n = S.currentStep;
+  if(LADDER[rung]==='fable' && n!==1 && n!==5 && !(S.ladder.rung===2)){
+    toast('Rule 2 — Fable opens twice per project. This isn’t one of them.', true);
+    return;
+  }
+  if(rung===0){ ladderSolve(); return; }
+  S.ladder.rung = rung; S.ladder.strikes = 0;
+  ladderMsgText = '';
+  save(); render();
+}
+
+/* =====================================================================
+   BINDINGS
+===================================================================== */
+function bindRail(){
+  document.querySelectorAll('[data-ref]').forEach(b=>b.addEventListener('click',()=>{
+    S.view='reference'; save(); render(b.dataset.ref);
+  }));
+  // ladder + coin widgets can appear twice (rail + inline) — bind them all
+  document.querySelectorAll('[data-act="fail"]').forEach(b=>b.addEventListener('click',ladderFail));
+  document.querySelectorAll('[data-act="solve"]').forEach(b=>b.addEventListener('click',ladderSolve));
+  document.querySelectorAll('[data-act="finish"]').forEach(b=>b.addEventListener('click',()=>{
+    S.view='finish'; save(); render();
+  }));
+  document.querySelectorAll('[data-rung]').forEach(b=>b.addEventListener('click',()=>ladderTap(+b.dataset.rung)));
+  if(ladderMsgText){
+    document.querySelectorAll('.ladder-msg').forEach(el=>{el.textContent=ladderMsgText;el.classList.add('on');});
+  }
+}
+function bindHome(){
+  const btnCopy = $('#btnCopy');
+  if(btnCopy) btnCopy.addEventListener('click',()=>{
+    const st = step(S.currentStep), ti = currentTaskIndex(S.currentStep);
+    const pr = st.prompts.find(x=>x.id===st.tasks[ti].copy);
+    if(pr) copyText(fillPrompt(pr.text, pr.noFill));
+  });
+  document.querySelectorAll('[id="btnStuck"]').forEach(b=>b.addEventListener('click',()=>{
+    copyText(stuckPrompt(),'Help prompt copied — paste it into Claude (Sonnet) and describe what’s happening.');
+  }));
+  const btnDone = $('#btnDone');
+  if(btnDone) btnDone.addEventListener('click',tickCurrentTask);
+  const btnComplete = $('#btnComplete');
+  if(btnComplete) btnComplete.addEventListener('click',completeStep);
+  document.querySelectorAll('[data-gate]').forEach(b=>b.addEventListener('click',()=>{
+    const i = +b.dataset.gate;
+    ps(S.currentStep).gates[i] = !ps(S.currentStep).gates[i];
+    save(); render();
+  }));
+  document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>openStepCard(+b.dataset.step)));
+  bindRail();
+}
+
+/* =====================================================================
+   MAIN RENDER
+===================================================================== */
+function render(refId){
+  renderNav(); renderCoins();
+  if(S.view==='finish'){ renderFinish(); return; }
+  if(S.view==='reference'){ renderReference(refId); return; }
+  renderHome();
+}
+document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{
+  const k = btn.dataset.nav;
+  if(k==='vars'){ openSetup(true); return; }
+  if(k==='map'){ S.view='home'; save(); render();
+    const a = $('#mapAnchor'); if(a) a.scrollIntoView({behavior:'smooth'}); return; }
+  S.view = k; save(); render();
+}));
+$('#overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeSheet(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+
+/* boot */
+if(!S.setupDone){ openSetup(false); }
+else { $('#app').classList.add('on'); render(); }
+</script>
+</body>
+</html>
