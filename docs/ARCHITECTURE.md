@@ -13,7 +13,8 @@ configuration. Do not introduce a UI framework or rebuild v1.
 - localStorage is the only product persistence.
 - Image assets live under `assets/`.
 - GitHub Actions provides validation.
-- Cloudflare Pages serves the repository as a static site.
+- The build script copies only runtime files into `dist/`.
+- Cloudflare Pages serves `dist/` as a static site.
 
 ## In-file modules
 
@@ -61,8 +62,8 @@ project, and leaves the source key untouched.
 - Canonical strings are never silently paraphrased.
 - Track and tool adaptation selects or annotates canonical material; it does
   not rewrite it.
-- A validation script compares normalized canonical text against
-  `docs/playbook-source.md`.
+- A validation script confirms the Parts B–E and Steps 0–10 source contract,
+  direct runtime loading, provenance labels, and the v1 migration boundary.
 
 ## Accessibility architecture
 

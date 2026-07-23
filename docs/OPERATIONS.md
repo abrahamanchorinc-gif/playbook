@@ -21,9 +21,16 @@ Before a task commit:
 
 ## Deployment
 
-Cloudflare Pages should serve the repository as a static site without a
-framework build. Supporting test files and documentation are not runtime
-dependencies.
+Cloudflare Pages should run `npm run build` and publish `dist/`. The build
+copies only `index.html`, `_headers`, the illustrative assets, and the canonical
+playbook source. Supporting tests and internal documentation are not deployed.
+
+Repository settings:
+
+- Production branch: `main`
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Preview deployments: enabled for feature branches and pull requests
 
 Production deployment is not considered complete until:
 
