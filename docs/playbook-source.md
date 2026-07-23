@@ -133,6 +133,37 @@ Model answers "who." Effort answers "how hard they think." **Mode answers "how m
 
 **The whole section in one line:** PLAN when deciding · ASK when learning or the code is delicate · AUTO when the work is mechanical and a branch + commit sit behind it · full auto never.
 
+## B.5 Two tracks — how much Git ceremony you actually need
+
+Git is non-negotiable (it's what makes undo possible), but the **ceremony around it** scales to the stakes. Pick a track per project.
+
+**SIMPLE TRACK — practice projects, personal sites, anything only you depend on.**
+Work directly on `main`. No branches, no pull requests, no merges. The loop is: commit → build → commit → push. Vercel deploys on push. If something breaks, revert to the last commit. Review comes from the **security-guidance plugin**, which runs automatically inside the session — pattern warnings as files are edited, an LLM review of the diff at the end of each turn, and a deeper cross-file review at commit time. That covers the two things that actually protect you (undo + review) with none of the sequencing puzzles.
+
+**FULL TRACK — client work, anything with real users, anything you're paid for.**
+Branches, pull requests, CodeRabbit, preview links, merges — the loop from Step 0. The extra ceremony buys you a permanent record of what changed and why, plus review before anything reaches something people depend on. Also use this track any time more than one person touches the repo.
+
+**The rule that prevents 90% of Git pain, on either track: one branch at a time.** Never open a second branch while the first is unmerged. (Branching off an unmerged branch is what creates confusing pull requests that show changes you didn't make.)
+
+**Make Git automatic instead of memorable.** Claude Code reads `CLAUDE.md` at the start of every session, so put the Git habits there and they happen without you asking:
+
+```
+## How to work in this repo
+
+Before starting any coding task, commit the current state first (message:
+"checkpoint before [task]"). This is my undo point — never skip it.
+
+When a task is finished and I've confirmed it looks right, commit with a clear
+message and push. Don't wait for me to ask.
+
+If a change goes wrong, offer to revert to the last checkpoint rather than
+patching on top of broken code.
+
+Never force-push, never rewrite history, never delete branches without asking.
+```
+
+**Install the security plugin once, benefit forever:** in Claude Code, run `/plugin install security-guidance@claude-plugins-official` and choose **user scope** so it loads in every project on this machine. It then runs automatically with nothing to invoke. Treat its findings as suggestions, not proof — Anthropic describes it as a best-effort assistive tool that can miss things and raise false positives, so on the full track it supplements CodeRabbit and human review rather than replacing them.
+
 ---
 
 # PART C — The 11 steps
@@ -149,6 +180,8 @@ Model answers "who." Effort answers "how hard they think." **Mode answers "how m
 
 **Two ways to run this step:** for a first practice project (like Project Zero, below), you can do everything inside the **Claude Code app alone** — skip Cursor and Kimi K3 entirely for now, steps 3–4 below don't apply yet. For a real client website you'll want the fuller setup with Cursor and Kimi K3 in play. The numbered list covers both; skip 3–4 if you're doing a practice project first.
 
+**Also pick your track before you start (see B.5):** SIMPLE track (practice/personal — no branches or pull requests, commit straight to `main`, security plugin does the reviewing) or FULL track (client work — the branch/PR/CodeRabbit/merge loop). On the simple track you can skip the CodeRabbit and branch-protection steps below entirely; add them the day the project stops being just yours.
+
 **Do this:**
 1. Make a GitHub account at github.com. Create one empty *repository* — that's the online home of a project's code. Call it anything. Keep it **Public** for now — CodeRabbit reviews public repositories for free, so the robot reviewer works today even before you've bought its paid plan.
 2. In that repository's settings, turn on protection for the `main` *branch* (the "real" version of your code): Settings → Branches → Add rule → branch name `main` → tick **"Require a pull request before merging."** Protection means nothing changes the real version without going through a *pull request* — a reviewed proposal. **If you are working solo (no one else reviewing your PRs), do NOT tick "Require approvals"** — or if it's ticked by default, untick it / set it to 0. That specific setting assumes a second person exists to click approve; left on, it will permanently block you from merging your own work later. If you can't find any of these toggles, use the tutor prompt below.
@@ -160,7 +193,8 @@ Model answers "who." Effort answers "how hard they think." **Mode answers "how m
 8. Go to vercel.com, sign in with GitHub, and import your repository, using the default settings and clicking Deploy. From now on, every pull request automatically gets a private preview link, and anything merged into `main` goes live. **Expect a 404 the first time you open the live link** — a brand-new repo usually only has a README, no actual webpage yet, so there's nothing to show at the homepage address. That's not a broken connection; check the Vercel dashboard for a green "Ready" status to confirm it's working.
 9. Install Antigravity (Google's tool) and sign in. Leave it alone for now — it's only used for checking, much later.
 10. In your project, create a folder named `docs`. This is the **shared notebook**. Models cannot read each other's chats — the ONLY way they stay coordinated is by reading the files in this folder before every task. Easiest way: ask Claude Code (Sonnet 5, ask-each-time mode) to create it for you.
-11. In the project's main folder, create a file named `CLAUDE.md`, and an identical copy named `AGENTS.md`, both containing exactly this: *"Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and /docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same component."* (Those four files don't exist yet — Steps 1, 2 and 3 create them. Claude reads CLAUDE.md automatically; the other tools read AGENTS.md. If this practice project never needs them, that's fine — the rule is harmless sitting unused.)
+11. In the project's main folder, create a file named `CLAUDE.md`, and an identical copy named `AGENTS.md`. Put the Git automation rules from **B.5** in them, followed by this project rule: *"Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and /docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same component."* (Those four files don't exist yet — Steps 1, 2 and 3 create them. Claude reads CLAUDE.md automatically at the start of every session; the other tools read AGENTS.md. If this practice project never needs the four files, that's fine — the rule is harmless sitting unused.)
+12. In Claude Code, run `/plugin install security-guidance@claude-plugins-official` and choose **user scope**. Free, installs once per machine, then reviews every session automatically with nothing to invoke.
 
 **Copy-paste prompt (use in ChatGPT whenever stuck):**
 ```
@@ -217,7 +251,7 @@ Now write /docs/SPEC.md containing: a page map, every section with a one-sentenc
 **Who does it:** You (grey) + Midjourney for imagery. Sonnet 5 (blue, normal) only as your note-taker at the end. Time: half a day minimum. Rushing this step wastes every step after it. **Mode: ASK-each-time** for Sonnet's single file save — trivial here, but the habit is the point.
 
 **Do this:**
-1. Browse awwwards.com and godly.website. Find 3–5 sites that create the feeling you want.
+1. Browse awwwards.com and godly.website. Find 3–5 sites that create the feeling you want. **Be specific about what you screenshot** — a site's homepage often mixes its best work with plain settings, sign-up, or filler pages. Search or click through to the actual showcase piece (e.g. "Site of the Day" entries), not a category or account page that merely links to it.
 2. Screenshot the **specific sections** you love — a hero, a menu, a gallery — not whole pages. Save the screenshots into `docs/refs/` in your project.
 3. In Midjourney, create moodboards: colour worlds, textures, hero imagery. Use its style-reference feature so all images match each other.
 4. Choose one display font (for headlines) and one text font (for paragraphs) — properly licensed. Choose your colour palette.
@@ -238,6 +272,8 @@ Turn these notes into /docs/DESIGN.md: fonts [names], colours [values], motion l
 ---
 
 ## Step 3 — Build the skeleton
+
+**Before you start:** like Step 0, this step's result will look like almost nothing — an empty page, maybe a placeholder heading. That's correct, not a sign it went wrong. You're building plumbing (folders, tools, rule files) that later steps fill in; the "wow, that's a real website" moment doesn't arrive until Step 4.
 
 **In one sentence:** Opus 4.8 sets up the empty but working project — the folder structure, the tools, and the rulebook files — with no visible sections yet.
 
@@ -451,7 +487,7 @@ Cold-review this repository you have never seen. Hunt specifically for: animatio
 - **Merge** — accept a pull request. The change becomes real.
 - **Revert** — load an earlier save point, throwing away a bad change.
 - **Terminal** — the text window where you type commands. About ten commands cover everything.
-- **Claude Code** — Claude living in the terminal; reads your project, edits files, runs commands. `/model` switches between Sonnet, Opus, Fable.
+- **Claude Code** — Claude that can read your project, edit files, and run commands, rather than just chat. Comes in two forms, same engine underneath: the **terminal** version (lives inside Cursor's terminal panel; switch models with `/model`, switch mode with Shift+Tab) and the standalone **Claude Code app** (friendlier buttons; model and mode pickers sit near the message box). Whenever a task says "attach a screenshot," it means exactly that in either form — in the app, there's a literal attach button or you can drag a file in; in the terminal, you'd instead save the file into the project folder and tell Claude Code where to find it. No hidden trick either way.
 - **API key** — a password string that lets a tool bill your account. Goes in Cursor's settings and nowhere else, ever.
 - **Dev server / localhost** — your site running privately on your own computer while you build.
 - **Effort / thinking / reasoning** — how long a model thinks before answering. See Part B.3.
