@@ -462,10 +462,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .journey-card.current{border-color:rgba(199,243,107,.5)}
 .journey-card.future{opacity:.62}
 .journey-card .state{
+  display:block;
   color:var(--faint);font-size:.61rem;font-weight:900;letter-spacing:.14em;
   text-transform:uppercase;margin-bottom:3px;
 }
-.journey-card .title{font-weight:850;line-height:1.25}
+.journey-card .title{display:block;font-weight:850;line-height:1.25}
 .journey-card .summary{color:var(--muted);font-size:.8rem;margin-top:5px;line-height:1.45}
 
 /* FORMA-9 example */
@@ -669,6 +670,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 }
 @media (min-width:1181px){.rail-inline{display:none}}
 @media (max-width:760px){
+  .shell{grid-template-columns:1fr}
   .main{padding:20px 15px 116px}
   .topbar{background:rgba(5,11,15,.94)}
   .topbar .brand-v2{padding:0;font-size:.95rem}
@@ -705,23 +707,23 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     <div class="topstats" id="topCoins"></div>
   </div>
   <div class="shell">
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Primary navigation">
       <div class="brand">The Walkthrough<small>YOUR WEBSITE PLAYBOOK</small></div>
-      <button class="nav-item" data-nav="home" id="navHome"></button>
-      <button class="nav-item" data-nav="map" id="navMap"></button>
-      <button class="nav-item" data-nav="reference" id="navRef"></button>
+      <button type="button" class="nav-item" data-nav="home" id="navHome" aria-label="You are here">You are here</button>
+      <button type="button" class="nav-item" data-nav="map" id="navMap" aria-label="The map">The map</button>
+      <button type="button" class="nav-item" data-nav="reference" id="navRef" aria-label="Reference">Reference</button>
       <div class="spacer"></div>
-      <button class="nav-item" data-nav="vars" id="navVars"></button>
+      <button type="button" class="nav-item" data-nav="vars" id="navVars" aria-label="Project variables">Project variables</button>
       <div class="side-coins" id="sideCoins"></div>
     </aside>
     <main class="main" id="main"></main>
-    <aside class="rail" id="rail"></aside>
+    <aside class="rail" id="rail" aria-label="Project example and tools"></aside>
   </div>
-  <nav class="bottomnav">
-    <button class="nav-item" data-nav="home"></button>
-    <button class="nav-item" data-nav="map"></button>
-    <button class="nav-item" data-nav="reference"></button>
-    <button class="nav-item" data-nav="vars"></button>
+  <nav class="bottomnav" aria-label="Mobile navigation">
+    <button type="button" class="nav-item" data-nav="home" aria-label="You are here">You are here</button>
+    <button type="button" class="nav-item" data-nav="map" aria-label="The map">The map</button>
+    <button type="button" class="nav-item" data-nav="reference" aria-label="Reference">Reference</button>
+    <button type="button" class="nav-item" data-nav="vars" aria-label="Project variables">Project variables</button>
   </nav>
 </div>
 <div class="overlay" id="overlay"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
@@ -2454,25 +2456,25 @@ function renderSettings(){
   $('#main').innerHTML=`${viewHeader('Project controls','Settings','Changes apply immediately to prompts, availability warnings, credits, and track-specific guidance.')}
     <div class="settings-grid">
       <section class="setting-card"><h2>Model and tools</h2><p>Set the routine default and mark the tools you actually have.</p>
-        <div class="field"><label>DEFAULT MODEL</label><select data-setting="defaultModel">${modelOptions}</select></div>
+        <div class="field"><label for="setting-default-model">DEFAULT MODEL</label><select id="setting-default-model" data-setting="defaultModel">${modelOptions}</select></div>
         <div class="toggle-row"><label for="tool-codex">Codex</label><input class="toggle" id="tool-codex" type="checkbox" data-tool="codex" ${s.tools.codex?'checked':''}></div>
         <div class="toggle-row"><label for="tool-kimi">Kimi Code</label><input class="toggle" id="tool-kimi" type="checkbox" data-tool="kimi" ${s.tools.kimi?'checked':''}></div>
         <div class="toggle-row"><label for="tool-cr">CodeRabbit</label><input class="toggle" id="tool-cr" type="checkbox" data-tool="coderabbit" ${s.tools.coderabbit?'checked':''}></div>
       </section>
       <section class="setting-card"><h2>Project track and hosting</h2><p>Client work reveals production ceremony; practice keeps the lap lighter.</p>
-        <div class="field"><label>TRACK</label><select data-setting="track"><option value="practice" ${s.track==='practice'?'selected':''}>Practice</option><option value="client" ${s.track==='client'?'selected':''}>Client production</option></select></div>
-        <div class="field"><label>HOSTING</label><select data-setting="hosting">${hosting}</select></div>
+        <div class="field"><label for="setting-track">TRACK</label><select id="setting-track" data-setting="track"><option value="practice" ${s.track==='practice'?'selected':''}>Practice</option><option value="client" ${s.track==='client'?'selected':''}>Client production</option></select></div>
+        <div class="field"><label for="setting-hosting">HOSTING</label><select id="setting-hosting" data-setting="hosting">${hosting}</select></div>
       </section>
       <section class="setting-card"><h2>Frontier-model credits</h2><p>Edit the personal pause point for expensive sessions.</p>
-        <div class="field"><label>CREDITS PER PROJECT</label><input type="number" min="0" max="20" value="${s.frontierCredits}" data-setting="frontierCredits"></div>
+        <div class="field"><label for="setting-credits">CREDITS PER PROJECT</label><input id="setting-credits" type="number" min="0" max="20" value="${s.frontierCredits}" data-setting="frontierCredits"></div>
         <div class="budget-note">This is a personal usage budget designed to prevent anxious overuse of your most expensive model. It is not a software-engineering rule.</div>
       </section>
       <section class="setting-card"><h2>Project brief variables</h2><p>These values fill the app-authored guided prompts.</p>
-        <div class="field"><label>PROJECT NAME</label><input value="${esc(p.name)}" data-project-field="name"></div>
-        <div class="field"><label>SITE IDEA</label><textarea data-project-field="idea">${esc(p.vars.idea)}</textarea></div>
-        <div class="field"><label>AUDIENCE</label><input value="${esc(p.vars.audience)}" data-project-field="audience"></div>
-        <div class="field"><label>ONE FEELING</label><input value="${esc(p.vars.feeling)}" data-project-field="feeling"></div>
-        <div class="field"><label>PAGES AND SECTIONS</label><textarea data-project-field="sections">${esc(p.vars.sections)}</textarea></div>
+        <div class="field"><label for="project-name">PROJECT NAME</label><input id="project-name" value="${esc(p.name)}" data-project-field="name"></div>
+        <div class="field"><label for="project-idea">SITE IDEA</label><textarea id="project-idea" data-project-field="idea">${esc(p.vars.idea)}</textarea></div>
+        <div class="field"><label for="project-audience">AUDIENCE</label><input id="project-audience" value="${esc(p.vars.audience)}" data-project-field="audience"></div>
+        <div class="field"><label for="project-feeling">ONE FEELING</label><input id="project-feeling" value="${esc(p.vars.feeling)}" data-project-field="feeling"></div>
+        <div class="field"><label for="project-sections">PAGES AND SECTIONS</label><textarea id="project-sections" data-project-field="sections">${esc(p.vars.sections)}</textarea></div>
         <button class="btn btn-primary" data-action="save-project-fields">SAVE VARIABLES</button>
       </section>
     </div>`;
@@ -2487,8 +2489,8 @@ function renderReference(){
     content='<div class="empty-state">Loading the canonical playbook…</div>';
   }else{
     const titles={B:'Part B — Operating rules',C:'Part C — The 11 steps',D:'Part D — Quick reference',E:'Part E — Troubleshooting, costs, and Project Zero'};
-    content=Object.entries(titles).map(([key,title])=>`<section class="acc"><button class="acc-head" data-action="reference-toggle" aria-expanded="false">${esc(title)}<span class="chev">›</span></button>
-      <div class="acc-body"><div class="source-label">Canonical playbook · verbatim source</div><div class="canonical">${markdownToHtml(SOURCE.parts[key])}</div></div></section>`).join('');
+    content=Object.entries(titles).map(([key,title])=>`<section class="acc"><button class="acc-head" data-action="reference-toggle" aria-expanded="false" aria-controls="reference-${key}">${esc(title)}<span class="chev" aria-hidden="true">›</span></button>
+      <div class="acc-body" id="reference-${key}"><div class="source-label">Canonical playbook · verbatim source</div><div class="canonical">${markdownToHtml(SOURCE.parts[key])}</div></div></section>`).join('');
   }
   $('#main').innerHTML=`${viewHeader('Canonical source','Reference','Parts B–E remain available in full, regardless of project track or tool settings.')}
     ${legendHtml()}${content}`;
@@ -2718,14 +2720,14 @@ function openProjectSetup(options={}){
   const setup=$('#setupView');
   setup.style.display='block';
   setup.innerHTML=`<div class="setup-wrap"><form class="setup-card" id="v2SetupForm">
-    <div class="view-kicker">${editing?'Project variables':'New project'}</div><h1>${editing?'Edit the project brief':'Start the walkthrough'}</h1>
+    <div class="view-kicker">${first?'New project':editing?'Project variables':'New project'}</div><h1>${first?'Start the walkthrough':editing?'Edit the project brief':'Start the walkthrough'}</h1>
     <div class="sub">These values fill guided prompts. You can change them later without losing progress.</div>
     <div class="field"><label for="setup-name">PROJECT NAME</label><input id="setup-name" name="name" value="${esc(values.name)}" placeholder="My project" required></div>
     <div class="field"><label for="setup-idea">SITE IDEA</label><textarea id="setup-idea" name="idea" placeholder="What are you building?" required>${esc(values.idea)}</textarea></div>
     <div class="field"><label for="setup-audience">AUDIENCE</label><input id="setup-audience" name="audience" value="${esc(values.audience)}" placeholder="Who is it for?" required></div>
     <div class="field"><label for="setup-feeling">ONE FEELING</label><input id="setup-feeling" name="feeling" value="${esc(values.feeling)}" placeholder="e.g. calm confidence" required></div>
     <div class="field"><label for="setup-sections">PAGES AND SECTIONS</label><textarea id="setup-sections" name="sections" placeholder="hero, catalog, about, contact…" required>${esc(values.sections)}</textarea></div>
-    <div class="hero-actions"><button class="btn btn-primary" type="submit">${editing?'SAVE CHANGES':'CREATE PROJECT'}</button>
+    <div class="hero-actions"><button class="btn btn-primary" type="submit">${first?'CREATE PROJECT':editing?'SAVE CHANGES':'CREATE PROJECT'}</button>
     ${!first&&(editing||STORE.projects.length)?'<button class="btn btn-ghost" type="button" data-action="setup-cancel">CANCEL</button>':''}</div></form></div>`;
   $('#v2SetupForm').addEventListener('submit',event=>{
     event.preventDefault();
@@ -2733,7 +2735,7 @@ function openProjectSetup(options={}){
     if(editing){
       const p=project();p.name=String(form.get('name')).trim();
       p.vars={idea:String(form.get('idea')).trim(),audience:String(form.get('audience')).trim(),feeling:String(form.get('feeling')).trim(),sections:String(form.get('sections')).trim()};
-      p.setupDone=true;p.view='settings';
+      p.setupDone=true;p.view=first?'home':'settings';
     }else{
       const created=newProject(String(form.get('name')).trim(),{
         idea:String(form.get('idea')).trim(),audience:String(form.get('audience')).trim(),
@@ -2744,6 +2746,7 @@ function openProjectSetup(options={}){
     }
     saveStore();setup.innerHTML='';setup.style.display='none';render();
   });
+  $('#setup-name')?.focus();
 }
 
 function renameProject(id){
