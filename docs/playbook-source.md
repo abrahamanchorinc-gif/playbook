@@ -1,536 +1,434 @@
-# The Visual Playbook — Complete Source Document
+# The Visual Playbook — Version 2
 
-**This file replaces every previous document.** It has two jobs:
-1. It is your complete, readable playbook on its own.
-2. It is the exact content you hand to Kimi K3 so it can build the visual version. Part A tells Kimi how. Parts B–E are the content.
+**This document replaces every previous version.** It is the single source of truth for how you build premium websites with AI models, and the source content for "The Walkthrough" app.
 
-Prices in USD, checked July 22, 2026.
+**Last verified: July 23, 2026.** Anything about specific models, prices, or product features can change — a list of time-sensitive claims to re-check lives at the very end of this document.
 
 ---
 
-# PART A — Instructions for the builder: build "The Walkthrough" (an interactive guided app)
+# THE THREE KINDS OF RULE (read this first)
 
-*(Human: when you do Project Zero, paste this ENTIRE file to the builder — Kimi K3, or Fable 5 standing in — and say: "Build the app described in Part A using the content in Parts B to E.")*
+Every rule in this playbook wears one of three badges. This is the most important idea in the whole document, because it tells you how seriously to take each instruction.
 
-Builder: you are building a single, self-contained **index.html** file — all CSS and JavaScript inline, no build step, no external services — that turns this playbook into an interactive guided walkthrough game. It will be deployed on Vercel as-is. Save all progress in the browser's localStorage so the player can close the tab any time and resume exactly where they left off.
+🛑 **PRODUCTION REQUIREMENT** — genuinely non-negotiable on real/client work. Breaking these can lose data, leak secrets, or ship broken products. Examples: never commit secrets; required CI checks must pass before merging client work; forms need server-side validation.
 
-**The player:** a beginner who loses track of where they are, reaches for the expensive model when anxious, forgets the Git safety net, learns visually, and wants to master this — every mechanic below exists to fix one of those. The tone is a calm, confident guide: game-like satisfaction, never childish.
+✅ **RECOMMENDED DEFAULT** — a good starting choice that lets you stop deliberating and proceed. Not a law. If you have a reason to deviate, deviating is fine. Examples: start routine work with Sonnet 5; one active feature branch at a time.
 
-**The one law: show everything, hide nothing.** The current task is huge and prominent; everything else may be collapsed for calm, but must always be reachable and fully readable — no information locked behind progress, ever.
+🎓 **PERSONAL HABIT / BUDGET** — a training-wheel or self-control rule that exists for *you specifically*, because of how you learn and where you overspend. Useful, honest, and absolutely not a universal engineering truth. Examples: the Fable allowance; ask-each-time mode while learning; two attempts before stopping to diagnose.
 
-**Use the text in Parts B–E word for word** for all step content, rules, tables, dictionary and troubleshooting. Do not paraphrase, shorten, or "improve" it. Do not shorten the prompts. Do not invent content.
-
-**Colour code (used everywhere, consistently):**
-| Who | Colour |
-|---|---|
-| Sonnet 5 | Blue |
-| Opus 4.8 | Purple |
-| Fable 5 | Coral red |
-| Kimi K3 | Teal |
-| Codex (GPT-5.6 Sol) | Pink |
-| Gemini / Antigravity | Amber |
-| You (the human) / no model | Grey |
-
-**Screens:**
-1. **Setup (first run only):** asks the project variables once — project name, site idea (a paragraph), audience, the one feeling, rough section list. Every prompt in the whole app auto-fills these into its brackets from then on. An "edit variables" control exists later.
-2. **Main screen — "You are here":** always exactly one current task, large: the step name, the task text, and three badges — MODEL (in its colour), EFFORT, MODE (PLAN / ASK / AUTO / READ-ONLY). One primary button: **Copy the prompt**. Secondary: **I'm stuck** and **Done → next**. Everything else on screen is quiet.
-3. **The map:** the 11 steps as a progress path, colour-coded by model, current position marked, completed steps ticked. Tapping any step expands its full card containing all nine fields listed below.
-4. **Reference drawer:** the Three Rules, the Ladder, the Switching Guide, the Modes guide, the cheat table, the dictionary, and "When things go wrong" — all present in full, collapsible.
-
-**Core mechanics:**
-- **Gated checklists.** Each step's "Do this" actions are tickable tasks, and each step ends with gate items taken from its "You are finished when" (e.g. "CodeRabbit commented", "Preview link loads", "Checked on my real phone"). A step cannot complete until its gates are ticked. Why: the loop is the real safety; the app enforces the loop.
-- **Copy-prompt on every task**, auto-filled with the project variables. The pre-flight confirm (v2) adds three ticks before copying a build prompt: on a branch? committed? mode set to [badge]?
-- **"I'm stuck" on every task.** Copies a help prompt pre-loaded with context: *"I'm following my website playbook. Step [N]: [step name]. Current task: [task text]. Expected model / effort / mode: [badges]. What's happening instead: [player describes here]. Guide me one small action at a time and wait for me between actions."* Pasting it into Claude (Sonnet) produces guided help with zero explaining.
-- **The Ladder widget with strike counter.** Three rungs, current model highlighted. An **It failed** button records a strike on the current task. Strike 1 → show: "Improve the prompt: add the exact error message and a screenshot, make the task smaller. Try once more." Strike 2 → move the highlight up one rung, update the MODEL badge, and offer a pre-written escalation prompt. A **Solved — back to Sonnet** button resets the rung. Why: this automates Rule 3 so the player never argues with a model for an hour again.
-- **Fable coins.** Two coin tokens always visible. Steps 1 and 5 each spend one, with a small satisfying animation. Any attempt to assign Fable elsewhere triggers: "Rule 2 — Fable opens twice per project. This isn't one of them." Why: it turns the budget the player finds hardest to keep into something visible and fun.
-- **Progress and finish.** Completing a step advances the map with a satisfying moment. Completing Step 9 shows the finish screen: a trophy, a field for the live URL, and **Start next project** — which resets task state, keeps the variables editable, and adds the finished site to a small shelf of completed projects.
-- **Notes seed.** Each step has a small "what went wrong / what worked" box and a **Copy all notes** button that outputs them formatted for NOTES.md. Why: it automates the mastery habit in Part 9.
-- **Fable session timer.** When a Fable task begins, a gentle one-hour countdown appears ("one sitting").
-
-**Every expanded step card contains these fields, in this order, always:**
-1. Step number and name
-2. "In one sentence" — what this step is
-3. "Why this step exists"
-4. "Who does it" — model, effort, **mode**, where, and how to select each. Show the model's colour prominently, and the mode as a badge: PLAN / ASK / AUTO / READ-ONLY
-5. "Do this" — the numbered actions, as the tickable tasks
-6. The copy-paste prompt(s), each in a monospace block with a copy button
-7. "You are finished when" — rendered as the step's gate items
-8. "Then" — what to close, what to open, which step is next
-9. "If it goes wrong" (only where the content provides it)
-
-**Build order — v1 before anything else:** v1 = setup screen, main screen, map, gated checklists, auto-filled copy prompts, "I'm stuck" prompts, the Ladder with strikes, Fable coins, localStorage saving. **v2** (only after v1 works end to end) = pre-flight confirms, session timer, celebrations, notes export, the completed-projects shelf. Why the split: the player ships v1 in one evening inside the full loop — and building v2 later becomes their first real Step 10 maintenance practice, on their own product.
-
-Also: works beautifully on a phone, large readable type, and every player-facing word in plain English matching the tone of this document.
+When you feel that mid-project anxiety — "am I doing this the RIGHT way?" — check the badge. If it's ✅ or 🎓, the answer is: you're fine either way. Proceed.
 
 ---
 
-# PART B — Read this first (the rules of the whole system)
+# PART A — Build brief for "The Walkthrough" app, Version 2
 
-## B.1 The Three Rules
+*(The v1 app is already built, live, and working. This brief covers v2 — the upgrade. Nothing needs rebuilding from scratch.)*
 
-**Rule 1 — Sonnet is home.** Sonnet 5 is your everyday model. Every task starts with Sonnet on its normal setting. Using Opus or Fable is a short visit for a specific hard job; when the job is done, you come straight back to Sonnet.
+**Recommended builder for v2 (✅, decided by project bake-off logic, last verified July 23, 2026):** GPT-5.6 Sol in Codex, high/maximum reasoning, plan-first, one feature branch, committing in coherent stages. **Independent reviewer:** Fable 5 in a fresh context, read-only first, ranking findings Blocker / High / Medium / Low / Preference-only. Sol implements confirmed fixes. This pairing means both frontier labs will have built real versions of this product — your own permanent bake-off data. It is a project decision, not a permanent ranking.
 
-**Rule 2 — Fable opens exactly twice per project.** Fable 5 is your smartest and most expensive model, and its usage allowance runs out fast. In a whole project you open it exactly two times: Step 1 (writing the plan) and Step 5 (the big animations). Any other Fable use means you have slipped back into your old habit — the one that kept eating your usage.
+**v2 changes to build:**
 
-**Rule 3 — Two strikes, then climb.** A model gets two tries at any task. Between try one and try two, you improve your instructions: add the exact error message, add a screenshot, make the task smaller. If try two also fails, you move up one rung of the ladder. You never argue with a model for an hour.
+1. **The three rule badges.** Every rule, tip, and gate in the app displays its badge (🛑 / ✅ / 🎓) with a one-line legend always reachable. The app must never teach a personal habit as universal truth.
+2. **Settings screen.** The player can edit: default model; frontier-model budget (see next item); which tools they have (Kimi Code yes/no, CodeRabbit yes/no, Codex yes/no); hosting platform; practice vs client track. Prompts and badges adapt to these settings.
+3. **"Fable coins" become configurable frontier-model credits**, labelled on-screen: *"This is a personal usage budget designed to prevent anxious overuse of your most expensive model. It is not a software-engineering rule."* Default: 2 credits per project, editable.
+4. **Track switch.** Practice track hides PR/CI ceremony; client track shows it and marks the 🛑 items.
+5. **Carried over from the old v2 list:** session timer for frontier-model tasks, per-step notes with export, small completion celebrations, the completed-projects shelf (multiple projects, each with its own saved state, resumable, renamable, deletable).
+6. **Hosting migration:** deploy v2 to **Cloudflare Pages** (the app is one static `index.html`, which is exactly what Pages is for). The v1 Vercel deployment stays live until v2 ships; retiring it is part of this exercise. Add a lightweight GitHub Actions check (HTML validity / link check / a basic Playwright smoke test) so the practice lap demonstrates CI too.
+7. **Content:** this document (Parts B–E) verbatim as the app's content — no paraphrasing, no shortened prompts, no invented content.
+8. **Unchanged v1 mechanics to preserve:** setup variables auto-filling prompts; the "You are here" single-task screen with model/effort/mode badges; the colour-coded progress map; gated checklists; the "I'm stuck" contextual help prompt; the escalation helper (updated to the diagnosis system in B.3, not a fixed model ladder); localStorage persistence; keyboard accessibility; reduced-motion support; phone + desktop layouts.
 
-**The safety net under all three rules:** before giving any model a task, save your game (in Git this is called a *commit* — see the dictionary). If the model breaks something, do not ask it to fix its own mess. Load your save (*revert*) and give a smaller, clearer task instead.
+**v2 acceptance criteria:** everything on the v1 list still passes (variables, gates, persistence, resume-on-reload, keyboard operation, reduced motion, no console errors, content matches source) **plus**: badges render on every rule; settings change prompts and badges live; multiple projects persist independently; the escalation helper walks the B.3 diagnosis instead of asserting a fixed ladder; Cloudflare Pages preview and production both work; CI passes; rollback understood.
 
-## B.2 The Ladder — which Claude do I pick?
+**Colour code (unchanged):** Sonnet blue · Opus purple · Fable coral · Kimi teal · Codex/Sol pink · Gemini/Antigravity amber · You grey.
 
-Picture three rungs, bottom to top:
+---
 
-- **Bottom rung: Sonnet 5 (blue) — home base.** You start every task here. About 80% of all work never leaves this rung.
-- **Middle rung: Opus 4.8 (purple) — the heavy lifter.** You climb here when Sonnet has failed twice, or when the job is big and careful by nature.
-- **Top rung: Fable 5 (coral red) — the genius.** Only Step 1, Step 5, or a genuine emergency where Sonnet AND Opus have each failed twice on the same problem.
+# PART B — The operating rules
 
-And one arrow pointing back down, labelled: **"Solved? Go straight back to Sonnet."**
+## B.1 Model selection: defaults, not mythology
 
-## B.3 The Switching Guide (with real examples)
+**The principle (✅):** *Use a strong default model for routine work. Run a short project-specific comparison ("bake-off") when model choice could materially affect quality. Escalate according to the type of problem, not model mythology.*
 
-| If the task is... | Use | At what effort | Why |
-|---|---|---|---|
-| Change text, colours, spacing, images | Sonnet 5 | Normal | Easy work; the cheap model does it perfectly |
-| A small bug ("this button doesn't work") | Sonnet 5 | Normal | Start at home; it usually solves it |
-| Write tests, write comments, explain code to you | Sonnet 5 | Normal | Routine work |
-| Sonnet got the same task wrong twice | Opus 4.8 | Normal | Two strikes — climb one rung |
-| A job that touches many files at once (renaming something used everywhere, reorganising folders) | Opus 4.8 | High | Big careful jobs need the stronger model thinking longer |
-| The one-time skeleton build (Step 3) | Opus 4.8 | High | Foundation work — start here directly, skip Sonnet for this one |
-| A nasty bug that survived Opus on normal | Opus 4.8 | High | Same model, more thinking time |
-| Sonnet failed twice AND Opus failed twice | Fable 5 | Don't touch its dial | Genuine emergency — Fable's third permitted use |
-| Writing the project plan (Step 1) | Fable 5 | Don't touch its dial | Planning mistakes multiply into everything after, so use the best brain |
-| The big animations (Step 5) | Fable 5 | Don't touch its dial | The hardest, most valuable code in the project |
-| The moment any hard problem is solved | Back to Sonnet 5 | Normal | Rule 1 — come home |
+Models change too fast for permanent rankings. Everything below is a **recommended default, last verified July 23, 2026** — expect it to age.
 
-**How to actually change effort:** in Claude Code, type `/model` to pick Sonnet, Opus, or Fable. If your version shows a thinking or effort option next to the model, that is the dial — normal for everyday, high when this guide says high. If you cannot find any dial, simply add the words **"think hard about this"** to your request — Claude Code treats that as the instruction to think longer. For Fable 5: it manages its own thinking depth, so never worry about its dial — your only job with Fable is keeping the task small.
+**Sonnet 5 (blue) — economical daily model. ✅** Routine implementation, copy and styling changes, straightforward responsive work, small bug fixes, tests, documentation, code explanation, maintenance, mechanical performance work, implementing clearly-defined review fixes.
 
-**What effort is:** thinking time before answering. More effort = smarter on genuinely hard problems, but slower, and it burns your usage allowance much faster. More effort does NOT fix vague instructions or an oversized task. Small clear task on normal beats giant task on maximum, every single time.
+**GPT-5.6 Sol (pink) — complex builder & cold reviewer. ✅** Planning complex projects, architecture, difficult implementation, long-context repository work, complex debugging, multi-file changes, high-stakes production changes, design-sensitive implementation, and cold review of work another model built. Recommended builder for the Walkthrough app v2.
 
-## B.4 The Modes — how much freedom the model gets while it works
+**Opus 4.8 (purple) — strong alternative engineer. ✅** Architecture, long-running engineering work, refactoring, difficult debugging, complex repository changes, second engineering opinion when Sol or Sonnet isn't producing a reliable result. A normal marketing-site scaffold does *not* automatically need this tier — Sonnet or Sol usually suffices.
 
-Model answers "who." Effort answers "how hard they think." **Mode answers "how much are you watching while they work?"** Every coding tool has some version of the same three modes, whatever names it uses. The idea that makes all of this make sense: **the yes-button was never your real safety.** Your real safety is the branch you're on, the commit behind you, and the pull-request review at the end. Mode only controls how closely you watch *during* the work.
+**Fable 5 (coral) — maximum-capability specialist. ✅** For work that is unusually long, ambiguous, or difficult; complex interactions that resisted other strong models; high-fidelity visual/interaction reasoning; architectural decisions that are expensive to get wrong; and read-only quality review of a nearly finished product's overall look and feel.
 
-**1. PLAN mode (look and think only).** The model can read your project and think, but it physically cannot change a file or run anything. It produces a plan; nothing happens until you approve it.
-**Use it whenever the decision is expensive** — before the skeleton, before a wow animation, whenever "what exactly should we build?" hasn't been agreed yet.
-**Why:** a wrong plan costs one conversation to fix; wrong code costs hours. Plan mode also makes it impossible for an eager model to "helpfully" start building before you've agreed — which is exactly how expensive Fable usage used to vanish.
+🎓 **Your personal Fable allowance:** a per-project budget (default 2 sessions) exists in the app *because you specifically tend to reach for the most expensive model when anxious, and it has repeatedly cost you your usage.* It is a self-control mechanism, honestly labelled — not an engineering rule. If a problem genuinely justifies Fable, use Fable; the budget is there to make you pause and check that it does.
 
-**2. ASK-each-time (the normal, default mode).** The model proposes every single file change and every command, and waits for your yes before doing it.
-**Use it while you're learning, and for delicate code.**
-**Why:** watching each change land is how you learn to read code — and on delicate work, you catch a wrong direction after one file instead of after ten.
+**Kimi K3 (teal) — visual implementation candidate. ✅** Reference-driven UI experiments, translating screenshots into frontend code, rapid visual prototypes, and section-building **when a project bake-off shows K3 produces the best result for that project**. K3 debuted #1 on the Frontend Code Arena (July 2026) — a strong signal, not a permanent fact. Use K3 through **Kimi Code or another officially supported integration** (🛑 for client work: don't make a paying project depend on an unofficial integration). Third-party routes (e.g. an editor's bring-your-own-key feature) are optional and only after a small test confirms model selection, image input, and edit application actually work. *Access status (time-sensitive): consumer subscriptions paused since July 19, 2026; the API remains open and is the route that matters here; open weights due July 27, 2026 — after which third-party hosts become an option too.*
 
-**3. AUTO-accept edits.** The model applies file changes by itself without asking each time. It still pauses to ask before bigger actions, like installing packages or running commands.
-**Use it for mechanical, well-defined work on a branch** — scaffolding, performance passes, writing tests.
-**Why:** clicking yes forty times on boilerplate teaches you nothing and protects you from nothing — the branch, the preview link, and CodeRabbit are doing the protecting. Auto-accept just removes friction where your attention adds no value.
+**Gemini / Antigravity (amber) — exploratory browser QA. ✅** Responsive screenshots, click-through exploration, cross-browser observations, recordings. 🛑 A browser-agent recording is supplementary evidence, never the only proof the product works — reproducible tests (Playwright) are the proof.
 
-**4. The banned mode: full auto / "skip permissions."** Some tools offer a mode where nothing is asked at all, commands included.
-**Never use it, at any stage.** One bad command can delete work or leak your API key, and the minutes it saves are never worth that. If a tool offers it, the answer is no.
+**CodeRabbit — optional AI reviewer. ✅** Comments on pull requests. Suggestions, not proof. It does not replace CI, testing, or security scanning; hosting does not replace it either — they're different jobs. Turn it on if you find its comments useful; skip it if you don't.
 
-**How to switch, per tool:**
-- **Claude Code:** press **Shift+Tab** to cycle between the modes — the current one is shown at the bottom of the panel. (Exact names vary a little by version; the three ideas above are always there.)
-- **Cursor (for K3):** the chat panel has a mode picker. The ask-questions-only option is its plan mode. The agent option proposes edits as **diffs** — before/after views you accept or reject one at a time (that's ask-each-time) — or can be set to apply them automatically (that's auto-accept).
-- **Codex:** when it offers approval levels, pick the review/suggest level for inspecting, and edits-on-a-branch for fixing. Never its full-auto level.
-- **Antigravity:** always used report-only in this playbook, which is its read-only posture.
+## B.2 The project bake-off (✅ for premium client work; skip for practice)
 
-**The whole section in one line:** PLAN when deciding · ASK when learning or the code is delicate · AUTO when the work is mechanical and a branch + commit sit behind it · full auto never.
+Before committing a whole premium project to one frontend builder:
 
-## B.5 Two tracks — how much Git ceremony you actually need
+1. Pick one representative section (the hero, or one highly styled section).
+2. Give the *identical* spec + reference image to two likely models.
+3. Build in separate disposable branches or isolated prototypes.
+4. Compare: visual fidelity · responsive behaviour · accessibility · code quality · number of correction turns · performance · time · cost.
+5. Choose the winner *for this project*. Archive or delete the loser.
 
-Git is non-negotiable (it's what makes undo possible), but the **ceremony around it** scales to the stakes. Pick a track per project.
+Don't run multi-model competitions for ordinary tasks — this is for when visual quality materially affects the commercial result.
 
-**SIMPLE TRACK — practice projects, personal sites, anything only you depend on.**
-Work directly on `main`. No branches, no pull requests, no merges. The loop is: commit → build → commit → push. Vercel deploys on push. If something breaks, revert to the last commit. Review comes from the **security-guidance plugin**, which runs automatically inside the session — pattern warnings as files are edited, an LLM review of the diff at the end of each turn, and a deeper cross-file review at commit time. That covers the two things that actually protect you (undo + review) with none of the sequencing puzzles.
+## B.3 Escalation by diagnosis, not by ladder
 
-**FULL TRACK — client work, anything with real users, anything you're paid for.**
-Branches, pull requests, CodeRabbit, preview links, merges — the loop from Step 0. The extra ceremony buys you a permanent record of what changed and why, plus review before anything reaches something people depend on. Also use this track any time more than one person touches the repo.
+🎓 **Attempt 1:** give the current model a small, clearly bounded task.
+🎓 **Attempt 2:** improve the task first — add the exact error, relevant logs, a screenshot, expected-vs-actual behaviour, file names, a smaller scope, a clear acceptance test. Then retry once.
 
-**The rule that prevents 90% of Git pain, on either track: one branch at a time.** Never open a second branch while the first is unmerged. (Branching off an unmerged branch is what creates confusing pull requests that show changes you didn't make.)
+**After two failures, stop and diagnose which kind of failure it is:**
 
-**Make Git automatic instead of memorable.** Claude Code reads `CLAUDE.md` at the start of every session, so put the Git habits there and they happen without you asking:
+- **Specification failure** (the request is unclear/contradictory) → stop coding; rewrite the requirement; update SPEC.md if needed. Switching models won't fix a vague ask.
+- **Context failure** (the model lacks a file, screenshot, error, or rule) → supply the missing context. Don't escalate because the prompt was incomplete.
+- **Visual failure** (doesn't match the design) → improve/crop/annotate the reference; state exact visual differences; consider the bake-off winner.
+- **Logic/debugging failure** (code misbehaves) → escalate Sonnet → Sol or Opus; Fable only when the problem justifies it.
+- **Architectural failure** (the structure itself is fighting you) → stop patching; Sol, Opus or Fable in plan mode; update ARCHITECTURE.md *before* structural changes.
+- **Environment/integration failure** (Cloudflare, GitHub, packages, runtime) → check official docs and logs. Don't burn model switches on a platform incompatibility.
+
+## B.4 Modes and permissions — what's actually enforced
+
+Three different things get confused; keep them separate:
+
+1. **A technically enforced permission** — e.g. a genuinely read-only environment, a workspace without write credentials, a PR diff view. The model *cannot* change things.
+2. **A tool's interface mode** — e.g. Claude Code's plan mode, ask-each-time, auto-accept. Real controls inside that tool.
+3. **A natural-language instruction** — writing "don't edit anything." This is *behavioural guidance*, not a guarantee.
+
+✅ For sensitive audits, prefer an actually enforced control: a real read-only mode, a disposable clone, a PR diff, or no write credentials.
+
+🛑 Never grant unrestricted command execution ("full auto" / skip-permissions). One unwatched command can delete work or leak keys.
+
+✅ Auto-accept edits only when: the task is mechanical and bounded; a clean branch exists; the current state is known; secrets are protected; required tests exist; commands still get conscious approval where possible; and the final diff gets reviewed.
+
+🎓 Ask-each-time while you're learning — watching each change land is how you learn to read code.
+
+## B.5 Git: two tracks, honest rules
+
+Git itself is 🛑 on both tracks — it's what makes undo possible. The *ceremony* scales with stakes.
+
+### Practice track (Project Zero, throwaway learning, personal experiments, nothing anyone depends on)
+
+May simplify: small PRs may be skipped; CodeRabbit may be skipped; some changes may go straight to `main`.
+Still required (🛑): a Git repository; useful commits; `.gitignore`; no secrets; local checks before pushing; a working deployment; the ability to revert.
+
+🎓 **Your auto-checkpoint habit** (in `CLAUDE.md` on practice repos only): Claude commits a checkpoint before each task and commits+pushes after you confirm the result. This exists because you asked to stop thinking about Git while learning. It stays on practice repos. It does **not** apply to client work.
+
+### Client production track
+
+🛑 Required: private repository; protected `main`; pull requests; required CI checks (see B.7); preview deployments with real access protection; human acceptance review; real-device test; documented rollback; environment separation; no required second-person approval when no second person exists. CodeRabbit optional. Secret scanning, push protection, Dependabot, and CodeQL where available.
+
+### Careful Git conduct for agents (🛑 on client track; ✅ everywhere)
 
 ```
-## How to work in this repo
+Before changing code:
+1. Run git status. 2. Report uncommitted changes. 3. Identify whether they
+belong to the current task. 4. Confirm secrets/env files are ignored.
+5. Do not stage or commit unrelated files. 6. Checkpoint only when the
+state is understood.
 
-Before starting any coding task, commit the current state first (message:
-"checkpoint before [task]"). This is my undo point — never skip it.
+Before committing:
+1. Show a concise diff summary. 2. Stage only the task's files.
+3. Run the required local checks. 4. Use an accurate, specific message.
+5. Do not push until the human approved the result, or a repo rule
+explicitly permits that narrow automated action.
 
-When a task is finished and I've confirmed it looks right, commit with a clear
-message and push. Don't wait for me to ask.
-
-If a change goes wrong, offer to revert to the last checkpoint rather than
-patching on top of broken code.
-
-Never force-push, never rewrite history, never delete branches without asking.
+Never: force-push without explicit approval · rewrite shared history ·
+commit secrets · delete branches without approval · silence failing tests
+to make CI green · change architecture merely to dodge a failing test.
 ```
 
-**Install the security plugin once, benefit forever:** in the Claude Code app, click the **+** next to the message box → **Plugins** → **Add plugin**, search for **Claude security** (official, Anthropic, from the `claude-plugins-official` marketplace) and install it — in the terminal, the equivalent is `/plugin install security-guidance@claude-plugins-official`, user scope. It's a deliberate, on-demand tool, not a silent background watcher: run it with `/claude-security`, which opens a menu to scan the whole codebase or just your recent changes, at a chosen effort tier. Every finding is challenged by a panel of agents before being reported, and it proposes patches you choose whether to apply. **Habit to build:** run `/claude-security` → "scan changes" any time before opening a pull request or merging to `main` — it's your Step 7 cold review, made effortless. Treat its findings as suggestions, not proof — a best-effort assistive tool can still miss things or raise false positives, so on the full track it supplements CodeRabbit and human review rather than replacing them.
+### Fix-in-place vs revert (✅)
+
+Fix in place when the regression is small, understood, and isolated. Revert when: the blast radius is unclear; speculative fixes are stacking up; the branch has no known-good state; or the whole approach was wrong. Preserve useful diagnostics (logs, the diff) before reverting. "Never let a model fix its own mistake" was too absolute — diagnose first, then choose.
+
+### Branches (✅)
+
+One active feature branch at a time, by default, as a solo beginner. **Exception — the hotfix:** a production defect may branch directly from `main` while a feature branch stays open; after the hotfix merges, update the feature branch from `main`. (Branching off an unmerged branch is what creates those confusing PRs that show changes you didn't make.)
+
+## B.6 Security — what's real
+
+🛑 The honest sentence, always: *"Automated scans found no currently detected high-severity issues. They do not prove the absence of vulnerabilities."* Never "the scan is clean, therefore the site is secure."
+
+**The Claude Security plugin you have installed** (v0.10.0 at last check — time-sensitive) is an **on-demand** tool: run `/claude-security`, pick a scan (whole codebase or recent changes) at a chosen effort tier; findings are challenged before being reported; it proposes patches you choose to apply. It is assistive. It is not a complete audit, and its output is suggestions, not proof. If a command or menu doesn't exist on your account/version, don't force it — the tool landscape shifts.
+
+**Real controls (🛑 on client track, ✅ on practice):**
+1. GitHub secret scanning + push protection, where available.
+2. Dependabot alerts (+ security updates where appropriate).
+3. CodeQL or equivalent code scanning, where available.
+4. Required CI status checks on `main`.
+5. Server-side input validation on every form and API route.
+6. Environment-variable separation (local / preview / production).
+7. Manual human review of authentication, forms, payments, API routes, and anything touching sensitive data.
+8. No production secrets in screenshots, prompts, source files, or client-side code — ever.
+9. An `.env.example` with variable names but no values; a real `.gitignore`.
+10. If a credential ever gets committed: rotate it immediately; deleting the commit is not enough.
+
+## B.7 Hosting: Cloudflare, done correctly
+
+*(Your live v1 app stays on Vercel until v2 ships — migrating it is part of the v2 exercise, not a chore today.)*
+
+**Static sites & Project Zero → Cloudflare Pages. ✅** Connect to GitHub; non-production branches get preview deployments automatically.
+
+**Full-stack Next.js → Cloudflare Workers with the OpenNext adapter. ✅** For SSR, route handlers, Server Actions, middleware the adapter supports. Do not put a full-stack app on the static-Pages path. Before committing a client project to it (🛑): verify the required Next.js features and packages support the Workers runtime; identify Node-specific dependencies; test with Cloudflare's production-like preview (not just `next dev`); confirm image handling; document any platform limitation. Exact command names vary — check Cloudflare's current docs rather than memorised commands.
+
+**Preview protection (🛑 for client work):** an obscure preview URL is *not* confidential. Protect client previews with Cloudflare Access (free tier covers this) or another real access control, and *test* that a logged-out browser can't open it. Never use real customer/production data in previews.
+
+**Environments (🛑):** separate values for local / preview / production. Production secrets don't get copied into preview unless genuinely required and safe.
+
+**Operations (✅):** Cloudflare Web Analytics; real-user performance monitoring; Worker logs/observability where relevant; Turnstile for form abuse — **verified on the server**, a visible widget alone protects nothing; DNS/domain management where appropriate.
+
+**Rollback (🛑 before client handover):** know which previous deployment is stable, know how to restore it, and test or document that process.
+
+## B.8 CI is the gate (client track)
+
+🛑 GitHub Actions gets installed during the scaffold, and `main` requires the checks to pass. Minimum per client-project PR:
+
+```
+npm ci
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+```
+
+Add as appropriate: Playwright smoke tests · axe accessibility smoke tests · unit/integration tests · bundle-size checks · Cloudflare-runtime preview checks.
+
+A production PR does **not** merge merely because it looks right, CodeRabbit approved, a model said "done," or the deployment succeeded. A successful deployment proves something deployed — not that the product is correct.
 
 ---
 
 # PART C — The 11 steps
 
-## Step 0 — Set up your tools
+*(Model names in these steps are ✅ recommended defaults, last verified July 23, 2026 — the badge system, B.1's philosophy, and B.3's diagnosis always take precedence over any specific name.)*
 
-**Before you start:** this step has no visible payoff — you won't see anything resembling a website by the end of it. That's normal, not a sign something's wrong. You're building the safety net (a save-game system with review checkpoints) that every later step relies on, not the app itself. If you finish this step feeling "okay, but what did that actually do?" — that feeling is expected. Come back and ask; it's worth understanding before moving on, not something to push through confused.
+## Step 0 — Set up the production safety system (once per machine + once per project)
 
-**In one sentence:** install and connect all seven tools, one time only, before your first project — you will never repeat this step.
+**In one sentence:** install the safety net — version control, checks, hosting, and previews — before any real building.
 
-**Why this step exists:** every later step assumes the tools are connected. Doing it once now means every future project starts in minutes.
+**Expectation-setting (🎓):** this step has no visible payoff. You won't see anything resembling a website at the end of it. That's correct, not a failure.
 
-**Who does it:** You (grey), with ChatGPT (your tutor) open beside you on its normal setting. No coding models are used yet. Time: one relaxed afternoon. **Mode for the practice lap: ASK-each-time** (Claude Code's default — touch nothing). Why: the entire point of Step 0 is watching what every single action does; approving each one IS the lesson.
+**Once per machine:** Git installed · GitHub account · Cloudflare account · your model tools (Claude Code; Kimi Code when doing visual client work; Codex) · the Claude Security plugin.
 
-**Two ways to run this step:** for a first practice project (like Project Zero, below), you can do everything inside the **Claude Code app alone** — skip Cursor and Kimi K3 entirely for now, steps 3–4 below don't apply yet. For a real client website you'll want the fuller setup with Cursor and Kimi K3 in play. The numbered list covers both; skip 3–4 if you're doing a practice project first.
+**Once per project:**
+- **Practice project:** repository (public is fine *if* the content is genuinely non-sensitive — never make a client repo public just to get free tooling 🛑); `.gitignore`; clone locally; open in your tool; `docs/` folder; instruction files (`CLAUDE.md`/`AGENTS.md`) — on practice repos these may include the 🎓 auto-checkpoint habit; Cloudflare Pages connected for previews.
+- **Client project (all of the above, plus 🛑):** private repository; protected `main` with required status checks (and "require approvals" OFF when you're solo — that setting assumes a second person and will lock you out of your own merges); GitHub Actions from day one; `.env.example`; secret scanning, push protection, Dependabot, CodeQL where available; Cloudflare Access on previews; lockfile committed; Node/package-manager versions pinned; CodeRabbit optional.
 
-**Also pick your track before you start (see B.5):** SIMPLE track (practice/personal — no branches or pull requests, commit straight to `main`, security plugin does the reviewing) or FULL track (client work — the branch/PR/CodeRabbit/merge loop). On the simple track you can skip the CodeRabbit and branch-protection steps below entirely; add them the day the project stops being just yours.
+**The practice lap (do once, ever):** branch → small change → local check → commit → push → pull request → CI runs → Cloudflare preview → (optional AI review) → your check → merge → production deploys → know how you'd roll back. That loop is the entire game; everything after is the loop with different content.
 
-**Do this:**
-1. Make a GitHub account at github.com. Create one empty *repository* — that's the online home of a project's code. Call it anything. Keep it **Public** for now — CodeRabbit reviews public repositories for free, so the robot reviewer works today even before you've bought its paid plan.
-2. In that repository's settings, turn on protection for the `main` *branch* (the "real" version of your code): Settings → Branches → Add rule → branch name `main` → tick **"Require a pull request before merging."** Protection means nothing changes the real version without going through a *pull request* — a reviewed proposal. **If you are working solo (no one else reviewing your PRs), do NOT tick "Require approvals"** — or if it's ticked by default, untick it / set it to 0. That specific setting assumes a second person exists to click approve; left on, it will permanently block you from merging your own work later. If you can't find any of these toggles, use the tutor prompt below.
-3. *(Skip for a first practice project.)* Download and install Cursor (cursor.com) — the program where code gets written. Sign in. Use "Open Folder / Clone Repository" to open your GitHub repository in it.
-4. *(Skip for a first practice project.)* In Cursor's settings, find the models section and paste in your Kimi K3 API key — the password string from your Kimi account. After this, "Kimi K3" appears in Cursor's model picker. Never paste this key anywhere except Cursor's settings.
-5. Install **Claude Code** — either inside Cursor's terminal (View menu → Terminal if hidden), or as its own **Claude Code app** if you're skipping Cursor for now (both are the same engine underneath; the app just has friendlier buttons, including a literal **attach** button for images — drag a screenshot in or click attach, no folder-placement tricks needed). Sign in with your Claude Max account. To switch between Sonnet 5, Opus 4.8 and Fable 5: in the terminal type `/model`; in the app, use the model picker shown near the message box. To change mode (Plan / Ask-each-time / Auto-accept): in the terminal press Shift+Tab; in the app, look for a mode toggle near the message box — if you can't find one, just start your message with "In plan mode:" and Claude Code will generally respect it.
-6. But before opening Claude Code, one plumbing step if you're not using Cursor: get the repository onto your computer. Open your computer's terminal (Mac: Terminal app; Windows: PowerShell), check Git is installed (`git --version` — if missing, Mac will offer to install it, Windows should get it from git-scm.com), then `cd` into a folder like Documents, and run `git clone ` followed by your repository's HTTPS address (copy it from the green **Code** button on your GitHub repo page). Then open that new local folder as your project in the Claude Code app.
-7. Go to coderabbit.ai, sign in with GitHub, and install it on your repository. That's all — from now on it automatically comments on every pull request you open. You never "run" it. (It may show "no open pull requests found" right after connecting — that's correct, not an error; you haven't opened one yet.)
-8. Go to vercel.com, sign in with GitHub, and import your repository, using the default settings and clicking Deploy. From now on, every pull request automatically gets a private preview link, and anything merged into `main` goes live. **Expect a 404 the first time you open the live link** — a brand-new repo usually only has a README, no actual webpage yet, so there's nothing to show at the homepage address. That's not a broken connection; check the Vercel dashboard for a green "Ready" status to confirm it's working.
-9. Install Antigravity (Google's tool) and sign in. Leave it alone for now — it's only used for checking, much later.
-10. In your project, create a folder named `docs`. This is the **shared notebook**. Models cannot read each other's chats — the ONLY way they stay coordinated is by reading the files in this folder before every task. Easiest way: ask Claude Code (Sonnet 5, ask-each-time mode) to create it for you.
-11. In the project's main folder, create a file named `CLAUDE.md`, and an identical copy named `AGENTS.md`. Put the Git automation rules from **B.5** in them, followed by this project rule: *"Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and /docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same component."* (Those four files don't exist yet — Steps 1, 2 and 3 create them. Claude reads CLAUDE.md automatically at the start of every session; the other tools read AGENTS.md. If this practice project never needs the four files, that's fine — the rule is harmless sitting unused.)
-12. In the Claude Code app, click the **+** next to the message box → **Plugins** → **Add plugin** → search **Claude security** and install it. (Terminal equivalent: `/plugin install security-guidance@claude-plugins-official`, user scope.) It's on-demand, not silent — you'll run it with `/claude-security` whenever you want a scan.
+**You're finished when:** the practice lap worked end to end and you watched each part happen.
 
-**Copy-paste prompt (use in ChatGPT whenever stuck):**
-```
-I'm on [Mac / Windows]. I'm setting up [tool name]. Right now my screen shows [describe it]. Tell me exactly what to click or type next, one action at a time.
-```
+## Step 1 — Define scope, success, and acceptance
 
-**Then do the practice lap — do not skip it.** In Claude Code (Sonnet), ask-each-time mode, say: *"Create a branch called test, add a file called hello.txt containing the word hi, commit it, push it."* Approve each action. Then on GitHub, click the yellow **Compare & pull request** banner that appears, and click **Create pull request**. Watch: CodeRabbit comments on the pull request, and Vercel attaches a "Visit Preview" link — open it (expect the same kind of 404-for-a-bare-text-file behaviour as above if you navigate to the wrong path; try `/hello.txt` on that link). Then merge and confirm on GitHub. That loop — **branch → change → pull request → robot review → your approval → merge** — is the entire game. Every step from here on is that loop with different content.
+**In one sentence:** write `/docs/SPEC.md` — what's being built, for whom, and how everyone will know it's done.
 
-**You are finished when:** the practice lap worked end to end and you saw the CodeRabbit comment and the Vercel preview link with your own eyes.
+**Who (✅):** GPT-5.6 Sol at high reasoning; Fable 5 for unusually complex briefs. **Mode:** plan/chat — no code exists yet. 🛑 **Human approval is mandatory; a model's output is never automatically the contract.**
 
-**Then:** go to Step 1.
+SPEC.md includes: business objective · audience · primary conversion · sitemap · every page and section with a one-line purpose · content status (final vs provisional) · functional requirements · integrations · data handling · SEO requirements · **accessibility target: WCAG 2.2 AA by default** (🛑 set it here, not at the end) · supported browsers/devices · performance budget · analytics · out-of-scope list · client approval stages · acceptance criteria · who approves launch · maintenance expectations.
 
----
+**For client work, also settle now (🛑):** deadlines and review dates · revision limits · change-request process · content and asset responsibility · domain and hosting ownership · privacy requirements · portfolio permission. (Full checklist: Part D.3.)
 
-## Step 1 — Write the plan
+**You're finished when:** a stranger could read SPEC.md and correctly describe what's being built and how success is judged.
 
-**In one sentence:** tell Fable 5 your idea and turn it into a written plan file called SPEC.md that every other model will follow.
+## Step 2 — Lock the content and design direction
 
-**Why this step exists:** every model works from written instructions, and mistakes in the plan multiply into everything built afterwards — so the plan is made by your best brain, once, and saved where all models can read it.
+**In one sentence:** you (not any model) choose how it looks, feels, and reads — captured in `/docs/DESIGN.md`, `/docs/CONTENT.md`, and `/docs/refs/`.
 
-**A sentence you need:** Fable 5 is opened exactly twice per whole project (Rule 2). **This is the first of those two times.**
+**Who:** you, with Midjourney for imagery and any model as note-taker. **Why it can't be skipped (✅):** left alone, models drift toward the same average design — references are what force them off that path.
 
-**Who does it:** Fable 5 (coral red). Where: the Claude app, or Claude Code with `/model` set to Fable 5. Don't touch any effort dial — Fable manages itself. Time: under one hour, one sitting. **Mode: PLAN.** In Claude Code, press Shift+Tab until the bottom of the panel says plan. Why: the plan IS the product of this step, and plan mode makes it physically impossible for Fable to start building the site early — which is exactly how expensive Fable usage used to vanish. (If you use the Claude app instead, there's no mode to set; the app can't touch your files anyway.)
+Do: collect 3–5 real reference sites (screenshot the *specific sections* you mean, not homepages — and note in DESIGN.md exactly which aspect each reference is for) · moodboards with consistent style · one display + one text typeface, **licence confirmed** (🛑 for client work) · colour system · spacing/component language · motion language in plain words · responsive priorities · accessibility considerations per component · banned patterns · content: final copy or clearly-marked provisional (CONTENT.md) · asset rights and AI-asset approval recorded.
 
-**Do this:**
-1. Paste prompt 1 below with your details filled in.
-2. Fable will ask you up to five questions. Answer them honestly — "I don't know, you decide" is an allowed answer.
-3. Paste prompt 2.
-4. Read the SPEC.md it wrote. **Change anything you don't like — especially the wording.** AI writing is a draft; your taste is final.
-5. Switch to ASK-each-time (Shift+Tab) for one action, and ask Claude Code: *"Save this as /docs/SPEC.md and commit it with the message 'add spec'."* Approve the save when it asks. Why the switch: plan mode can't write files — saving is the one moment this step needs hands.
+**AI prototypes (✅):** tools like Claude Design may generate exploratory directions to react to — label them *exploratory material*, not authoritative reference code. Human taste is the final decision-maker; nothing from a prototype gets pasted into the repo.
 
-**Copy-paste prompt 1:**
-```
-You are my lead architect. My website idea: [describe it]. It is for: [audience]. The single feeling a visitor should get: [one feeling]. Pages and sections I imagine: [rough list]. Before writing anything, ask me up to 5 questions that would improve the plan.
-```
+**You're finished when:** a stranger reading DESIGN.md could describe the vibe in three words matching your intent, and every asset's rights are accounted for.
 
-**Copy-paste prompt 2:**
-```
-Now write /docs/SPEC.md containing: a page map, every section with a one-sentence purpose, draft text for each section, and success criteria for the finished site.
-```
+## Step 3 — Choose the architecture, hosting, and build the scaffold
 
-**You are finished when:** you can describe every section of the site out loud in one sentence each, without looking.
+**In one sentence:** pick the *right-sized* technology for this project's actual requirements, then build the empty-but-working foundation with CI and previews attached.
 
-**Then:** **close Fable 5 completely.** It stays closed until Step 5. Go to Step 2.
+**Who (✅):** Sol or Opus for the architecture decision (plan mode first); Sonnet can execute a straightforward scaffold. Fable only if the architecture is genuinely unusual. **Expectation (🎓):** the result looks like almost nothing — an empty page that deploys. Correct, not broken.
 
----
+🛑 **Do not default to Next.js.** Choose from requirements: plain HTML/CSS/JS · Astro · Next.js · a CMS — considering static vs server-rendered needs, forms/APIs, **Cloudflare runtime compatibility**, who edits content later, animation requirements, and maintenance burden. Record the decision and its reasons in `/docs/ARCHITECTURE.md`; motion rules in `/docs/MOTION.md`; operational notes (envs, deploy, rollback) in `/docs/OPERATIONS.md`.
 
-## Step 2 — Pick the look
+Scaffold includes: folder structure · typecheck + lint + test setup · GitHub Actions wired (client track 🛑) · Cloudflare config + preview deployment · environment handling · error handling where relevant · metadata foundation · accessibility foundation (semantic landmarks, focus styles) · responsive foundation · production build verified.
 
-**In one sentence:** you (not any AI) choose exactly how the site should look and feel, and save that decision as pictures and a file called DESIGN.md.
+**You're finished when:** CI passes **and** a Cloudflare preview loads. Both, not either.
 
-**Why this step exists:** left alone, every AI model drifts toward the same average design — that is why your old sites looked "AI-generated." Real reference pictures are the only thing that forces a model off that path. This is the single most important step for premium results.
+## Step 4 — Build and approve a representative vertical slice
 
-**Who does it:** You (grey) + Midjourney for imagery. Sonnet 5 (blue, normal) only as your note-taker at the end. Time: half a day minimum. Rushing this step wastes every step after it. **Mode: ASK-each-time** for Sonnet's single file save — trivial here, but the habit is the point.
+**In one sentence:** build ONE section or page completely — real content, real type, responsive, accessible, performant, previewed — and get it approved before mass production.
 
-**Do this:**
-1. Browse awwwards.com and godly.website. Find 3–5 sites that create the feeling you want. **Be specific about what you screenshot** — a site's homepage often mixes its best work with plain settings, sign-up, or filler pages. Search or click through to the actual showcase piece (e.g. "Site of the Day" entries), not a category or account page that merely links to it.
-2. Screenshot the **specific sections** you love — a hero, a menu, a gallery — not whole pages. Save the screenshots into `docs/refs/` in your project.
-3. In Midjourney, create moodboards: colour worlds, textures, hero imagery. Use its style-reference feature so all images match each other.
-4. Optional but powerful: open **Claude Design** (the Design tab in Claude — included with your Max plan, no extra cost). Give it your reference screenshots and your vibe words, and ask for 2–3 different design directions as clickable prototypes. React to them, refine the one you like with its inline comments and sliders, then screenshot the winner into `docs/refs/`. **Rule: its prototypes are references, never code** — nothing from Claude Design gets pasted into the repo; the real build still happens through the loop in Steps 3–5, where review and Git protect it.
-5. Choose one display font (for headlines) and one text font (for paragraphs) — properly licensed. Choose your colour palette.
-6. Write your **motion language** in ordinary words. Examples: "heavy, slow, cinematic — things settle like stone" or "light, springy, playful — things bounce into place."
-7. Give all your notes to Sonnet 5 with the prompt below, then commit the file it writes.
+**Who (✅):** for premium client work, **this is where the bake-off runs** (B.2) and the winner builds the slice. Otherwise: Sonnet for straightforward, Sol for design-sensitive, K3 for reference-driven visual work.
 
-**Copy-paste prompt (Sonnet 5):**
-```
-Turn these notes into /docs/DESIGN.md: fonts [names], colours [values], motion language: [your words], and a banned list: no purple-glow-on-dark, no floating glass cards, no generic 3D blobs, no default component-library look for hero sections.
-```
+The slice answers, cheaply: is the design direction translating? is the component approach sound? is the chosen model reliable *on this project*? is the animation direction realistic? does the responsive system work? is the client expecting something different? 🛑 Do not build the whole site before these are answered — this is the single best insurance in the playbook.
 
-**One permanent change from your old habit:** no more AI-generated website mockups as references. An AI's guess at a website fed into another AI doubles the generic look. Real, human-made award sites only.
+**You're finished when:** the slice passes lint/typecheck/tests/build, an accessibility smoke check, the Cloudflare preview, a real-phone look, and human (or client) approval.
 
-**You are finished when:** a stranger reading DESIGN.md could describe your vibe in three words that match what's in your head.
+## Step 5 — Build the remaining sections and pages
 
-**Then:** go to Step 3.
+**In one sentence:** repeat the slice's proven approach across the site, in coherent feature groups.
 
----
+**Who (✅):** the slice's winning model for visual sections; Sonnet for logic pieces; escalate per B.3. **Mode (🎓):** diff-review while learning; bounded auto-edit once a model has earned trust on this project.
 
-## Step 3 — Build the skeleton
+✅ One PR per *understandable unit*, not per tiny section: navigation + global layout · homepage content sections · portfolio/work pages · about/services · footer + global CTAs. Each group passes: lint · typecheck · relevant tests · production build · accessibility smoke test · Cloudflare preview · desktop review · **real-phone review**. Visual feedback to models must be specific and measurable ("the heading is ~2× too small relative to the image — match the reference crop"), not "make it better."
 
-**Before you start:** like Step 0, this step's result will look like almost nothing — an empty page, maybe a placeholder heading. That's correct, not a sign it went wrong. You're building plumbing (folders, tools, rule files) that later steps fill in; the "wow, that's a real website" moment doesn't arrive until Step 4.
+## Step 6 — Build the signature interactions
 
-**In one sentence:** Opus 4.8 sets up the empty but working project — the folder structure, the tools, and the rulebook files — with no visible sections yet.
+**In one sentence:** the 2–3 "wow" moments — scroll sequences, hero animation, canvas work — built plan-first, one at a time, then hand-tuned by you on a real phone.
 
-**Why this step exists:** everything later hangs on this foundation, so it's built once, carefully, by the strong model, and its rules are written down so no later model can wander off and structure things differently.
+**Who (✅):** the strongest suitable model *for this interaction* — Sol, Fable, Opus, or the bake-off winner; a tiny prototype settles genuine doubt. 🎓 Don't spend a Fable credit because a step number says so — spend it when the interaction's difficulty justifies it.
 
-**Who does it:** Opus 4.8 (purple) on **high** effort — go straight to Opus for this one, don't start at Sonnet. Where: Claude Code inside Cursor's terminal (`/model` → Opus 4.8, pick the high thinking option, or add "think hard about this" to the prompt). Time: an hour or two, mostly waiting. **Mode: PLAN first, then AUTO-accept edits.** Why both: the *decisions* in a skeleton are the expensive part — plan them, read them, approve them. But the *typing* is dozens of boilerplate files, and approving each one teaches you nothing; the branch, the preview link, and CodeRabbit are the real safety here, not the yes button.
+Method (✅): plan mode first · written animation beats · one isolated interaction per branch · explicit mobile behaviour · explicit reduced-motion fallback · performance budget stated up front · cleanup requirements stated up front · real-device testing before merge.
 
-**Do this:**
-1. In Claude Code: *"Create a branch called scaffold."*
-2. Press Shift+Tab until you're in **PLAN mode**. Paste the prompt below with this sentence added at the top: *"First present your plan for this scaffold and wait for my approval before building anything."*
-3. Read the plan. Paste anything confusing into ChatGPT: *"Explain this plan like I'm new — any red flags?"* Happy? Approve it.
-4. Switch to **AUTO-accept edits** (Shift+Tab) and let it build. It will still pause before bigger actions like installing packages — read those and say yes consciously; a command is an action on your computer.
-5. When it finishes: *"Commit everything, push, and open a pull request."*
-6. Open the Vercel preview link — an empty skeleton page should load without errors.
-7. Read CodeRabbit's comments. Paste any you don't understand into Sonnet: *"Explain this like I'm new, and tell me if it matters."* Fix what matters, then merge.
+**Animation rules (revised — honest versions):**
+- ✅ *Prefer* transform and opacity for high-frequency animation — they're generally the safest performance choices. Other properties (layout, colour, filter) may be animated deliberately when the cost has been tested.
+- 🛑 **One owner per animated property.** GSAP and Motion must never both control the same property on the same element — that's the real conflict.
+- ✅ Motion by default for state-driven component animation; GSAP for timeline-heavy, scroll-driven, or highly coordinated sequences where it clearly helps. "One system per component" is a useful beginner simplification (🎓), not a technical law.
+- 🛑 Every animated component: cleans up timelines, ScrollTriggers, and listeners; avoids duplicate setup on React rerenders; respects reduced motion; has a simplified/non-animated fallback; has mobile-specific behaviour where needed; never traps keyboard or screen-reader users; is tested on a representative lower-powered phone.
 
-**Copy-paste prompt (Opus 4.8, high):**
-```
-Read /docs/SPEC.md and /docs/DESIGN.md. Think hard about this. Set up a Next.js project with Tailwind, using Motion for small component animations and GSAP for large scroll-driven moments. Add React Three Fiber only if the spec requires 3D. Then write two files: /docs/ARCHITECTURE.md (folder layout, naming rules, where animation code lives) and /docs/MOTION.md containing these hard rules: Motion for small component animations only; GSAP and 3D only inside isolated sections with full cleanup when they unmount; animate transform and opacity only; every animation respects the user's reduced-motion setting; mobile gets its own animation settings from day one via matchMedia. Build a deployable empty skeleton — no real sections yet.
-```
+## Step 7 — Forms, integrations, content systems, and SEO
 
-**You are finished when:** the empty skeleton loads on a Vercel preview link, and ARCHITECTURE.md and MOTION.md exist in `/docs`.
+**In one sentence:** everything that makes the site *do* things — built with its tests, not with tests postponed.
 
-**Then:** switch to Kimi K3 in Cursor's chat panel. Go to Step 4.
+**Who (✅):** Sonnet/Sol by task complexity; 🛑 human review on anything touching auth, payments, or personal data.
 
----
+🛑 Every form: server-side validation · clear validation messages · success state · failure state · spam protection (Turnstile **verified server-side**) · rate limiting where appropriate · email delivery *tested* · logging or monitoring · privacy explanation · a retention decision · no secrets in browser code.
 
-## Step 4 — Build the sections, one at a time
+Where relevant: CMS · booking/API integrations · authentication · metadata + Open Graph · sitemap · robots · structured data · redirects · canonical URLs.
 
-**In one sentence:** Kimi K3 builds each visible piece of the site (hero, features, gallery, footer...) one at a time, always copying from one of your reference screenshots.
+## Step 8 — Harden and test the entire product
 
-**Why this step exists:** building one small section at a time, each locked in by a review before the next begins, is what keeps quality high — the opposite of your old "generate the whole site at once, then tweak forever" habit. K3 does this step because it is currently the world's best model at matching a reference picture.
+**In one sentence:** the full-court press — automated and human — before anyone calls it finished.
 
-**Who does it:** Kimi K3 (teal), normal setting, in Cursor's chat panel with K3 selected from the model picker. You (grey) approve each section. Time: this is where most of the project hours go. Repeat the recipe below once per section. **Mode: Cursor's agent with diff review** — K3 proposes each change as a diff (a before/after view) and you accept or reject it. Why: for looks, *your eye* is the quality gate, and you don't yet know K3's habits — watching is how trust gets earned. After a few sections go smoothly, letting it auto-apply within the branch is fine, because the pull request and the real-phone check still guard the result. Any logic piece that goes to Sonnet: ASK-each-time in Claude Code — small delicate work gets watched.
+Run: full CI · production build · Cloudflare-runtime preview · Playwright suite · accessibility automation (axe) **plus the human passes automation can't do**: keyboard-only pass · screen-reader pass · zoom/reflow (200%) · reduced-motion pass · responsive + cross-browser sweep · console-error check · broken-link check · form-delivery test · repeated Lighthouse runs under consistent conditions (✅ 90+ mobile is a sensible target for marketing sites — a target, not the sole gate) · bundle review · animation profiling (long main-thread tasks, layout shifts, memory growth during repeated navigation) · slower-network test · security checks per B.6 · dependency review · secret review.
 
-**The recipe — repeat for every section:**
-1. In Claude Code: *"Create a branch called section-hero"* (swap in each section's name).
-2. In Cursor's chat with K3 selected: attach **one** reference screenshot from `docs/refs/`, and paste the prompt below with the blanks filled.
-3. Look at the result in your dev server (the private local preview — Cursor/K3 will tell you the localhost address). Not right? Tell K3 *specifically* what's off: "the heading is much bigger relative to the image in the reference — match that." It compares screenshots and adjusts.
-4. Optional but excellent: in Antigravity (amber), ask its agent to open your dev server and screenshot the section at phone width and desktop width, so you can compare against the reference side by side without squinting.
-5. Happy? In Claude Code: *"Commit, push, open a pull request."* Read CodeRabbit's comments. **Open the Vercel preview link on your actual phone and look at it.** Then merge.
-6. Next section — back to action 1.
+Antigravity may add exploratory browser sweeps and recordings (✅) — supplementary to, never instead of, Playwright.
 
-**Copy-paste prompt (Kimi K3):**
-```
-Read /docs/DESIGN.md and /docs/MOTION.md. Build the [hero] section. Its purpose from the spec: [paste that section's one-sentence purpose and draft text from SPEC.md]. Match the attached reference image's layout and feel. It must work at desktop and phone widths. Use small Motion animations only — no GSAP in this section.
-```
+## Step 9 — Independent review, approval, and launch
 
-**If it goes wrong:**
-- **K3 gets the LOOK wrong twice** → the problem is your reference, nine times out of ten. Crop the screenshot tighter to exactly the part you mean, or draw an arrow on it. Do not climb the ladder for looks — Opus and Fable are worse than K3 at this.
-- **The broken part is LOGIC** (a form, saving data — anything about *working* rather than *looking*) → that's not K3's lane. Take just that piece to Sonnet 5 (blue, normal) in Claude Code.
-- **A section seems to need Opus or Fable** → the section is too big. Split it into two smaller sections instead.
-- **Kimi K3 is unavailable** → Sonnet 5 (blue, normal) builds sections instead. The recipe and the reference screenshots stay exactly the same — only the builder changes.
+**In one sentence:** a model that did not build it reviews it read-only; confirmed fixes go back to a builder; humans approve; then launch — with rollback ready.
 
-**You are finished when:** every section from SPEC.md is merged and looks right on your real phone.
+**Who (✅):** cross-review — Sol reviews Claude-built work; Claude reviews Sol-built work; K3 can review visual fidelity. Reviewer is read-only for the initial report (enforced where possible, per B.4) and ranks findings **Blocker / High / Medium / Low / Preference-only**. 🛑 Preferences don't get fixed unless the human wants them.
 
-**Then:** reopen Fable 5 — **the second and final of its two permitted uses.** Go to Step 5.
+Launch checklist (🛑 on client work): blockers + highs resolved · CI green · client approval in writing · domain + DNS verified · production env vars confirmed · analytics + privacy/consent settings confirmed · form delivery confirmed in production path · monitoring on (errors, uptime/form monitoring) · rollback confirmed · content freeze in effect (Part D.4) · accessibility acceptance done · custom 404/error pages exist · merge to `main` · **verify the actual production domain in a real browser.**
 
----## Step 5 — The wow moments
+## Step 10 — Maintain, monitor, and handle emergencies
 
-**In one sentence:** Fable 5 builds the two or three signature animations that make the site feel premium (the scroll-driven hero, a pinned sequence, maybe a 3D scene) — then you personally fine-tune the timing by hand on a real phone.
+**Routine (✅):** issue → clarify acceptance criteria → branch → change → tests → preview → review → merge → verify production. Covers: dependency updates · security alerts · analytics + Core Web Vitals review (LCP, INP, CLS from real users) · error and form monitoring · content updates · broken-link checks · backup/export checks · keeping docs and ARCHITECTURE.md true.
 
-**Why this step exists:** these moments are the hardest code in the project AND the part visitors actually feel. The hardest code goes to the smartest model; the feel goes to the only one with taste — you. This hour of human fiddling is the entire difference between "nice site" and "out of this world."
+**Hotfix path (🛑 memorise):** confirm the production defect → branch directly from `main` → smallest safe fix → focused tests + build → preview → merge → verify production → update any open feature branch from `main` → write down what happened.
 
-**A sentence you need:** this is **the second of Fable 5's two permitted uses.** After this step, Fable stays closed for the rest of the project, including all maintenance, forever.
-
-**Who does it:** Fable 5 (coral red) writes it → Sonnet 5 (blue) cleans it → You (grey) tune it. Where: Claude Code (`/model` → Fable 5). Time: budget half a day per moment. One branch per moment. **Mode: PLAN first, then ASK-each-time — never auto-accept in this step.** Why: this is the most delicate code in the whole project, it's the single best learning moment in the whole project, and Fable is expensive — ask-each-time means you catch a wrong direction after one file, not after ten.
-
-**Do this (repeat per wow moment):**
-1. In Claude Code: *"Create a branch called wow-hero."*
-2. Shift+Tab to **PLAN mode** and ask: *"Before writing any code, describe the structure of the animation you'll build and how it follows MOTION.md."* Read it. Approve it.
-3. Shift+Tab to **ASK-each-time**, then paste the prompt below with your beats filled in, approving each change as it comes.
-4. When it works: **close Fable.** Switch `/model` to Sonnet and say: *"Clean this up and add plain-English comments explaining what every number in the animation timeline controls."*
-5. **The human part.** Open the preview on a real phone. Change the numbers yourself — duration, delay, easing, overlap. Nudge, scroll, feel, repeat. Whenever curious, ask Sonnet: *"What does changing this number do?"* (This is also how you learn.)
-6. *"Commit, push, open a pull request."* CodeRabbit, real-phone check, merge. Next moment → back to 1.
-
-**Copy-paste prompt (Fable 5):**
-```
-Read /docs/MOTION.md. Build [the pinned hero scroll sequence]: [describe it beat by beat — for example: "as you scroll, the title splits apart, the product rotates into view, then everything settles into place"]. Use GSAP ScrollTrigger in an isolated component, full cleanup when it unmounts, a mobile variant via matchMedia, and respect the reduced-motion setting.
-```
-
-**You are finished when:** scrolling feels perfectly smooth (a steady 60 frames per second) on a mid-range phone — not just on your computer.
-
-**Then:** close Fable 5 for the rest of the project. Back home to Sonnet. Go to Step 6.
-
----
-
-## Step 6 — Phone and speed check
-
-**In one sentence:** make the site fast and smooth on ordinary phones, and prove it with a score.
-
-**Why this step exists:** most visitors are on phones, and a premium-looking site that stutters reads as cheap. Speed is measurable, so this step has a number to hit.
-
-**Who does it:** Sonnet 5 (blue), normal. Climb to Opus 4.8 (purple, high) only if one specific speed problem survives two Sonnet attempts. Where: Claude Code, on a branch. **Mode: AUTO-accept edits.** Why: this is mechanical, well-defined work, and the gate here is a number — the Lighthouse score — not your yes-clicks.
-
-**Do this:**
-1. Paste the prompt below.
-2. Test on one iPhone and one mid-range Android if you possibly can.
-3. Pull request, CodeRabbit, merge.
-
-**Copy-paste prompt (Sonnet 5):**
-```
-Do a performance pass on the whole site: reduce how many things animate at once on small screens, lazy-load anything heavy such as 3D, verify the reduced-motion setting genuinely calms the entire site, and use next/image for all images. Then run Lighthouse and report the mobile scores.
-```
-
-**You are finished when:** the Lighthouse mobile performance score is **90 or higher**.
-
-**Then:** switch companies for fresh eyes. Go to Step 7.
-
----
-
-## Step 7 — Fresh-eyes review
-
-**In one sentence:** Codex — a model that has never seen this code — inspects everything and reports what the builders missed, and the security plugin scans specifically for vulnerabilities.
-
-**Why this step exists:** a model reviewing its own work excuses its own mistakes, exactly like a person proofreading their own essay. A different company's model has no loyalty to the code. The security scan exists because vulnerabilities are a specific category general review can miss — a dedicated scan catches what a broader "does this look right" pass doesn't.
-
-**Who does it:** the security-guidance plugin (installed in Step 0) first — it's fast, free, and lives right in Claude Code where the code already is. Then Codex running GPT-5.6 Sol (pink), at the highest effort setting your ChatGPT Plus plan offers. Where: Codex, pointed at your GitHub repository. Then Gemini in Antigravity (amber) for one final sweep. **Mode: READ-ONLY for both reviews — the security scan and Codex — then edits-on-a-branch only for confirmed fixes. Never Codex's full-auto option.** Why: an inspector must not touch anything while inspecting — hands-off is exactly what makes the eyes fresh — and the fixes it *is* allowed to make stay small, on a branch, behind the same pull-request gate as everything else.
-
-**Do this:**
-1. In Claude Code, run `/claude-security` and choose "scan changes." Read what it reports; apply the patches it proposes only after you understand what each one fixes.
-2. Paste the prompt below into Codex.
-3. Its small mechanical fixes → it opens a branch and pull request → CodeRabbit → you merge.
-4. Anything *structural* it flagged (how the code is organised) → take to Opus 4.8 in Claude Code. Claude owns the architecture; the inspector does not remodel the house.
-5. Then in Antigravity: ask a Gemini agent to sweep the entire project in one pass (it can hold all of it at once) for cross-browser problems and leftover junk — **report only, no fixing.** Route its findings to Sonnet or K3 depending on whose lane it is.
-
-**On the simple track (see B.5):** you still run `/claude-security` before every merge to `main` — that part costs nothing and takes a minute. Codex and the Antigravity sweep are optional there; use them for anything you'd hate to get wrong, skip them for low-stakes practice work.
-
-**Copy-paste prompt (Codex):**
-```
-Cold-review this repository you have never seen. Hunt specifically for: animation cleanup leaks (GSAP / Three.js), hydration errors, accessibility failures, dead code, performance problems. Rank findings by severity. Fix ONLY small mechanical issues on a branch. For anything structural, describe it but do not restructure.
-```
-
-**You are finished when:** the security scan is clean or its findings are resolved, Codex's severity list is empty of high items, and the Gemini sweep report has been handled.
-
-**Then:** go to Step 8.
-
----
-
-## Step 8 — Test everything
-
-**In one sentence:** robots and you together prove every page works, everyone can use it, and search engines can find it.
-
-**Why this step exists:** "it worked when I looked" is not proof. Tests are proof that survives every future change.
-
-**Who does it:** Sonnet 5 (blue, normal) in Claude Code, plus Antigravity (amber), plus you (grey) for one keyboard pass. **Mode: AUTO-accept edits on the branch — but still read and approve the commands that run the tests.** Why: the tests themselves are the gate in this step, so watching every edit adds nothing; a command, though, is an action on your computer, so commands always get a conscious yes.
-
-**Do this:**
-1. Sonnet: *"Write Playwright tests: every page loads, navigation works, forms submit, no console errors. Run them and fix any failures."*
-2. Sonnet: *"Run an accessibility check with axe and fix critical issues: alt text, focus states, colour contrast."* Then, yourself: put the mouse away and go through the whole site using only Tab and Enter. Can you reach and use everything?
-3. Sonnet: *"Add SEO basics: title and description for every page, an OpenGraph share image, a sitemap, and a robots file."* Make the share image in Midjourney so it matches your brand.
-4. Antigravity: have its agent click through every page at phone and desktop sizes and save the recording — your proof that everything works.
-
-**You are finished when:** tests pass, the keyboard pass works, and the Antigravity recording exists.
-
-**Then:** go to Step 9.
-
----
-
-## Step 9 — Ship it
-
-**In one sentence:** merge the final pull request and the site goes live automatically.
-
-**Who does it:** You (grey). No model needed.
-
-**Do this:**
-1. Merge into `main` on GitHub. Vercel puts it live on its own — that's what you connected in Step 0.
-2. In Vercel, turn on Analytics and Speed Insights so you can see real visitors and real-world speed.
-3. Stuck on any setting → ChatGPT tutor prompt from Step 0.
-
-**You are finished when:** the live URL loads on your phone and Analytics shows your own visit.
-
-**Then:** go to Step 10 — and stay there forever.
-
----
-
-## Step 10 — Keep it alive (forever)
-
-**In one sentence:** every future change, no matter how small, uses Sonnet 5 and the same loop: branch → change → pull request → CodeRabbit → your check on a real phone → merge.
-
-**Why this step exists:** sites die by accumulating careless changes. The loop makes carelessness impossible.
-
-**Who does it:** Sonnet 5 (blue, normal) for everything. Climb the ladder only by Rule 3. **Fable 5 does not exist in maintenance — ever.** **Mode by default: ASK-each-time** for anything touching the live site — small changes deserve small attention. Drop to AUTO-accept only for repetitive chores you have already watched succeed before.
-
-**One extra rule:** if a change would break something written in MOTION.md or ARCHITECTURE.md, the change goes to Opus 4.8 first, and Opus updates the rulebook file in the same pull request — so the written rules never drift from the real code.
+**Fable in maintenance (✅):** not banned — simply unnecessary for normal maintenance, reserved for problems that justify it.
 
 ---
 
 # PART D — Quick reference
 
-## D.1 The one-glance table
+## D.1 The one-glance table (✅ defaults, last verified July 23, 2026)
 
-| Situation | Use | Setting | Mode | Where |
-|---|---|---|---|---|
-| Any new coding task | Sonnet 5 (blue) | Normal | ASK-each-time | Claude Code in Cursor |
-| Sonnet failed the same task twice | Opus 4.8 (purple) | Normal, then High | ASK-each-time | Claude Code |
-| Big careful job: skeleton, many files at once, stubborn bug | Opus 4.8 (purple) | High | PLAN first, then AUTO | Claude Code |
-| Sonnet and Opus each failed twice | Fable 5 (coral) | Leave its dial alone | PLAN first, then ASK | Claude Code, short visit |
-| The project plan — once per project | Fable 5 (coral) | Leave its dial alone | PLAN | Claude app / Claude Code |
-| The wow animations — once per project | Fable 5 (coral) | Leave its dial alone | PLAN, then ASK | Claude Code |
-| Building a section from a reference image | Kimi K3 (teal) | Normal | Agent with diff review | Cursor chat panel |
-| A section's forms or logic | Sonnet 5 (blue) | Normal | ASK-each-time | Claude Code |
-| Security scan before merging | `/claude-security` plugin | Scan changes | READ-ONLY, then apply confirmed patches | Claude Code |
-| End-of-project cold review | Codex / GPT-5.6 Sol (pink) | Highest available | READ-ONLY, then edits on a branch | Codex |
-| Whole-project sweep, browser screenshots | Gemini (amber) | — | READ-ONLY (report-only) | Antigravity |
-| "Explain this to me like I'm new" | ChatGPT or Sonnet | Normal | Just chat | Chat |
+| Situation | Starting model/tool | Escalation / alternative | Mode |
+|---|---|---|---|
+| Routine coding task | Sonnet 5 | Sol or Opus after a *diagnosed* failure (B.3) | Ask, or bounded auto-edit |
+| Complex architecture | GPT-5.6 Sol or Opus 4.8 | Fable 5 for exceptional complexity | Plan, then reviewed edits |
+| Walkthrough app v2 build | GPT-5.6 Sol (Codex) | Fable 5 read-only review; K3 optional prototype | Plan, then branch edits |
+| Reference-driven section | Project bake-off winner | K3 / Sol / Sonnet / Fable | Diff review |
+| Complex animation | Sol / Fable / Opus, prototype decides | A different strong model reviews | Plan, then closely reviewed edits |
+| Tests & documentation | Sonnet 5 | Sol for complex test architecture | Bounded auto-edit |
+| Logic / integration | Sonnet or Sol | Opus/Fable for persistent hard problems | Ask or reviewed edits |
+| Browser regression testing | Playwright | Antigravity for exploratory sweeps | Automated + report-only |
+| PR quality review | CodeRabbit (optional) | Fresh-context model | Report first |
+| Security | GitHub controls + CI + human review (B.6) | Specialist review where risk warrants | Enforced controls |
+| Hosting: static site | Cloudflare Pages | Workers if runtime logic needed | Automated preview |
+| Hosting: full-stack Next.js | Cloudflare Workers + OpenNext | Reconsider platform if incompatible | Production-like preview |
+| Final cold review | A model that didn't build it | Second reviewer only for high-risk work | Read-only first |
+| Human visual approval | You (client where relevant) | — | 🛑 No model replaces this |
 
-## D.2 Dictionary
+## D.2 Dictionary (updated entries only — plain-English entries from v1 carry over)
 
-- **Repository (repo)** — the online home of one project's code, on GitHub.
-- **Branch** — a separate save file of the project where you experiment safely. `main` is the real version.
-- **Commit** — a save point. Made constantly.
-- **Push** — send your saves up to GitHub.
-- **Pull request (PR)** — a proposal to add your branch's changes into `main`. Shows every changed line. CodeRabbit comments on it; you press merge.
-- **Merge** — accept a pull request. The change becomes real.
-- **Revert** — load an earlier save point, throwing away a bad change.
-- **Terminal** — the text window where you type commands. About ten commands cover everything.
-- **Claude Code** — Claude that can read your project, edit files, and run commands, rather than just chat. Comes in two forms, same engine underneath: the **terminal** version (lives inside Cursor's terminal panel; switch models with `/model`, switch mode with Shift+Tab) and the standalone **Claude Code app** (friendlier buttons; model and mode pickers sit near the message box). Whenever a task says "attach a screenshot," it means exactly that in either form — in the app, there's a literal attach button or you can drag a file in; in the terminal, you'd instead save the file into the project folder and tell Claude Code where to find it. No hidden trick either way.
-- **Claude Design** — Anthropic's design tool (the Design tab in Claude, included with your Max plan). Describe what you want, attach references, and it produces clickable interactive prototypes you refine with inline comments and sliders. In this playbook it lives in Step 2 only, as an exploration tool: its prototypes are references to react to, never code to ship — the real build always goes through the loop.
-- **API key** — a password string that lets a tool bill your account. Goes in Cursor's settings and nowhere else, ever.
-- **Dev server / localhost** — your site running privately on your own computer while you build.
-- **Effort / thinking / reasoning** — how long a model thinks before answering. See Part B.3.
-- **Mode** — how much freedom a model has while it works: PLAN (look and think only, can't touch files), ASK-each-time (proposes every change and waits for your yes), AUTO-accept (applies file edits itself, still asks before bigger actions like commands). Full guide with the whys: Part B.4.
-- **Diff** — a before/after view of a proposed change, shown line by line. Cursor shows K3's work as diffs for you to accept or reject.
-- **Full auto / "skip permissions"** — the banned mode where a tool asks nothing at all, commands included. Never used, at any stage.
-- **Lighthouse** — a free scoring robot for site speed. You want 90+ on mobile.
-- **Playwright** — a robot that clicks through your site checking things work.
-- **axe** — a robot that checks accessibility.
-- **Hydration error** — a common Next.js bug where the page the server sent and the page the browser built disagree; Codex hunts these in Step 7.
-- **GSAP / Motion / React Three Fiber** — the animation and 3D toolkits. The rule that matters: never both GSAP and Motion in the same component (it causes conflicts) — MOTION.md enforces it.
+- **CI (Continuous Integration):** robots on GitHub that run your checks (lint, types, tests, build) on every pull request. On the client track, `main` refuses merges until they pass. The real gate.
+- **Cloudflare Pages:** hosting for static sites; connects to GitHub; every non-production branch gets a preview URL.
+- **Cloudflare Workers + OpenNext:** how full-stack Next.js runs on Cloudflare. Needs a compatibility check before client commitments.
+- **Cloudflare Access:** real login protection for preview URLs. Obscurity is not protection.
+- **Turnstile:** Cloudflare's CAPTCHA-alternative for forms — only counts when verified on the server.
+- **Vertical slice:** one section/page built completely to prove the approach before mass production.
+- **Bake-off:** a small same-spec, same-reference model comparison on one section, when visual quality materially matters.
+- **Claude Security plugin:** on-demand `/claude-security` scans; findings are suggestions, not proof (B.6).
+- **Kimi Code:** Moonshot's official CLI for K3 — the supported route; runs in any terminal, including Antigravity's.
 
-# PART E — Problems and costs
+## D.3 Client delivery checklist (🛑 — settle before design or development)
 
-## E.1 When things go wrong
+Business objective · audience · primary conversion · page + feature inventory · integrations · content responsibility · asset responsibility · deadlines + review dates · revision limits · out-of-scope list · change-request process · acceptance criteria · launch approver · maintenance responsibility · accessibility target · browser/device support · analytics + privacy + SEO requirements · CMS/editing needs · domain ownership · hosting ownership · font/stock/image licensing · AI-asset approval · logo + brand files · portfolio permission.
 
-- **"It looks AI-generated."** You rushed Step 2. Go back, collect better references, tighten DESIGN.md. No model can fix taste that was never written down.
-- **"Scrolling stutters on my phone."** Too many things animating at once. Sonnet: cut animated elements on mobile and check nothing re-renders during scroll.
-- **"The model made it worse and now things are broken."** Stop. Revert to the last save. Give a smaller task with clearer instructions. Two strikes → climb. Never ask a model to fix its own mess on top of the mess.
-- **"Two models disagree about how code should be organised."** Claude (Opus) is the architect and ARCHITECTURE.md is law. The other model's branch gets redone to match. No exceptions, no negotiation.
-- **"My Fable usage is gone again."** You opened Fable outside Steps 1 and 5. That is the old habit. Rule 2 exists precisely because of it.
-- **"CodeRabbit said something I don't understand."** Paste it to Sonnet: *"Explain this like I'm new, and tell me if it matters."* Most comments are minor; the ones that matter, Sonnet fixes on the same branch.
-- **"I don't know which model this task needs."** It needs Sonnet. That is always the answer to this question (Rule 1). The ladder exists for what happens after.
+## D.4 Content freeze & change control (🛑 for client work)
 
-## E.2 Costs (USD, checked July 22, 2026)
+1. Draft scope approved → 2. Sitemap approved → 3. Design direction approved → 4. Core content approved (or clearly provisional) → 5. Vertical slice approved → 6. Remaining build → 7. **Content freeze before final QA** → 8. Anything new after freeze is a *documented change request* unless it fixes a defect. A client request is not automatically a small revision because it sounds small — compare to approved scope, estimate impact, raise it properly.
 
-Already paying: Claude Max 20x ($200/mo) · ChatGPT Plus ($20/mo) · Kimi K3 usage (~$5–20 per site) · Antigravity (free).
-Added: Cursor Pro ($20) + Midjourney ($10–30) + CodeRabbit (~$12–30) + Vercel Pro ($20) ≈ **$62–90/mo extra**.
-Do not buy: ChatGPT Pro, Lovable, Bolt, v0, Windsurf, paid Gemini — every one overlaps with something you already own.
+---
 
-## E.3 Project Zero — your first real act
+# PART E — Troubleshooting, costs, and Project Zero
 
-Hand this ENTIRE file to Kimi K3 and say: **"Build the app described in Part A using the content in Parts B to E."** Do it inside the full loop: new repo called `playbook`, Step 0 for real, one branch, pull request, CodeRabbit, merge, Vercel preview. An evening's work, pocket-change cost — and at the end you own a live, interactive walkthrough of your own system, and you've practised every mechanic that everything else depends on. Build v1 only; v2 becomes your first Step 10 maintenance practice later.
+## E.1 Troubleshooting by cause
 
-**If Kimi K3 is unavailable:** use Fable 5 in Claude Code as the stand-in builder — it is the #2 frontend model on the same leaderboard K3 tops, it *won* the interactive category there (which is exactly what this app is), and Project Zero doesn't otherwise use Fable, so this legitimately spends one of its two permitted openings (Rule 2 intact). Say: *"You are standing in for Kimi K3. Build the app described in Part A using the content in Parts B to E."* One branch, one session, then close Fable. Budget alternative that leaves Fable untouched: Sonnet 5 first, Opus 4.8 on high if the result falls short.
+**"It looks generic."** Weak references · vague DESIGN.md · generic content · no approved vertical slice · default component patterns overused. Fix the inputs, not the model.
 
-**Gathering the two reference screenshots (be specific, or you'll grab the wrong screen):**
-- **Reference 1 — the journey/map feel.** Search "Duolingo learning path screenshot" or "Duolingo home screen" in Google Images rather than opening the app yourself — you want the screen with the **winding trail of round lesson bubbles** and streak/gem counters at the top. Explicitly *not* any sign-up, survey, or settings screen (e.g. "how did you hear about us") — those look similar (dark, card-based) but show the wrong thing entirely.
-- **Reference 2 — the card/checklist style.** Search "onboarding checklist UI" or "habit tracker app" on mobbin.com or dribbble.com. You want a screen with tickable rows and a progress indicator — not a full dashboard or a landing page.
-- Attach both directly in whichever tool you're using — in the Claude Code app there is a literal attach button (or drag-and-drop); you do not need to place files in folders yourself first.
+**"It doesn't match the reference."** Reference too broad · wrong crop · missing measurements · wrong assets · model unsuited to this project (bake-off) · feedback not specific enough.
+
+**"It's slow."** Check: bundle size · image sizes · font loading · layout shifts · long tasks · excessive JS · animation count · mobile variants · repeated animation setup · memory leaks · Cloudflare-runtime behaviour.
+
+**"CI is failing."** 🛑 Never ask a model to silence the failure. Identify which check: lint · types · unit tests · browser tests · build · runtime compatibility · env vars — then fix that thing.
+
+**"Cloudflare preview differs from local dev."** Test with the production-like preview runtime, then inspect: unsupported Node APIs · package compatibility · bindings · env vars · build config · caching · runtime logs.
+
+**"A model keeps making it worse."** Stop → inspect the diff → preserve logs → revert if direction is unclear → shrink the task → reconfirm acceptance criteria → escalate only after diagnosing (B.3).
+
+**"The client asked for a big change late."** D.4. Compare to scope → estimate impact → change request → update spec/design/deadline. Don't silently absorb it.
+
+## E.2 Costs (last verified July 23, 2026 — all of this drifts; check official pages before purchase)
+
+1. **Required infrastructure (free tiers cover the practice track):** GitHub · Git · Cloudflare (Pages/Access/Turnstile free tiers) · a Claude plan for Claude Code.
+2. **Optional convenience:** CodeRabbit (free on public repos; paid for private) · Cursor or similar editors (a visual-diff/autocomplete convenience — overlaps with tools you own; still worth it *if* you find its interface materially faster) · Vercel (fine product; you're standardising on Cloudflare).
+3. **Optional model upgrades:** higher Claude tiers · ChatGPT tiers above Plus.
+4. **Per-project usage:** Kimi K3 API ($3/M in, $15/M out, $0.30 cached — pay-as-you-go; $10 of credit is a sensible first load); any other API metering. Kimi *memberships* ($19–$199, currently paused for new signups) do **not** include API access — different product.
+5. **Client-billable:** premium fonts · stock · client-requested services — pass through, don't absorb.
+
+## E.3 Project Zero — status and the v2 exercise
+
+**Status: v1 is built, live, and yours.** It shipped through the full loop and taught you the loop. Nothing about this revision invalidates it.
+
+**The v2 exercise (your next maintenance rep):** hand Part A of this document to GPT-5.6 Sol in Codex — plan first, one feature branch, coherent commits — building the badge system, settings, configurable credits, the projects shelf, the carried-over v2 features, CI, and the Cloudflare Pages migration. Then Fable 5, fresh context, read-only review against this document and the reference images, findings ranked Blocker→Preference. Sol implements confirmed findings. Merge, verify production on Cloudflare, retire the Vercel deployment. Optional: K3 builds one key screen as a disposable prototype *only if* the comparison would change the final design.
+
+---
+
+# CONSISTENCY CHECKLIST (verified for this document)
+
+- Part A matches Parts B–E: badges, settings, credits, tracks, Cloudflare, and the Sol-builds/Fable-reviews pairing appear identically in both. ✓
+- Model assignments are consistent everywhere and always labelled ✅ defaults with a verification date; no permanent-ranking language remains. ✓
+- Cloudflare replaces Vercel throughout for new/client work; the one exception (v1 app remains on Vercel until the v2 migration) is stated deliberately in B.7 and E.3. ✓
+- CodeRabbit is optional everywhere it appears. ✓
+- CI is mandatory on the client track (B.8, Step 0, Step 3) and lightweight-but-present for Project Zero v2. ✓
+- Project Zero v2's recommended builder is GPT-5.6 Sol, with Fable 5 as read-only reviewer, framed as a project decision. ✓
+- Fable: capability-based role + honestly-labelled 🎓 personal allowance; the "exactly twice vs. third emergency use" contradiction is removed. ✓
+- Kimi: strong visual candidate via official integrations; arena result dated; access status dated; no "categorically best" claim. ✓
+- Security: plugin described accurately as on-demand and assistive; real controls listed; "clean scan ≠ secure" language used. ✓
+- Animation rules: one-owner-per-property is the hard rule; transform/opacity is a preference; per-component separation is labelled 🎓. ✓
+- Client delivery, content freeze, and change control are present (D.3, D.4, Steps 1/9/10). ✓
+- No contradiction remains between the model budget (🎓 personal) and the escalation system (B.3 capability-based). ✓
+
+# TIME-SENSITIVE CLAIMS TO REVERIFY LATER
+
+1. All model roles, rankings and pairings in B.1/D.1 (verified July 23, 2026 — expect drift within months).
+2. Kimi K3 access: consumer signups paused (July 19); API open; open weights due **July 27, 2026**; membership tiers/pricing.
+3. All prices in E.2, including Kimi API rates and Sonnet's announced Sept 1 price change.
+4. Claude Security plugin behaviour/commands (v0.10.0) and any newer Anthropic security products' availability on your plan.
+5. Cloudflare's OpenNext adapter compatibility and preview-command names.
+6. GitHub feature availability on your plan (secret scanning, push protection, CodeQL for private repos).
+7. Codex/ChatGPT Plus reasoning tiers and limits; Claude Code app UI (mode toggles, plugin menu paths).
+8. CodeRabbit free-tier terms for public repositories.
+9. WCAG 2.2 as the current target (a 3.0 draft process exists; AA of the current standard remains the sensible default).
+10. Whether Cursor or other editors have added capabilities that change the convenience calculus in E.2.
