@@ -54,6 +54,12 @@ back into skipping the check.
 Never silently do easy work on an expensive model, at high effort, or in a
 looser mode than the task needs.
 
+**Copyable prompts always go in a code block.** Any time you write a prompt
+meant to be copied and reused — for another AI tool, or saved for later —
+put it inside a fenced code block (triple backticks), never as plain
+paragraph text. The code block is what renders with a copy button; nothing
+else does.
+
 ## How to work in this repo
 
 **This repo is on the practice track (playbook v2, B.5).** The habits below are
