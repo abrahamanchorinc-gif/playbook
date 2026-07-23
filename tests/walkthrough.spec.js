@@ -89,6 +89,7 @@ test.describe('desktop walkthrough behavior', () => {
     page.on('pageerror', error => browserErrors.push(error.message));
 
     await completeFirstRun(page);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
 
     await page.getByRole('button', { name: 'I’M STUCK' }).click();
     await expect(page.getByRole('status')).toContainText('Diagnosis prompt copied');

@@ -1895,6 +1895,10 @@ function esc(value=''){
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
+function scrollToStart(){
+  window.scrollTo(0,0);
+}
+
 function uid(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
   return 'p-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9);
@@ -2640,12 +2644,12 @@ function completeStep(n){
   stepState(n).done=true;
   if(n===9){
     p.finished=true;p.currentStep=10;p.view='home';
-    saveStore();render();celebrate('Project journey complete — maintenance mode is ready.',true);
+    saveStore();render();scrollToStart();celebrate('Project journey complete — maintenance mode is ready.',true);
     return;
   }
   p.currentStep=Math.min(10,n+1);
   p.view='home';
-  saveStore();render();
+  saveStore();render();scrollToStart();
   celebrate(`Step ${n} complete. Step ${p.currentStep} is ready.`);
 }
 
@@ -2744,8 +2748,9 @@ function openProjectSetup(options={}){
       created.setupDone=true;
       STORE.projects.push(created);STORE.activeProjectId=created.id;
     }
-    saveStore();setup.innerHTML='';setup.style.display='none';render();
+    saveStore();setup.innerHTML='';setup.style.display='none';render();scrollToStart();
   });
+  scrollToStart();
   $('#setup-name')?.focus();
 }
 
@@ -2778,7 +2783,7 @@ function handleClick(event){
   const target=event.target.closest('[data-action],[data-nav]');
   if(!target) return;
   if(target.dataset.nav){
-    const p=project();p.view=target.dataset.nav;saveStore();render();return;
+    const p=project();p.view=target.dataset.nav;saveStore();render();scrollToStart();return;
   }
   const action=target.dataset.action;
   if(action==='legend'){openLegend();return;}
@@ -2824,14 +2829,14 @@ function handleClick(event){
     toast('Notes exported as Markdown.');return;
   }
   if(action==='project-open'){
-    STORE.activeProjectId=target.dataset.id;project().view='home';saveStore();render();return;
+    STORE.activeProjectId=target.dataset.id;project().view='home';saveStore();render();scrollToStart();return;
   }
   if(action==='project-create'){openProjectSetup({editing:false});return;}
   if(action==='project-rename'){renameProject(target.dataset.id);return;}
   if(action==='project-delete'){deleteProject(target.dataset.id);return;}
   if(action==='save-project-fields'){saveProjectFields();return;}
   if(action==='setup-cancel'){
-    $('#setupView').innerHTML='';$('#setupView').style.display='none';$('#app').classList.add('on');render();return;
+    $('#setupView').innerHTML='';$('#setupView').style.display='none';$('#app').classList.add('on');render();scrollToStart();return;
   }
 }
 
