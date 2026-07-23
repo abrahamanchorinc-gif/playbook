@@ -29,9 +29,13 @@
 - The **exact prompt** that was used for that step, filled in for real (not a template with brackets).
 - The **actual result** — an excerpt of SPEC.md at Step 1, a screenshot of the reference used and the section built at Step 4, and so on — whatever that step actually produces.
 
-This must be **one coherent project's journey**, not disconnected examples per step — the point is a user can follow it end to end and see how one idea became one real site. This needs actual assets (real screenshots, real SPEC/DESIGN excerpts) built once and stored with the app, not fabricated per step in isolation.
+This must be **one coherent project's journey**, not disconnected examples per step — the point is a user can follow it end to end and see how one idea became one real site.
 
-**Acceptance:** every one of the 11 steps has a real, concrete example from the same project, visible alongside the step you're working on.
+**No real client project exists to pull this from — generate one.** Invent one small, coherent example site concept (e.g. a portfolio, a local business, a simple product page) and use it consistently across all 11 steps. Use GPT Image to generate the imagery this example needs — reference-style images at Step 2, section screenshots at Step 4, the finished look at Step 5/6 — all sharing the same visual identity (same colours, same subject matter, same style) so it reads as one project throughout, not disconnected generated images. Write the accompanying text (SPEC.md excerpt, DESIGN.md excerpt, prompts filled in for real, etc.) to match.
+
+**This must be clearly labeled inside the app as an illustrative example**, not a real client result — a visitor should never mistake it for an actual site someone built and shipped.
+
+**Acceptance:** every one of the 11 steps has a concrete example from the same invented project, visually and textually consistent with every other step, clearly labeled as illustrative, visible alongside the step you're working on.
 
 ---
 
