@@ -133,11 +133,44 @@ Model answers "who." Effort answers "how hard they think." **Mode answers "how m
 
 **The whole section in one line:** PLAN when deciding · ASK when learning or the code is delicate · AUTO when the work is mechanical and a branch + commit sit behind it · full auto never.
 
+## B.5 Two tracks — how much Git ceremony you actually need
+
+Git is non-negotiable (it's what makes undo possible), but the **ceremony around it** scales to the stakes. Pick a track per project.
+
+**SIMPLE TRACK — practice projects, personal sites, anything only you depend on.**
+Work directly on `main`. No branches, no pull requests, no merges. The loop is: commit → build → commit → push. Vercel deploys on push. If something breaks, revert to the last commit. Review comes from the **security-guidance plugin**, which runs automatically inside the session — pattern warnings as files are edited, an LLM review of the diff at the end of each turn, and a deeper cross-file review at commit time. That covers the two things that actually protect you (undo + review) with none of the sequencing puzzles.
+
+**FULL TRACK — client work, anything with real users, anything you're paid for.**
+Branches, pull requests, CodeRabbit, preview links, merges — the loop from Step 0. The extra ceremony buys you a permanent record of what changed and why, plus review before anything reaches something people depend on. Also use this track any time more than one person touches the repo.
+
+**The rule that prevents 90% of Git pain, on either track: one branch at a time.** Never open a second branch while the first is unmerged. (Branching off an unmerged branch is what creates confusing pull requests that show changes you didn't make.)
+
+**Make Git automatic instead of memorable.** Claude Code reads `CLAUDE.md` at the start of every session, so put the Git habits there and they happen without you asking:
+
+```
+## How to work in this repo
+
+Before starting any coding task, commit the current state first (message:
+"checkpoint before [task]"). This is my undo point — never skip it.
+
+When a task is finished and I've confirmed it looks right, commit with a clear
+message and push. Don't wait for me to ask.
+
+If a change goes wrong, offer to revert to the last checkpoint rather than
+patching on top of broken code.
+
+Never force-push, never rewrite history, never delete branches without asking.
+```
+
+**Install the security plugin once, benefit forever:** in Claude Code, run `/plugin install security-guidance@claude-plugins-official` and choose **user scope** so it loads in every project on this machine. It then runs automatically with nothing to invoke. Treat its findings as suggestions, not proof — Anthropic describes it as a best-effort assistive tool that can miss things and raise false positives, so on the full track it supplements CodeRabbit and human review rather than replacing them.
+
 ---
 
 # PART C — The 11 steps
 
 ## Step 0 — Set up your tools
+
+**Before you start:** this step has no visible payoff — you won't see anything resembling a website by the end of it. That's normal, not a sign something's wrong. You're building the safety net (a save-game system with review checkpoints) that every later step relies on, not the app itself. If you finish this step feeling "okay, but what did that actually do?" — that feeling is expected. Come back and ask; it's worth understanding before moving on, not something to push through confused.
 
 **In one sentence:** install and connect all seven tools, one time only, before your first project — you will never repeat this step.
 
@@ -145,24 +178,30 @@ Model answers "who." Effort answers "how hard they think." **Mode answers "how m
 
 **Who does it:** You (grey), with ChatGPT (your tutor) open beside you on its normal setting. No coding models are used yet. Time: one relaxed afternoon. **Mode for the practice lap: ASK-each-time** (Claude Code's default — touch nothing). Why: the entire point of Step 0 is watching what every single action does; approving each one IS the lesson.
 
+**Two ways to run this step:** for a first practice project (like Project Zero, below), you can do everything inside the **Claude Code app alone** — skip Cursor and Kimi K3 entirely for now, steps 3–4 below don't apply yet. For a real client website you'll want the fuller setup with Cursor and Kimi K3 in play. The numbered list covers both; skip 3–4 if you're doing a practice project first.
+
+**Also pick your track before you start (see B.5):** SIMPLE track (practice/personal — no branches or pull requests, commit straight to `main`, security plugin does the reviewing) or FULL track (client work — the branch/PR/CodeRabbit/merge loop). On the simple track you can skip the CodeRabbit and branch-protection steps below entirely; add them the day the project stops being just yours.
+
 **Do this:**
-1. Make a GitHub account at github.com. Create one empty *repository* — that's the online home of a project's code. Call it anything.
-2. In that repository's settings, turn on protection for the `main` *branch* (the "real" version of your code). Protection means nothing changes the real version without going through a *pull request* — a reviewed proposal. If you can't find the toggle, use the tutor prompt below.
-3. Download and install Cursor (cursor.com) — the program where code gets written. Sign in. Use "Open Folder / Clone Repository" to open your GitHub repository in it.
-4. In Cursor's settings, find the models section and paste in your Kimi K3 API key — the password string from your Kimi account. After this, "Kimi K3" appears in Cursor's model picker. Never paste this key anywhere except Cursor's settings.
-5. Open Cursor's terminal — the text panel at the bottom (View menu → Terminal if hidden). Install Claude Code there and sign in with your Claude Max account. Once it's running, type `/model` — you'll see Sonnet 5, Opus 4.8, and Fable 5. That command is your model switch for all Claude work.
-6. Go to coderabbit.ai, sign in with GitHub, and install it on your repository. That's all — from now on it automatically comments on every pull request you open. You never "run" it.
-7. Go to vercel.com, sign in with GitHub, and import your repository. From now on, every pull request automatically gets a private preview link, and anything merged into `main` goes live.
-8. Install Antigravity (Google's tool) and sign in. Leave it alone for now — it's only used for checking, much later.
-9. In your project, create a folder named `docs`. This is the **shared notebook**. Models cannot read each other's chats — the ONLY way they stay coordinated is by reading the files in this folder before every task.
-10. In the project's main folder, create a file named `CLAUDE.md`, and an identical copy named `AGENTS.md`, both containing exactly this: *"Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and /docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same component."* (Those four files don't exist yet — Steps 1, 2 and 3 create them. Claude reads CLAUDE.md automatically; the other tools read AGENTS.md.)
+1. Make a GitHub account at github.com. Create one empty *repository* — that's the online home of a project's code. Call it anything. Keep it **Public** for now — CodeRabbit reviews public repositories for free, so the robot reviewer works today even before you've bought its paid plan.
+2. In that repository's settings, turn on protection for the `main` *branch* (the "real" version of your code): Settings → Branches → Add rule → branch name `main` → tick **"Require a pull request before merging."** Protection means nothing changes the real version without going through a *pull request* — a reviewed proposal. **If you are working solo (no one else reviewing your PRs), do NOT tick "Require approvals"** — or if it's ticked by default, untick it / set it to 0. That specific setting assumes a second person exists to click approve; left on, it will permanently block you from merging your own work later. If you can't find any of these toggles, use the tutor prompt below.
+3. *(Skip for a first practice project.)* Download and install Cursor (cursor.com) — the program where code gets written. Sign in. Use "Open Folder / Clone Repository" to open your GitHub repository in it.
+4. *(Skip for a first practice project.)* In Cursor's settings, find the models section and paste in your Kimi K3 API key — the password string from your Kimi account. After this, "Kimi K3" appears in Cursor's model picker. Never paste this key anywhere except Cursor's settings.
+5. Install **Claude Code** — either inside Cursor's terminal (View menu → Terminal if hidden), or as its own **Claude Code app** if you're skipping Cursor for now (both are the same engine underneath; the app just has friendlier buttons, including a literal **attach** button for images — drag a screenshot in or click attach, no folder-placement tricks needed). Sign in with your Claude Max account. To switch between Sonnet 5, Opus 4.8 and Fable 5: in the terminal type `/model`; in the app, use the model picker shown near the message box. To change mode (Plan / Ask-each-time / Auto-accept): in the terminal press Shift+Tab; in the app, look for a mode toggle near the message box — if you can't find one, just start your message with "In plan mode:" and Claude Code will generally respect it.
+6. But before opening Claude Code, one plumbing step if you're not using Cursor: get the repository onto your computer. Open your computer's terminal (Mac: Terminal app; Windows: PowerShell), check Git is installed (`git --version` — if missing, Mac will offer to install it, Windows should get it from git-scm.com), then `cd` into a folder like Documents, and run `git clone ` followed by your repository's HTTPS address (copy it from the green **Code** button on your GitHub repo page). Then open that new local folder as your project in the Claude Code app.
+7. Go to coderabbit.ai, sign in with GitHub, and install it on your repository. That's all — from now on it automatically comments on every pull request you open. You never "run" it. (It may show "no open pull requests found" right after connecting — that's correct, not an error; you haven't opened one yet.)
+8. Go to vercel.com, sign in with GitHub, and import your repository, using the default settings and clicking Deploy. From now on, every pull request automatically gets a private preview link, and anything merged into `main` goes live. **Expect a 404 the first time you open the live link** — a brand-new repo usually only has a README, no actual webpage yet, so there's nothing to show at the homepage address. That's not a broken connection; check the Vercel dashboard for a green "Ready" status to confirm it's working.
+9. Install Antigravity (Google's tool) and sign in. Leave it alone for now — it's only used for checking, much later.
+10. In your project, create a folder named `docs`. This is the **shared notebook**. Models cannot read each other's chats — the ONLY way they stay coordinated is by reading the files in this folder before every task. Easiest way: ask Claude Code (Sonnet 5, ask-each-time mode) to create it for you.
+11. In the project's main folder, create a file named `CLAUDE.md`, and an identical copy named `AGENTS.md`. Put the Git automation rules from **B.5** in them, followed by this project rule: *"Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and /docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same component."* (Those four files don't exist yet — Steps 1, 2 and 3 create them. Claude reads CLAUDE.md automatically at the start of every session; the other tools read AGENTS.md. If this practice project never needs the four files, that's fine — the rule is harmless sitting unused.)
+12. In Claude Code, run `/plugin install security-guidance@claude-plugins-official` and choose **user scope**. Free, installs once per machine, then reviews every session automatically with nothing to invoke.
 
 **Copy-paste prompt (use in ChatGPT whenever stuck):**
 ```
 I'm on [Mac / Windows]. I'm setting up [tool name]. Right now my screen shows [describe it]. Tell me exactly what to click or type next, one action at a time.
 ```
 
-**Then do the practice lap — do not skip it.** In Claude Code (Sonnet), say: *"Create a branch called test, add a file called hello.txt containing the word hi, commit it, push it, and open a pull request."* Then watch: CodeRabbit comments on the pull request, and Vercel attaches a preview link. Press merge on GitHub. That loop — **branch → change → pull request → robot review → your approval → merge** — is the entire game. Every step from here on is that loop with different content.
+**Then do the practice lap — do not skip it.** In Claude Code (Sonnet), ask-each-time mode, say: *"Create a branch called test, add a file called hello.txt containing the word hi, commit it, push it."* Approve each action. Then on GitHub, click the yellow **Compare & pull request** banner that appears, and click **Create pull request**. Watch: CodeRabbit comments on the pull request, and Vercel attaches a "Visit Preview" link — open it (expect the same kind of 404-for-a-bare-text-file behaviour as above if you navigate to the wrong path; try `/hello.txt` on that link). Then merge and confirm on GitHub. That loop — **branch → change → pull request → robot review → your approval → merge** — is the entire game. Every step from here on is that loop with different content.
 
 **You are finished when:** the practice lap worked end to end and you saw the CodeRabbit comment and the Vercel preview link with your own eyes.
 
@@ -212,7 +251,7 @@ Now write /docs/SPEC.md containing: a page map, every section with a one-sentenc
 **Who does it:** You (grey) + Midjourney for imagery. Sonnet 5 (blue, normal) only as your note-taker at the end. Time: half a day minimum. Rushing this step wastes every step after it. **Mode: ASK-each-time** for Sonnet's single file save — trivial here, but the habit is the point.
 
 **Do this:**
-1. Browse awwwards.com and godly.website. Find 3–5 sites that create the feeling you want.
+1. Browse awwwards.com and godly.website. Find 3–5 sites that create the feeling you want. **Be specific about what you screenshot** — a site's homepage often mixes its best work with plain settings, sign-up, or filler pages. Search or click through to the actual showcase piece (e.g. "Site of the Day" entries), not a category or account page that merely links to it.
 2. Screenshot the **specific sections** you love — a hero, a menu, a gallery — not whole pages. Save the screenshots into `docs/refs/` in your project.
 3. In Midjourney, create moodboards: colour worlds, textures, hero imagery. Use its style-reference feature so all images match each other.
 4. Choose one display font (for headlines) and one text font (for paragraphs) — properly licensed. Choose your colour palette.
@@ -233,6 +272,8 @@ Turn these notes into /docs/DESIGN.md: fonts [names], colours [values], motion l
 ---
 
 ## Step 3 — Build the skeleton
+
+**Before you start:** like Step 0, this step's result will look like almost nothing — an empty page, maybe a placeholder heading. That's correct, not a sign it went wrong. You're building plumbing (folders, tools, rule files) that later steps fill in; the "wow, that's a real website" moment doesn't arrive until Step 4.
 
 **In one sentence:** Opus 4.8 sets up the empty but working project — the folder structure, the tools, and the rulebook files — with no visible sections yet.
 
@@ -446,7 +487,7 @@ Cold-review this repository you have never seen. Hunt specifically for: animatio
 - **Merge** — accept a pull request. The change becomes real.
 - **Revert** — load an earlier save point, throwing away a bad change.
 - **Terminal** — the text window where you type commands. About ten commands cover everything.
-- **Claude Code** — Claude living in the terminal; reads your project, edits files, runs commands. `/model` switches between Sonnet, Opus, Fable.
+- **Claude Code** — Claude that can read your project, edit files, and run commands, rather than just chat. Comes in two forms, same engine underneath: the **terminal** version (lives inside Cursor's terminal panel; switch models with `/model`, switch mode with Shift+Tab) and the standalone **Claude Code app** (friendlier buttons; model and mode pickers sit near the message box). Whenever a task says "attach a screenshot," it means exactly that in either form — in the app, there's a literal attach button or you can drag a file in; in the terminal, you'd instead save the file into the project folder and tell Claude Code where to find it. No hidden trick either way.
 - **API key** — a password string that lets a tool bill your account. Goes in Cursor's settings and nowhere else, ever.
 - **Dev server / localhost** — your site running privately on your own computer while you build.
 - **Effort / thinking / reasoning** — how long a model thinks before answering. See Part B.3.
@@ -481,4 +522,9 @@ Do not buy: ChatGPT Pro, Lovable, Bolt, v0, Windsurf, paid Gemini — every one 
 
 Hand this ENTIRE file to Kimi K3 and say: **"Build the app described in Part A using the content in Parts B to E."** Do it inside the full loop: new repo called `playbook`, Step 0 for real, one branch, pull request, CodeRabbit, merge, Vercel preview. An evening's work, pocket-change cost — and at the end you own a live, interactive walkthrough of your own system, and you've practised every mechanic that everything else depends on. Build v1 only; v2 becomes your first Step 10 maintenance practice later.
 
-**If Kimi K3 is unavailable:** use Fable 5 in Claude Code as the stand-in builder — it is the #2 frontend model on the same leaderboard K3 tops, it *won* the interactive category there (which is exactly what this app is), and Project Zero doesn't otherwise use Fable, so this legitimately spends one of its two permitted openings (Rule 2 intact). Say: *"You are standing in for Kimi K3. Build the app described in Part A using the content in Parts B to E."* One branch, one session, then close Fable. Budget alternative that leaves Fable untouched: Sonnet 5 first, Opus 4.8 on high if the result falls short. Whichever model builds it, attach one or two screenshots of app or dashboard designs whose look you like — references keep every builder from drifting generic, not just K3.
+**If Kimi K3 is unavailable:** use Fable 5 in Claude Code as the stand-in builder — it is the #2 frontend model on the same leaderboard K3 tops, it *won* the interactive category there (which is exactly what this app is), and Project Zero doesn't otherwise use Fable, so this legitimately spends one of its two permitted openings (Rule 2 intact). Say: *"You are standing in for Kimi K3. Build the app described in Part A using the content in Parts B to E."* One branch, one session, then close Fable. Budget alternative that leaves Fable untouched: Sonnet 5 first, Opus 4.8 on high if the result falls short.
+
+**Gathering the two reference screenshots (be specific, or you'll grab the wrong screen):**
+- **Reference 1 — the journey/map feel.** Search "Duolingo learning path screenshot" or "Duolingo home screen" in Google Images rather than opening the app yourself — you want the screen with the **winding trail of round lesson bubbles** and streak/gem counters at the top. Explicitly *not* any sign-up, survey, or settings screen (e.g. "how did you hear about us") — those look similar (dark, card-based) but show the wrong thing entirely.
+- **Reference 2 — the card/checklist style.** Search "onboarding checklist UI" or "habit tracker app" on mobbin.com or dribbble.com. You want a screen with tickable rows and a progress indicator — not a full dashboard or a landing page.
+- Attach both directly in whichever tool you're using — in the Claude Code app there is a literal attach button (or drag-and-drop); you do not need to place files in folders yourself first.
