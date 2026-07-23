@@ -1,0 +1,22 @@
+{
+  "name": "the-walkthrough",
+  "version": "2.0.0",
+  "private": true,
+  "description": "An interactive guided walkthrough for The Visual Playbook.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "npm run check:content && npm run check:links && npm run check:html",
+    "check:content": "node scripts/check-content.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "check:html": "html-validate index.html",
+    "dev": "node scripts/serve.mjs",
+    "test": "npm run check && npm run test:browser",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.1",
+    "html-validate": "^10.1.2"
+  }
+}
