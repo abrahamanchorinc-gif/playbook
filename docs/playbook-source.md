@@ -254,9 +254,10 @@ Now write /docs/SPEC.md containing: a page map, every section with a one-sentenc
 1. Browse awwwards.com and godly.website. Find 3–5 sites that create the feeling you want. **Be specific about what you screenshot** — a site's homepage often mixes its best work with plain settings, sign-up, or filler pages. Search or click through to the actual showcase piece (e.g. "Site of the Day" entries), not a category or account page that merely links to it.
 2. Screenshot the **specific sections** you love — a hero, a menu, a gallery — not whole pages. Save the screenshots into `docs/refs/` in your project.
 3. In Midjourney, create moodboards: colour worlds, textures, hero imagery. Use its style-reference feature so all images match each other.
-4. Choose one display font (for headlines) and one text font (for paragraphs) — properly licensed. Choose your colour palette.
-5. Write your **motion language** in ordinary words. Examples: "heavy, slow, cinematic — things settle like stone" or "light, springy, playful — things bounce into place."
-6. Give all your notes to Sonnet 5 with the prompt below, then commit the file it writes.
+4. Optional but powerful: open **Claude Design** (the Design tab in Claude — included with your Max plan, no extra cost). Give it your reference screenshots and your vibe words, and ask for 2–3 different design directions as clickable prototypes. React to them, refine the one you like with its inline comments and sliders, then screenshot the winner into `docs/refs/`. **Rule: its prototypes are references, never code** — nothing from Claude Design gets pasted into the repo; the real build still happens through the loop in Steps 3–5, where review and Git protect it.
+5. Choose one display font (for headlines) and one text font (for paragraphs) — properly licensed. Choose your colour palette.
+6. Write your **motion language** in ordinary words. Examples: "heavy, slow, cinematic — things settle like stone" or "light, springy, playful — things bounce into place."
+7. Give all your notes to Sonnet 5 with the prompt below, then commit the file it writes.
 
 **Copy-paste prompt (Sonnet 5):**
 ```
@@ -492,6 +493,7 @@ Cold-review this repository you have never seen. Hunt specifically for: animatio
 - **Revert** — load an earlier save point, throwing away a bad change.
 - **Terminal** — the text window where you type commands. About ten commands cover everything.
 - **Claude Code** — Claude that can read your project, edit files, and run commands, rather than just chat. Comes in two forms, same engine underneath: the **terminal** version (lives inside Cursor's terminal panel; switch models with `/model`, switch mode with Shift+Tab) and the standalone **Claude Code app** (friendlier buttons; model and mode pickers sit near the message box). Whenever a task says "attach a screenshot," it means exactly that in either form — in the app, there's a literal attach button or you can drag a file in; in the terminal, you'd instead save the file into the project folder and tell Claude Code where to find it. No hidden trick either way.
+- **Claude Design** — Anthropic's design tool (the Design tab in Claude, included with your Max plan). Describe what you want, attach references, and it produces clickable interactive prototypes you refine with inline comments and sliders. In this playbook it lives in Step 2 only, as an exploration tool: its prototypes are references to react to, never code to ship — the real build always goes through the loop.
 - **API key** — a password string that lets a tool bill your account. Goes in Cursor's settings and nowhere else, ever.
 - **Dev server / localhost** — your site running privately on your own computer while you build.
 - **Effort / thinking / reasoning** — how long a model thinks before answering. See Part B.3.
