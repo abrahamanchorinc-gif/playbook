@@ -162,7 +162,7 @@ patching on top of broken code.
 Never force-push, never rewrite history, never delete branches without asking.
 ```
 
-**Install the security plugin once, benefit forever:** in Claude Code, run `/plugin install security-guidance@claude-plugins-official` and choose **user scope** so it loads in every project on this machine. It then runs automatically with nothing to invoke. Treat its findings as suggestions, not proof — Anthropic describes it as a best-effort assistive tool that can miss things and raise false positives, so on the full track it supplements CodeRabbit and human review rather than replacing them.
+**Install the security plugin once, benefit forever:** in the Claude Code app, click the **+** next to the message box → **Plugins** → **Add plugin**, search for **Claude security** (official, Anthropic, from the `claude-plugins-official` marketplace) and install it — in the terminal, the equivalent is `/plugin install security-guidance@claude-plugins-official`, user scope. It's a deliberate, on-demand tool, not a silent background watcher: run it with `/claude-security`, which opens a menu to scan the whole codebase or just your recent changes, at a chosen effort tier. Every finding is challenged by a panel of agents before being reported, and it proposes patches you choose whether to apply. **Habit to build:** run `/claude-security` → "scan changes" any time before opening a pull request or merging to `main` — it's your Step 7 cold review, made effortless. Treat its findings as suggestions, not proof — a best-effort assistive tool can still miss things or raise false positives, so on the full track it supplements CodeRabbit and human review rather than replacing them.
 
 ---
 
@@ -194,7 +194,7 @@ Never force-push, never rewrite history, never delete branches without asking.
 9. Install Antigravity (Google's tool) and sign in. Leave it alone for now — it's only used for checking, much later.
 10. In your project, create a folder named `docs`. This is the **shared notebook**. Models cannot read each other's chats — the ONLY way they stay coordinated is by reading the files in this folder before every task. Easiest way: ask Claude Code (Sonnet 5, ask-each-time mode) to create it for you.
 11. In the project's main folder, create a file named `CLAUDE.md`, and an identical copy named `AGENTS.md`. Put the Git automation rules from **B.5** in them, followed by this project rule: *"Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and /docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same component."* (Those four files don't exist yet — Steps 1, 2 and 3 create them. Claude reads CLAUDE.md automatically at the start of every session; the other tools read AGENTS.md. If this practice project never needs the four files, that's fine — the rule is harmless sitting unused.)
-12. In Claude Code, run `/plugin install security-guidance@claude-plugins-official` and choose **user scope**. Free, installs once per machine, then reviews every session automatically with nothing to invoke.
+12. In the Claude Code app, click the **+** next to the message box → **Plugins** → **Add plugin** → search **Claude security** and install it. (Terminal equivalent: `/plugin install security-guidance@claude-plugins-official`, user scope.) It's on-demand, not silent — you'll run it with `/claude-security` whenever you want a scan.
 
 **Copy-paste prompt (use in ChatGPT whenever stuck):**
 ```
@@ -387,24 +387,27 @@ Do a performance pass on the whole site: reduce how many things animate at once 
 
 ## Step 7 — Fresh-eyes review
 
-**In one sentence:** Codex — a model that has never seen this code — inspects everything and reports what the builders missed.
+**In one sentence:** Codex — a model that has never seen this code — inspects everything and reports what the builders missed, and the security plugin scans specifically for vulnerabilities.
 
-**Why this step exists:** a model reviewing its own work excuses its own mistakes, exactly like a person proofreading their own essay. A different company's model has no loyalty to the code.
+**Why this step exists:** a model reviewing its own work excuses its own mistakes, exactly like a person proofreading their own essay. A different company's model has no loyalty to the code. The security scan exists because vulnerabilities are a specific category general review can miss — a dedicated scan catches what a broader "does this look right" pass doesn't.
 
-**Who does it:** Codex running GPT-5.6 Sol (pink), at the highest effort setting your ChatGPT Plus plan offers. Where: Codex, pointed at your GitHub repository. Then Gemini in Antigravity (amber) for one final sweep. **Mode: READ-ONLY for the review itself, then edits-on-a-branch only for its mechanical-fix list. Never Codex's full-auto option.** Why: an inspector must not touch anything while inspecting — hands-off is exactly what makes the eyes fresh — and the fixes it *is* allowed to make stay small, on a branch, behind the same pull-request gate as everything else.
+**Who does it:** the security-guidance plugin (installed in Step 0) first — it's fast, free, and lives right in Claude Code where the code already is. Then Codex running GPT-5.6 Sol (pink), at the highest effort setting your ChatGPT Plus plan offers. Where: Codex, pointed at your GitHub repository. Then Gemini in Antigravity (amber) for one final sweep. **Mode: READ-ONLY for both reviews — the security scan and Codex — then edits-on-a-branch only for confirmed fixes. Never Codex's full-auto option.** Why: an inspector must not touch anything while inspecting — hands-off is exactly what makes the eyes fresh — and the fixes it *is* allowed to make stay small, on a branch, behind the same pull-request gate as everything else.
 
 **Do this:**
-1. Paste the prompt below into Codex.
-2. Its small mechanical fixes → it opens a branch and pull request → CodeRabbit → you merge.
-3. Anything *structural* it flagged (how the code is organised) → take to Opus 4.8 in Claude Code. Claude owns the architecture; the inspector does not remodel the house.
-4. Then in Antigravity: ask a Gemini agent to sweep the entire project in one pass (it can hold all of it at once) for cross-browser problems and leftover junk — **report only, no fixing.** Route its findings to Sonnet or K3 depending on whose lane it is.
+1. In Claude Code, run `/claude-security` and choose "scan changes." Read what it reports; apply the patches it proposes only after you understand what each one fixes.
+2. Paste the prompt below into Codex.
+3. Its small mechanical fixes → it opens a branch and pull request → CodeRabbit → you merge.
+4. Anything *structural* it flagged (how the code is organised) → take to Opus 4.8 in Claude Code. Claude owns the architecture; the inspector does not remodel the house.
+5. Then in Antigravity: ask a Gemini agent to sweep the entire project in one pass (it can hold all of it at once) for cross-browser problems and leftover junk — **report only, no fixing.** Route its findings to Sonnet or K3 depending on whose lane it is.
+
+**On the simple track (see B.5):** you still run `/claude-security` before every merge to `main` — that part costs nothing and takes a minute. Codex and the Antigravity sweep are optional there; use them for anything you'd hate to get wrong, skip them for low-stakes practice work.
 
 **Copy-paste prompt (Codex):**
 ```
 Cold-review this repository you have never seen. Hunt specifically for: animation cleanup leaks (GSAP / Three.js), hydration errors, accessibility failures, dead code, performance problems. Rank findings by severity. Fix ONLY small mechanical issues on a branch. For anything structural, describe it but do not restructure.
 ```
 
-**You are finished when:** Codex's severity list is empty of high items, and the Gemini sweep report has been handled.
+**You are finished when:** the security scan is clean or its findings are resolved, Codex's severity list is empty of high items, and the Gemini sweep report has been handled.
 
 **Then:** go to Step 8.
 
@@ -473,6 +476,7 @@ Cold-review this repository you have never seen. Hunt specifically for: animatio
 | The wow animations — once per project | Fable 5 (coral) | Leave its dial alone | PLAN, then ASK | Claude Code |
 | Building a section from a reference image | Kimi K3 (teal) | Normal | Agent with diff review | Cursor chat panel |
 | A section's forms or logic | Sonnet 5 (blue) | Normal | ASK-each-time | Claude Code |
+| Security scan before merging | `/claude-security` plugin | Scan changes | READ-ONLY, then apply confirmed patches | Claude Code |
 | End-of-project cold review | Codex / GPT-5.6 Sol (pink) | Highest available | READ-ONLY, then edits on a branch | Codex |
 | Whole-project sweep, browser screenshots | Gemini (amber) | — | READ-ONLY (report-only) | Antigravity |
 | "Explain this to me like I'm new" | ChatGPT or Sonnet | Normal | Just chat | Chat |
