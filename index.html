@@ -321,6 +321,379 @@ tr:last-child td{border-bottom:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
+
+/* =====================================================================
+   V2 — premium field-guide layer
+===================================================================== */
+:root{
+  --bg:#091217;
+  --bg-deep:#050b0f;
+  --panel:#12212a;
+  --panel-2:#182b35;
+  --border:#314852;
+  --border-soft:#223740;
+  --text:#f4f1e8;
+  --muted:#a6b8c1;
+  --faint:#78909b;
+  --lime:#c7f36b;
+  --lime-deep:#7da522;
+  --focus:#ffd166;
+}
+body{
+  background:
+    radial-gradient(circle at 60% -20%,rgba(73,182,255,.11),transparent 34rem),
+    radial-gradient(circle at 100% 60%,rgba(255,122,192,.06),transparent 30rem),
+    var(--bg);
+}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:3px;
+}
+.shell{grid-template-columns:232px minmax(0,1fr) 380px;max-width:1520px}
+.sidebar{
+  padding:26px 14px;background:rgba(5,11,15,.34);
+  border-right:1px solid var(--border-soft);
+}
+.brand-v2{
+  padding:8px 12px 24px;color:var(--text);font-size:1.16rem;font-weight:900;
+  letter-spacing:-.035em;
+}
+.brand-v2 .mark{
+  display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9px;
+  margin-right:8px;background:var(--lime);color:var(--bg-deep);font-size:.75rem;
+  box-shadow:0 0 0 5px rgba(199,243,107,.08);
+}
+.brand-v2 small{
+  display:block;margin:7px 0 0 38px;color:var(--faint);font-size:.61rem;
+  letter-spacing:.15em;font-weight:800;
+}
+.nav-item{min-height:48px}
+.nav-item.active{
+  color:var(--text);background:rgba(244,241,232,.07);
+  border-color:rgba(199,243,107,.28);
+}
+.nav-item.active svg{color:var(--lime)}
+.main{padding:32px 34px 120px}
+.rail{padding:32px 22px 120px;gap:16px;border-left:1px solid var(--border-soft)}
+.view-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:18px;
+  margin-bottom:24px;
+}
+.view-kicker{
+  color:var(--lime);font-size:.66rem;font-weight:900;letter-spacing:.18em;
+  text-transform:uppercase;margin-bottom:6px;
+}
+.view-head h1{font-size:clamp(1.65rem,3vw,2.45rem);line-height:1.06;letter-spacing:-.045em}
+.view-head p{color:var(--muted);margin-top:8px;max-width:62ch}
+.legend-button{
+  flex:none;display:inline-flex;align-items:center;gap:7px;padding:9px 12px;
+  color:var(--muted);font-size:.7rem;font-weight:850;letter-spacing:.07em;
+  border:1px solid var(--border);border-radius:999px;background:rgba(24,43,53,.78);
+}
+.legend-strip{
+  display:flex;flex-wrap:wrap;gap:8px;padding:13px 14px;margin-bottom:20px;
+  border:1px solid var(--border-soft);border-radius:14px;background:rgba(18,33,42,.62);
+}
+.rule-pill{
+  display:inline-flex;align-items:center;gap:6px;border-radius:999px;
+  padding:5px 9px;font-size:.67rem;font-weight:850;letter-spacing:.04em;
+  border:1px solid currentColor;background:rgba(9,18,23,.5);
+}
+.rule-pill.req{color:#ff8a80}
+.rule-pill.default{color:#a7d8ff}
+.rule-pill.habit{color:#f0b8ff}
+.progress-pill{
+  background:linear-gradient(135deg,#060c10,#0d181e);border:1px solid #1f323b;
+  box-shadow:inset 0 1px rgba(255,255,255,.04),0 24px 60px rgba(0,0,0,.2);
+}
+.hero{
+  position:relative;overflow:hidden;padding:30px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),transparent 42%),
+    var(--panel);
+  border:1px solid var(--border);
+  box-shadow:0 24px 80px rgba(0,0,0,.18);
+}
+.hero::after{
+  content:"";position:absolute;width:240px;height:240px;border-radius:50%;
+  right:-140px;top:-150px;border:1px solid rgba(199,243,107,.22);
+  box-shadow:0 0 0 28px rgba(199,243,107,.025),0 0 0 62px rgba(199,243,107,.018);
+  pointer-events:none;
+}
+.hero .eyebrow{font-size:.66rem;letter-spacing:.2em}
+.hero h1{font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.04em;max-width:22ch}
+.task-text{font-size:1.08rem;max-width:64ch}
+.badge{border-width:1px;background:rgba(5,11,15,.48)}
+.badge.model{background:rgba(5,11,15,.38)}
+.btn{border-radius:12px}
+.btn-primary{background:var(--lime);box-shadow:0 4px 0 #77991e}
+.btn-green{background:#e9eef0;color:#091217;box-shadow:0 4px 0 #8fa0a7}
+.btn-danger{background:rgba(255,116,104,.12);border:1px solid rgba(255,116,104,.45);color:#ff9b92}
+.card{
+  border-width:1px;background:
+    linear-gradient(145deg,rgba(255,255,255,.022),transparent 50%),
+    var(--panel);
+}
+.check-row{border-width:1px}
+.check-row.done{opacity:.82}
+.check-row.locked{cursor:default}
+.check-row .meta{
+  display:block;color:var(--faint);font-size:.69rem;font-weight:750;
+  letter-spacing:.04em;margin-top:5px;
+}
+.path{max-width:720px}
+.node{
+  border:1px solid rgba(255,255,255,.24);
+  box-shadow:0 7px 0 rgba(0,0,0,.5),inset 0 1px rgba(255,255,255,.4);
+}
+.node.future{filter:saturate(.5)}
+.node-label{max-width:290px}
+.journey-card{
+  display:grid;grid-template-columns:88px minmax(0,1fr);gap:16px;align-items:center;
+  padding:16px;border:1px solid var(--border-soft);border-radius:18px;
+  background:rgba(18,33,42,.72);margin-bottom:12px;text-align:left;width:100%;
+}
+.journey-card:hover{border-color:var(--border)}
+.journey-orb{
+  width:72px;height:72px;border-radius:50%;display:grid;place-items:center;
+  color:#081014;font-size:1.1rem;font-weight:900;
+  box-shadow:inset 0 1px rgba(255,255,255,.55),0 8px 20px rgba(0,0,0,.25);
+}
+.journey-card.current{border-color:rgba(199,243,107,.5)}
+.journey-card.future{opacity:.62}
+.journey-card .state{
+  color:var(--faint);font-size:.61rem;font-weight:900;letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:3px;
+}
+.journey-card .title{font-weight:850;line-height:1.25}
+.journey-card .summary{color:var(--muted);font-size:.8rem;margin-top:5px;line-height:1.45}
+
+/* FORMA-9 example */
+.example-card{
+  position:relative;overflow:hidden;border:1px solid #31505d;border-radius:22px;
+  background:#071015;box-shadow:0 26px 70px rgba(0,0,0,.25);
+}
+.example-label{
+  display:flex;align-items:center;gap:7px;padding:11px 14px;
+  color:#a7d8ff;background:#0c1b22;border-bottom:1px solid #223b46;
+  font-size:.62rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;
+}
+.example-label::before{
+  content:"";width:7px;height:7px;border-radius:50%;background:#75e8ff;
+  box-shadow:0 0 14px #75e8ff;
+}
+.example-visual{
+  position:relative;min-height:230px;overflow:hidden;background:
+    radial-gradient(circle at 65% 35%,rgba(105,221,255,.34),transparent 18%),
+    radial-gradient(circle at 28% 72%,rgba(160,99,255,.28),transparent 24%),
+    linear-gradient(145deg,#071017,#0c1c26 55%,#04070a);
+}
+.example-visual img{width:100%;height:100%;min-height:230px;object-fit:cover;display:block}
+.example-visual::after{
+  content:"FORMA—9";position:absolute;left:18px;bottom:16px;color:white;
+  font-size:.72rem;font-weight:900;letter-spacing:.22em;text-shadow:0 2px 12px #000;
+}
+.molecule{
+  position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+}
+.molecule .core{
+  width:104px;height:104px;border-radius:50%;
+  border:1px solid rgba(192,244,255,.9);
+  background:radial-gradient(circle at 35% 30%,#f1fdff 0 4%,#65d7ef 8%,#213f59 28%,#0b1820 62%);
+  box-shadow:inset -16px -16px 28px rgba(0,0,0,.65),0 0 60px rgba(91,219,255,.45);
+  animation:formaFloat 7s ease-in-out infinite;
+}
+.molecule .orbit{
+  position:absolute;width:190px;height:76px;border:1px solid rgba(127,229,255,.65);
+  border-radius:50%;transform:rotate(-24deg);
+}
+.molecule .orbit::before,.molecule .orbit::after{
+  content:"";position:absolute;width:15px;height:15px;border-radius:50%;
+  background:#d7fbff;box-shadow:0 0 18px #6be2ff;
+}
+.molecule .orbit::before{left:15px;top:6px}
+.molecule .orbit::after{right:20px;bottom:2px;background:#ad75ff;box-shadow:0 0 18px #a56cff}
+@keyframes formaFloat{50%{transform:translateY(-9px) rotate(8deg)}}
+.example-body{padding:17px}
+.example-step{
+  color:#7ee9ff;font-size:.63rem;font-weight:900;letter-spacing:.16em;
+  text-transform:uppercase;margin-bottom:5px;
+}
+.example-body h3{color:var(--text);font-size:1.05rem;letter-spacing:-.02em;margin:0 0 8px}
+.example-body p{color:var(--muted);font-size:.83rem;line-height:1.55}
+.example-tabs{display:flex;gap:6px;padding:0 17px 14px}
+.example-tabs button{
+  flex:1;padding:8px;border:1px solid var(--border-soft);border-radius:9px;
+  color:var(--faint);font-size:.65rem;font-weight:850;letter-spacing:.07em;
+}
+.example-tabs button.on{color:#091217;background:#7ee9ff;border-color:#7ee9ff}
+.artifact{
+  margin:0 17px 17px;padding:14px;border:1px solid #28414d;border-radius:13px;
+  background:#071116;color:#d8e5e9;font-size:.76rem;line-height:1.55;
+}
+.artifact pre{
+  white-space:pre-wrap;word-break:break-word;font:inherit;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.artifact .artifact-title{
+  color:#7ee9ff;font-size:.59rem;font-weight:900;letter-spacing:.13em;
+  text-transform:uppercase;margin-bottom:8px;
+}
+.rail-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tool-stat{
+  padding:13px;border:1px solid var(--border-soft);border-radius:14px;background:var(--panel);
+}
+.tool-stat .n{font-size:1.1rem;font-weight:900;color:var(--text)}
+.tool-stat .l{font-size:.62rem;color:var(--faint);font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+
+/* project shelf + settings */
+.project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.project-card{
+  padding:21px;border:1px solid var(--border);border-radius:20px;background:var(--panel);
+}
+.project-card.current{border-color:rgba(199,243,107,.52)}
+.project-card h2{font-size:1.16rem;margin-bottom:4px}
+.project-card .project-meta{color:var(--muted);font-size:.78rem;margin-bottom:16px}
+.project-card .project-actions{display:flex;flex-wrap:wrap;gap:8px}
+.new-project{border-style:dashed;display:flex;flex-direction:column;justify-content:center;min-height:190px}
+.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.setting-card{padding:20px;border:1px solid var(--border);border-radius:18px;background:var(--panel)}
+.setting-card h2{font-size:1rem;margin-bottom:6px}
+.setting-card>p{color:var(--muted);font-size:.8rem;margin-bottom:15px}
+.field select{
+  width:100%;background:var(--bg-deep);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:13px 15px;color:var(--text);
+}
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--border-soft);
+}
+.toggle-row:last-child{border-bottom:0}
+.toggle-row label{font-weight:780}
+.toggle{
+  appearance:none;width:44px;height:25px;border-radius:999px;background:#31414a;
+  position:relative;cursor:pointer;transition:background .18s;
+}
+.toggle::after{
+  content:"";position:absolute;width:19px;height:19px;border-radius:50%;
+  left:3px;top:3px;background:white;transition:transform .18s;
+}
+.toggle:checked{background:var(--lime)}
+.toggle:checked::after{transform:translateX(19px);background:#122018}
+.budget-note{
+  padding:13px;border-left:3px solid #f0b8ff;background:rgba(240,184,255,.06);
+  color:var(--muted);font-size:.78rem;line-height:1.5;border-radius:0 10px 10px 0;
+}
+
+/* notes + sessions */
+.work-tools{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);gap:16px;margin-top:18px}
+.notes-card textarea{width:100%;min-height:128px}
+.session-time{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1.7rem;
+  font-weight:850;letter-spacing:.04em;margin:4px 0 12px;
+}
+.session-actions{display:flex;flex-wrap:wrap;gap:8px}
+.credit-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.credit-dot{
+  width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  color:#23112a;background:linear-gradient(145deg,#f5c3ff,#c16ee0);
+  font-size:.58rem;font-weight:900;box-shadow:0 3px 0 #744085;
+}
+.credit-dot.spent{background:#263740;color:#718690;box-shadow:none}
+
+/* canonical markdown */
+.canonical{
+  color:#dce7ea;font-size:.94rem;line-height:1.7;
+}
+.canonical h2,.canonical h3,.canonical h4,.canonical h5{
+  color:var(--text);line-height:1.2;letter-spacing:-.02em;margin:27px 0 12px;
+}
+.canonical h2{font-size:1.35rem}
+.canonical h3{font-size:1.15rem}
+.canonical h4{font-size:1.02rem}
+.canonical p{margin:0 0 14px}
+.canonical ul,.canonical ol{margin:0 0 16px 21px}
+.canonical li{margin:7px 0;padding-left:3px}
+.canonical pre{
+  overflow:auto;padding:15px;border:1px solid var(--border-soft);border-radius:12px;
+  background:#050b0f;color:#cce1e7;font-size:.8rem;line-height:1.55;
+}
+.canonical code{background:#050b0f;border:1px solid #203640;border-radius:5px;padding:1px 5px}
+.canonical pre code{border:0;padding:0}
+.canonical table{min-width:700px}
+.canonical-rule{
+  position:relative;padding:14px 15px 14px 18px;margin:0 0 12px;
+  border:1px solid var(--border-soft);border-radius:14px;background:rgba(24,43,53,.52);
+}
+.canonical-rule.req{border-left:3px solid #ff8a80}
+.canonical-rule.default{border-left:3px solid #a7d8ff}
+.canonical-rule.habit{border-left:3px solid #f0b8ff}
+.source-label{
+  display:inline-flex;margin-bottom:13px;padding:6px 9px;border-radius:8px;
+  background:#071116;color:#9fb4bc;font-size:.61rem;font-weight:900;letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.preview-card{padding:4px 4px 18px}
+.preview-lead{font-size:1.08rem;color:var(--text);line-height:1.65;margin-bottom:18px}
+.preview-note{
+  display:flex;gap:10px;padding:13px 14px;border:1px solid var(--border-soft);
+  border-radius:13px;background:var(--panel);color:var(--muted);font-size:.82rem;
+}
+.sheet.full{max-width:1040px}
+.sheet-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:24px;align-items:start}
+.sheet-example{position:sticky;top:62px}
+.empty-state{padding:40px 20px;text-align:center;color:var(--muted)}
+.warning-card{
+  padding:12px 14px;border:1px solid rgba(255,209,102,.38);
+  border-radius:12px;background:rgba(255,209,102,.07);color:#f3ddb0;
+  font-size:.82rem;margin-bottom:14px;
+}
+.celebration{
+  position:fixed;left:50%;top:48%;width:1px;height:1px;z-index:260;pointer-events:none;
+}
+.celebration i{
+  position:absolute;width:8px;height:14px;border-radius:3px;background:var(--c);
+  animation:celebrateBurst 1.05s cubic-bezier(.2,.8,.2,1) var(--d) both;
+}
+@keyframes celebrateBurst{
+  0%{transform:translate(0,0) rotate(0);opacity:0}
+  12%{opacity:1}
+  100%{transform:translate(var(--x),var(--y)) rotate(240deg);opacity:0}
+}
+
+@media (max-width:1180px){
+  .shell{grid-template-columns:210px minmax(0,1fr)}
+  .rail{display:none}
+  .rail-inline{display:block;margin-top:18px}
+  .rail-inline .example-card{max-width:620px}
+}
+@media (min-width:1181px){.rail-inline{display:none}}
+@media (max-width:760px){
+  .main{padding:20px 15px 116px}
+  .topbar{background:rgba(5,11,15,.94)}
+  .topbar .brand-v2{padding:0;font-size:.95rem}
+  .bottomnav{padding-left:4px;padding-right:4px}
+  .bottomnav .nav-item{padding:7px 5px;min-width:0}
+  .bottomnav .nav-item span{max-width:64px;text-align:center}
+  .view-head{display:block}
+  .legend-button{margin-top:13px}
+  .hero{padding:22px 18px}
+  .project-grid,.settings-grid,.work-tools{grid-template-columns:1fr}
+  .sheet-grid{grid-template-columns:1fr}
+  .sheet-example{position:static}
+  .example-visual,.example-visual img{min-height:190px}
+  .journey-card{grid-template-columns:66px minmax(0,1fr);padding:13px}
+  .journey-orb{width:58px;height:58px}
+  .rail-inline .rail-tools{margin-top:12px}
+}
+@media (max-width:420px){
+  .hero-actions .btn{width:100%}
+  .project-card .btn{flex:1}
+  .view-head h1{font-size:1.65rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .molecule .core{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -354,6 +727,7 @@ tr:last-child td{border-bottom:none}
 <div class="overlay" id="overlay"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
+<script>window.WALKTHROUGH_V2 = true;</script>
 <script>
 'use strict';
 /* =====================================================================
@@ -1326,19 +1700,1179 @@ function render(refId){
   if(S.view==='reference'){ renderReference(refId); return; }
   renderHome();
 }
-document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{
-  const k = btn.dataset.nav;
-  if(k==='vars'){ openSetup(true); return; }
-  if(k==='map'){ S.view='home'; save(); render();
-    const a = $('#mapAnchor'); if(a) a.scrollIntoView({behavior:'smooth'}); return; }
-  S.view = k; save(); render();
-}));
-$('#overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeSheet(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+if(!window.WALKTHROUGH_V2){
+  document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>{
+    const k = btn.dataset.nav;
+    if(k==='vars'){ openSetup(true); return; }
+    if(k==='map'){ S.view='home'; save(); render();
+      const a = $('#mapAnchor'); if(a) a.scrollIntoView({behavior:'smooth'}); return; }
+    S.view = k; save(); render();
+  }));
+  $('#overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeSheet(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
 
-/* boot */
-if(!S.setupDone){ openSetup(false); }
-else { $('#app').classList.add('on'); render(); }
+  /* boot */
+  if(!S.setupDone){ openSetup(false); }
+  else { $('#app').classList.add('on'); render(); }
+}
+</script>
+<script id="walkthrough-v2">
+(() => {
+'use strict';
+
+const STORAGE_KEY = 'walkthrough-v2';
+const V1_KEY = 'walkthrough-v1';
+const SCHEMA_VERSION = 2;
+
+const $ = (selector, root=document) => root.querySelector(selector);
+const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
+
+const ICONS = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>',
+  projects:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7" rx="2"/><rect x="14" y="4" width="7" height="7" rx="2"/><rect x="3" y="15" width="7" height="6" rx="2"/><rect x="14" y="15" width="7" height="6" rx="2"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>',
+  copy:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
+  export:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>'
+};
+
+const MODELS = {
+  sonnet:{name:'Sonnet 5', colour:'var(--blue)'},
+  opus:{name:'Opus 4.8', colour:'var(--purple)'},
+  fable:{name:'Fable 5', colour:'var(--coral)'},
+  kimi:{name:'Kimi K3', colour:'var(--teal)'},
+  codex:{name:'GPT-5.6 Sol', colour:'var(--pink)'},
+  gemini:{name:'Gemini / Antigravity', colour:'var(--amber)'},
+  you:{name:'You', colour:'var(--grey)'}
+};
+
+const RULES = {
+  req:{icon:'🛑', short:'Production requirement', label:'🛑 Production requirement'},
+  default:{icon:'✅', short:'Recommended default', label:'✅ Recommended default'},
+  habit:{icon:'🎓', short:'Personal habit / budget', label:'🎓 Personal habit / budget'}
+};
+
+const STEP_META = [
+  {n:0,title:'Set up the production safety system',model:'you',effort:'NORMAL',mode:'REVIEWED SETUP'},
+  {n:1,title:'Define scope, success, and acceptance',model:'codex',effort:'HIGH',mode:'PLAN / CHAT'},
+  {n:2,title:'Lock the content and design direction',model:'you',effort:'NORMAL',mode:'HUMAN-LED'},
+  {n:3,title:'Choose the architecture and build the scaffold',model:'codex',effort:'HIGH',mode:'PLAN → REVIEWED EDITS'},
+  {n:4,title:'Build and approve a vertical slice',model:'kimi',effort:'HIGH',mode:'DIFF REVIEW'},
+  {n:5,title:'Build the remaining sections and pages',model:'sonnet',effort:'NORMAL',mode:'REVIEWED EDITS',adaptive:true},
+  {n:6,title:'Build the signature interactions',model:'codex',effort:'HIGH',mode:'PLAN → REVIEWED EDITS'},
+  {n:7,title:'Forms, integrations, content systems, and SEO',model:'sonnet',effort:'NORMAL',mode:'REVIEWED EDITS',adaptive:true},
+  {n:8,title:'Harden and test the entire product',model:'sonnet',effort:'HIGH',mode:'AUTOMATED + HUMAN',adaptive:true},
+  {n:9,title:'Independent review, approval, and launch',model:'fable',effort:'HIGH',mode:'READ-ONLY FIRST'},
+  {n:10,title:'Maintain, monitor, and handle emergencies',model:'sonnet',effort:'NORMAL',mode:'REVIEWED EDITS',adaptive:true}
+];
+
+const PREVIEWS = [
+  'This is where you install the safety net before building anything valuable. You will connect version control, checks, and hosting once, then run a tiny practice lap so the rest of the journey feels familiar.',
+  'Before design or code, you will turn the idea into a clear agreement about what the site is, who it serves, and what “finished” means. This keeps every later decision pointed in the same direction.',
+  'This is the taste-setting step. You will choose the references, words, type, colours, imagery, and motion language that stop the finished site drifting toward a generic AI look.',
+  'Now the project gets its technical foundation. You will choose the smallest suitable architecture, document the decision, and prove that an empty version can pass its checks and load in a preview.',
+  'Instead of building everything at once, you will finish one representative piece all the way through. That small slice proves the design, code, responsive behavior, and approval process before the rest multiplies.',
+  'With the slice approved, you will repeat its proven approach across the remaining pages and sections. Work moves in understandable groups, with checks and phone review after each group.',
+  'This is where the two or three memorable moments are designed and built. Each interaction starts as written beats, gets a mobile and reduced-motion plan, and is tested as carefully as any other feature.',
+  'Here the site begins doing real work: forms, integrations, content systems, and search metadata. Anything touching personal data or external services gets stronger validation and human review.',
+  'This is the full-court press before launch. Automated checks and human passes work together across accessibility, browsers, performance, forms, links, security, and real devices.',
+  'Fresh eyes inspect the finished product before humans approve launch. Confirmed problems return to a builder, production is verified in a real browser, and rollback is ready before the switch.',
+  'A shipped site becomes a maintained product. Routine changes use the normal branch-and-check loop, while urgent production defects take the smallest safe hotfix path.'
+];
+
+const STEP_TASKS = [
+  [
+    {id:'machine',rule:'default',text:'Once per machine: Git installed · GitHub account · Cloudflare account · your model tools (Claude Code; Kimi Code when doing visual client work; Codex) · the Claude Security plugin.'},
+    {id:'practice-project',rule:'req',track:'practice',text:'Practice project: repository (public is fine if the content is genuinely non-sensitive — never make a client repo public just to get free tooling 🛑); `.gitignore`; clone locally; open in your tool; `docs/` folder; instruction files (`CLAUDE.md`/`AGENTS.md`) — on practice repos these may include the 🎓 auto-checkpoint habit; Cloudflare Pages connected for previews.'},
+    {id:'client-project',rule:'req',track:'client',text:'Client project (all of the above, plus 🛑): private repository; protected `main` with required status checks (and “require approvals” OFF when you’re solo — that setting assumes a second person and will lock you out of your own merges); GitHub Actions from day one; `.env.example`; secret scanning, push protection, Dependabot, CodeQL where available; Cloudflare Access on previews; lockfile committed; Node/package-manager versions pinned; CodeRabbit optional.'},
+    {id:'practice-lap',rule:'habit',text:'The practice lap (do once, ever): branch → small change → local check → commit → push → pull request → CI runs → Cloudflare preview → (optional AI review) → your check → merge → production deploys → know how you’d roll back.'}
+  ],
+  [
+    {id:'write-spec',rule:'default',text:'write `/docs/SPEC.md` — what’s being built, for whom, and how everyone will know it’s done.'},
+    {id:'human-approval',rule:'req',text:'Human approval is mandatory; a model’s output is never automatically the contract.'},
+    {id:'client-scope',rule:'req',track:'client',text:'For client work, also settle now (🛑): deadlines and review dates · revision limits · change-request process · content and asset responsibility · domain and hosting ownership · privacy requirements · portfolio permission.'}
+  ],
+  [
+    {id:'references',rule:'default',text:'collect 3–5 real reference sites (screenshot the specific sections you mean, not homepages — and note in DESIGN.md exactly which aspect each reference is for)'},
+    {id:'system',rule:'default',text:'one display + one text typeface, licence confirmed (🛑 for client work) · colour system · spacing/component language · motion language in plain words · responsive priorities · accessibility considerations per component · banned patterns'},
+    {id:'content',rule:'req',text:'content: final copy or clearly-marked provisional (CONTENT.md) · asset rights and AI-asset approval recorded.'}
+  ],
+  [
+    {id:'choose',rule:'req',text:'Do not default to Next.js. Choose from requirements: plain HTML/CSS/JS · Astro · Next.js · a CMS — considering static vs server-rendered needs, forms/APIs, Cloudflare runtime compatibility, who edits content later, animation requirements, and maintenance burden.'},
+    {id:'record',rule:'default',text:'Record the decision and its reasons in `/docs/ARCHITECTURE.md`; motion rules in `/docs/MOTION.md`; operational notes (envs, deploy, rollback) in `/docs/OPERATIONS.md`.'},
+    {id:'scaffold',rule:'default',text:'Scaffold includes: folder structure · typecheck + lint + test setup · GitHub Actions wired (client track 🛑) · Cloudflare config + preview deployment · environment handling · error handling where relevant · metadata foundation · accessibility foundation (semantic landmarks, focus styles) · responsive foundation · production build verified.'}
+  ],
+  [
+    {id:'slice',rule:'default',text:'build ONE section or page completely — real content, real type, responsive, accessible, performant, previewed — and get it approved before mass production.'},
+    {id:'bakeoff',rule:'default',track:'client',text:'for premium client work, this is where the bake-off runs (B.2) and the winner builds the slice.'},
+    {id:'checks',rule:'req',text:'The slice passes lint/typecheck/tests/build, an accessibility smoke check, the Cloudflare preview, a real-phone look, and human (or client) approval.'}
+  ],
+  [
+    {id:'groups',rule:'default',text:'repeat the slice’s proven approach across the site, in coherent feature groups.'},
+    {id:'units',rule:'default',text:'One PR per understandable unit, not per tiny section: navigation + global layout · homepage content sections · portfolio/work pages · about/services · footer + global CTAs.'},
+    {id:'review',rule:'default',text:'Each group passes: lint · typecheck · relevant tests · production build · accessibility smoke test · Cloudflare preview · desktop review · real-phone review.'}
+  ],
+  [
+    {id:'beats',rule:'default',text:'plan mode first · written animation beats · one isolated interaction per branch · explicit mobile behaviour · explicit reduced-motion fallback · performance budget stated up front · cleanup requirements stated up front · real-device testing before merge.'},
+    {id:'owner',rule:'req',text:'One owner per animated property. GSAP and Motion must never both control the same property on the same element — that’s the real conflict.'},
+    {id:'cleanup',rule:'req',text:'Every animated component: cleans up timelines, ScrollTriggers, and listeners; avoids duplicate setup on React rerenders; respects reduced motion; has a simplified/non-animated fallback; has mobile-specific behaviour where needed; never traps keyboard or screen-reader users; is tested on a representative lower-powered phone.'}
+  ],
+  [
+    {id:'forms',rule:'req',text:'Every form: server-side validation · clear validation messages · success state · failure state · spam protection (Turnstile verified server-side) · rate limiting where appropriate · email delivery tested · logging or monitoring · privacy explanation · a retention decision · no secrets in browser code.'},
+    {id:'systems',rule:'default',text:'Where relevant: CMS · booking/API integrations · authentication · metadata + Open Graph · sitemap · robots · structured data · redirects · canonical URLs.'},
+    {id:'human',rule:'req',text:'human review on anything touching auth, payments, or personal data.'}
+  ],
+  [
+    {id:'automated',rule:'req',text:'Run: full CI · production build · Cloudflare-runtime preview · Playwright suite · accessibility automation (axe)'},
+    {id:'human-passes',rule:'req',text:'keyboard-only pass · screen-reader pass · zoom/reflow (200%) · reduced-motion pass · responsive + cross-browser sweep · console-error check · broken-link check · form-delivery test'},
+    {id:'quality',rule:'default',text:'repeated Lighthouse runs under consistent conditions · bundle review · animation profiling · slower-network test · security checks per B.6 · dependency review · secret review.'}
+  ],
+  [
+    {id:'review',rule:'default',text:'a model that did not build it reviews it read-only; confirmed fixes go back to a builder; humans approve; then launch — with rollback ready.'},
+    {id:'rank',rule:'default',text:'Reviewer is read-only for the initial report (enforced where possible, per B.4) and ranks findings Blocker / High / Medium / Low / Preference-only.'},
+    {id:'launch',rule:'req',text:'Launch checklist (🛑 on client work): blockers + highs resolved · CI green · client approval in writing · domain + DNS verified · production env vars confirmed · analytics + privacy/consent settings confirmed · form delivery confirmed in production path · monitoring on (errors, uptime/form monitoring) · rollback confirmed · content freeze in effect (Part D.4) · accessibility acceptance done · custom 404/error pages exist · merge to `main` · verify the actual production domain in a real browser.'}
+  ],
+  [
+    {id:'routine',rule:'default',text:'Routine (✅): issue → clarify acceptance criteria → branch → change → tests → preview → review → merge → verify production.'},
+    {id:'hotfix',rule:'req',text:'Hotfix path (🛑 memorise): confirm the production defect → branch directly from `main` → smallest safe fix → focused tests + build → preview → merge → verify production → update any open feature branch from `main` → write down what happened.'}
+  ]
+];
+
+const STEP_GATES = [
+  [{id:'lap',rule:'default',text:'the practice lap worked end to end and you watched each part happen.'}],
+  [{id:'stranger',rule:'default',text:'a stranger could read SPEC.md and correctly describe what’s being built and how success is judged.'}],
+  [{id:'vibe',rule:'default',text:'a stranger reading DESIGN.md could describe the vibe in three words matching your intent, and every asset’s rights are accounted for.'}],
+  [{id:'preview',rule:'default',text:'CI passes and a Cloudflare preview loads. Both, not either.'}],
+  [{id:'approved',rule:'req',text:'the slice passes lint/typecheck/tests/build, an accessibility smoke check, the Cloudflare preview, a real-phone look, and human (or client) approval.'}],
+  [{id:'groups',rule:'default',text:'Each group passes: lint · typecheck · relevant tests · production build · accessibility smoke test · Cloudflare preview · desktop review · real-phone review.'}],
+  [{id:'motion',rule:'req',text:'Every animated component respects reduced motion and has a simplified/non-animated fallback.'}],
+  [{id:'forms',rule:'req',text:'Every form has server-side validation, clear validation messages, success state, failure state, and tested email delivery.'}],
+  [{id:'qa',rule:'req',text:'The full CI, keyboard-only, screen-reader, zoom/reflow, reduced-motion, responsive, console-error, and broken-link passes are complete.'}],
+  [{id:'launch',rule:'req',text:'blockers + highs resolved · CI green · rollback confirmed · verify the actual production domain in a real browser.'}],
+  []
+];
+
+const USER_PROMPTS = [
+  ctx => `I am setting up the production safety system for ${ctx.projectName}, a ${ctx.track} project. My tools: ${ctx.tools}. Hosting: ${ctx.hosting}. Guide me through the smallest next setup action, explain what it protects, and wait for me before the next action.`,
+  ctx => `Act as the lead product architect for ${ctx.projectName}. The site idea is: ${ctx.idea}. Audience: ${ctx.audience}. Desired feeling: ${ctx.feeling}. Proposed pages and sections: ${ctx.sections}. Track: ${ctx.track}. First ask only the questions that materially affect scope. Then draft /docs/SPEC.md using the Step 1 requirements from the Visual Playbook, clearly separating confirmed decisions, provisional content, acceptance criteria, and out-of-scope work. Do not write code.`,
+  ctx => `Help me turn my approved direction for ${ctx.projectName} into /docs/DESIGN.md and /docs/CONTENT.md. The desired feeling is ${ctx.feeling}. Use my attached section references as evidence, record exactly what each reference is for, and include typography licensing, colour, spacing, component language, motion language, responsive priorities, accessibility considerations, banned patterns, content status, and asset rights. Do not invent references I did not provide.`,
+  ctx => `Read /docs/SPEC.md and /docs/DESIGN.md for ${ctx.projectName}. Recommend the smallest architecture that satisfies the requirements and is compatible with ${ctx.hosting}. Explain the tradeoffs before editing. After approval, write /docs/ARCHITECTURE.md, /docs/MOTION.md, and /docs/OPERATIONS.md, then build only an empty deployable scaffold with CI and preview support.`,
+  ctx => `Build one representative vertical slice for ${ctx.projectName} using the approved content and the attached reference. Model: ${ctx.model}. Match the specified hierarchy, spacing, type, imagery, and responsive priorities. Include accessibility, reduced-motion behavior, relevant tests, and a production preview. Stop after this slice so a human can approve the direction before other sections are built.`,
+  ctx => `Using the approved vertical slice for ${ctx.projectName} as the pattern, build the next coherent feature group from SPEC.md. Keep canonical content and the design system unchanged. Run the relevant checks, review at desktop and real-phone widths, and prepare a ${ctx.review} before moving to another group.`,
+  ctx => `Plan the signature interaction for ${ctx.projectName} before coding. Describe the beats, property ownership, cleanup, mobile behavior, reduced-motion fallback, and performance budget. After approval, implement this one interaction in isolation and verify it on a representative phone.`,
+  ctx => `Implement the next functional system for ${ctx.projectName}: forms, integrations, content, or SEO as specified. Track: ${ctx.track}. Include server-side validation where applicable, clear success and failure states, abuse protection, privacy and retention decisions, tests, and human-review notes for anything touching personal data, auth, or payments.`,
+  ctx => `Run the complete pre-launch hardening pass for ${ctx.projectName} against Step 8 of the Visual Playbook. Use ${ctx.hosting}'s production-like preview. Report automated and human checks separately, include exact failures and evidence, and do not silence or weaken a failing check.`,
+  ctx => `Cold-review ${ctx.projectName} without changing files first. Rank findings Blocker / High / Medium / Low / Preference-only. Check the approved spec and design, accessibility, performance, animation cleanup, security controls, responsive behavior, content, and rollback readiness. Separate defects from preferences and wait for human confirmation before fixes.`,
+  ctx => `For the maintenance issue on ${ctx.projectName}, first classify it as routine work or a production hotfix. Restate the acceptance criteria, choose the smallest safe change, identify the required checks and preview, and explain the verification and rollback steps before editing.`
+];
+
+const EXAMPLES = [
+  {title:'Safety system ready',prompt:'Set up a private GitHub repository for FORMA-9, add the project instruction files, configure CI and Cloudflare Pages previews, then walk me through one practice branch without building the storefront.',result:'Repository: forma-9-store\nTrack: illustrative client workflow\nHosting: Cloudflare Pages\nChecks: HTML · unit · Playwright · links\nPreview protection: documented\nRollback: previous deployment identified'},
+  {title:'SPEC.md excerpt',prompt:'Draft a SPEC for FORMA-9, a fictional premium research-peptide storefront for design-conscious laboratory buyers. Primary conversion: request catalog access. It must feel precise, cinematic, and trustworthy. No medical claims, dosage guidance, real checkout, or real products.',result:'Objective — make a complex research catalog feel calm and premium.\nAudience — qualified laboratory buyers evaluating fictional research compounds.\nPrimary conversion — request catalog access.\nPages — Home · Catalog · Compound detail · Standards · Contact.\nOut of scope — treatment claims, dosage, payment, fulfilment, patient data.'},
+  {title:'Design system locked',prompt:'Turn this direction into DESIGN.md for FORMA-9: mineral black, pearl, electric cyan, ultraviolet accents; glass vials and molecular sculptures; oversized editorial type; slow orbital movement; no generic SaaS gradients, medical promises, or decorative dashboard cards.',result:'Vibe — cinematic · precise · material\nDisplay — geometric grotesque, compressed scale\nBody — neutral humanist sans\nMaterials — smoked glass, brushed alloy, optical refraction\nMotion — slow orbit, controlled reveal, decisive settle\nBanned — health claims, neon overload, generic glass dashboards'},
+  {title:'Architecture decision',prompt:'Choose the smallest architecture for the FORMA-9 concept: a static premium catalog, isolated 3D hero, scroll choreography, catalog filters, mock inquiry form, Cloudflare hosting, and no real commerce.',result:'Astro for static pages and content.\nThree.js isolated to the hero canvas.\nGSAP owns DOM scroll choreography only.\nCSS owns state transitions.\nNo shared animated property ownership.\nCloudflare Pages output with a static fallback poster for reduced motion.'},
+  {title:'Vertical slice approved',prompt:'Build only the FORMA-9 hero as the vertical slice. Use the approved mineral-black design, a floating molecular glass sculpture, the headline “Research, refined.”, catalog-access CTA, responsive layout, keyboard access, and reduced-motion poster fallback.',result:'Hero slice\n• 1440px and 390px layouts approved\n• 3D canvas isolated and lazy-loaded\n• Static poster fallback verified\n• CTA and focus order pass\n• Preview reviewed on a real phone'},
+  {title:'Core site assembled',prompt:'Use the approved FORMA-9 hero slice as the pattern. Build the catalog grid, fictional compound detail, standards section, process story, catalog-access CTA, and footer as coherent feature groups.',result:'HOME\nHero → Featured compounds → Quality standard → Process → Access CTA\n\nCATALOG\nFilter bar → PX-09 cards → detail drawer\n\nSTANDARDS\nHandling principles → documentation → fictional batch record'},
+  {title:'Signature motion storyboard',prompt:'Plan the FORMA-9 molecular assembly sequence. On scroll, three peptide fragments orbit, align into one chain, reveal the PX-09 vial, then settle beside the catalog CTA. Include mobile, cleanup, performance, and reduced-motion behavior.',result:'Beat 01 — fragments enter slow orbit\nBeat 02 — scroll progress aligns the chain\nBeat 03 — vial refracts into view\nBeat 04 — copy and CTA settle\nMobile — two beats, no pinned scroll\nReduced motion — final composed frame\nBudget — lazy canvas, capped DPR, no layout animation'},
+  {title:'Inquiry flow and SEO',prompt:'Build the fictional FORMA-9 catalog-access form and SEO layer. Include company email, intended research category, consent, validation, success/failure states, spam-control plan, privacy copy, metadata, sitemap, robots, and structured data. Do not add payment or medical claims.',result:'Form states — empty · invalid · submitting · success · recoverable failure\nValidation — server boundary specified\nRetention — 30-day illustrative policy\nSEO — title, description, canonical, OG card, sitemap\nExcluded — payment, dosage, efficacy, patient information'},
+  {title:'QA evidence',prompt:'Run the complete Step 8 hardening pass on FORMA-9 and report evidence without weakening failures.',result:'CI — PASS\nKeyboard — PASS\nScreen reader landmarks — PASS\n200% reflow — PASS\nReduced motion — PASS\nPhone + desktop sweep — PASS\nConsole errors — 0\nBroken internal links — 0\nNote — illustrative report, not a real client audit'},
+  {title:'Cold review and launch mock',prompt:'Cold-review FORMA-9 read-only, rank findings, separate defects from preferences, and prepare the fictional launch checklist only after blockers and highs are resolved.',result:'Blocker — 0\nHigh — 0\nMedium — 2 resolved\nLow — 3 documented\nPreference-only — 2 left for human choice\nProduction mock — verified\nRollback — previous deployment ready\nStatus — illustrative launch complete'},
+  {title:'Maintenance record',prompt:'Handle this fictional FORMA-9 issue: the catalog drawer loses focus after a filter change. Classify the issue, define acceptance, choose the smallest safe fix, and list verification and rollback before editing.',result:'Classification — routine accessibility defect\nAcceptance — focus returns to the updated result heading\nChange — scoped drawer focus management\nChecks — unit · keyboard · Playwright · phone\nPreview — verified\nRollback — revert focused commit\nRecord — maintenance log updated'}
+];
+
+const SOURCE = {raw:'',parts:{},steps:[],ready:false,error:''};
+let STORE;
+let lastFocus = null;
+let exampleTab = 'result';
+let timerTick = null;
+
+function esc(value=''){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function uid(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'p-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9);
+}
+
+function defaultSettings(){
+  return {
+    defaultModel:'sonnet',
+    tools:{kimi:true,coderabbit:false,codex:true},
+    hosting:'Cloudflare Pages',
+    track:'practice',
+    frontierCredits:2
+  };
+}
+
+function blankStepState(){
+  return {tasks:{},gates:{},done:false,note:''};
+}
+
+function newProject(name='My first project', vars={}){
+  const settings = JSON.parse(JSON.stringify(STORE?.defaults || defaultSettings()));
+  const perStep = {};
+  STEP_META.forEach(step=>{perStep[step.n]=blankStepState();});
+  return {
+    id:uid(),name,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),
+    setupDone:false,
+    vars:{idea:'',audience:'',feeling:'',sections:'',...vars},
+    settings,
+    currentStep:0,
+    view:'home',
+    perStep,
+    frontier:{total:settings.frontierCredits,remaining:settings.frontierCredits,active:null,history:[]},
+    finished:false,
+    liveUrl:''
+  };
+}
+
+function normalizeProject(project){
+  const base = newProject(project?.name || 'My project');
+  const out = {...base,...project};
+  out.vars = {...base.vars,...(project?.vars||{})};
+  out.settings = {...base.settings,...(project?.settings||{})};
+  out.settings.tools = {...base.settings.tools,...(project?.settings?.tools||{})};
+  out.perStep = {};
+  STEP_META.forEach(step=>{
+    const got = project?.perStep?.[step.n] || {};
+    out.perStep[step.n] = {
+      ...blankStepState(),...got,
+      tasks:{...(got.tasks||{})},gates:{...(got.gates||{})}
+    };
+  });
+  out.currentStep = Math.max(0,Math.min(10,Number(out.currentStep)||0));
+  out.frontier = {...base.frontier,...(project?.frontier||{})};
+  out.frontier.history = Array.isArray(out.frontier.history)?out.frontier.history:[];
+  return out;
+}
+
+function migrateV1(raw){
+  try{
+    const old = JSON.parse(raw);
+    const name = old.vars?.name || 'Migrated v1 project';
+    const project = newProject(name,{
+      idea:old.vars?.idea||'',audience:old.vars?.audience||'',
+      feeling:old.vars?.feeling||'',sections:old.vars?.sections||''
+    });
+    project.setupDone = !!old.setupDone;
+    project.currentStep = Math.max(0,Math.min(10,Number(old.currentStep)||0));
+    project.finished = !!old.finished;
+    project.liveUrl = old.liveUrl||'';
+    STEP_META.forEach(step=>{
+      const was = old.perStep?.[step.n];
+      if(was?.done){
+        project.perStep[step.n].done = true;
+        STEP_TASKS[step.n].forEach(task=>{project.perStep[step.n].tasks[task.id]=true;});
+        STEP_GATES[step.n].forEach(gate=>{project.perStep[step.n].gates[gate.id]=true;});
+      }
+    });
+    const remaining = Number.isFinite(Number(old.coins))?Math.max(0,Number(old.coins)):2;
+    project.frontier.remaining = remaining;
+    project.frontier.total = Math.max(2,remaining);
+    return project;
+  }catch(error){
+    return null;
+  }
+}
+
+function loadStore(){
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if(saved){
+      const parsed = JSON.parse(saved);
+      const defaults = {...defaultSettings(),...(parsed.defaults||{})};
+      defaults.tools = {...defaultSettings().tools,...(parsed.defaults?.tools||{})};
+      const projects = (parsed.projects||[]).map(normalizeProject);
+      if(projects.length){
+        return {
+          schemaVersion:SCHEMA_VERSION,defaults,projects,
+          activeProjectId:projects.some(p=>p.id===parsed.activeProjectId)?parsed.activeProjectId:projects[0].id
+        };
+      }
+    }
+  }catch(error){}
+  const seed = {schemaVersion:SCHEMA_VERSION,defaults:defaultSettings(),projects:[],activeProjectId:null};
+  STORE = seed;
+  const migrated = migrateV1(localStorage.getItem(V1_KEY));
+  const first = migrated || newProject();
+  seed.projects.push(first);
+  seed.activeProjectId = first.id;
+  return seed;
+}
+
+function saveStore(){
+  const current = project();
+  if(current) current.updatedAt = new Date().toISOString();
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(STORE));}catch(error){}
+}
+
+function project(){
+  return STORE.projects.find(item=>item.id===STORE.activeProjectId) || STORE.projects[0];
+}
+
+function stepState(n){
+  return project().perStep[n];
+}
+
+function filteredTasks(n){
+  const p = project();
+  return STEP_TASKS[n].filter(task=>{
+    if(task.track && task.track!==p.settings.track) return false;
+    if(task.requiresTool && !p.settings.tools[task.requiresTool]) return false;
+    return true;
+  });
+}
+
+function modelForStep(n){
+  const p = project();
+  const meta = STEP_META[n];
+  let key = meta.adaptive ? p.settings.defaultModel : meta.model;
+  if(key==='kimi' && !p.settings.tools.kimi) key = p.settings.tools.codex?'codex':p.settings.defaultModel;
+  if(key==='codex' && !p.settings.tools.codex) key = p.settings.defaultModel;
+  return MODELS[key] ? key : 'sonnet';
+}
+
+function promptContext(n){
+  const p = project();
+  const toolNames = [
+    p.settings.tools.codex?'Codex':null,
+    p.settings.tools.kimi?'Kimi Code':null,
+    p.settings.tools.coderabbit?'CodeRabbit':null
+  ].filter(Boolean).join(', ') || 'no optional tools selected';
+  return {
+    projectName:p.name,
+    idea:p.vars.idea||'a premium website',
+    audience:p.vars.audience||'the intended audience',
+    feeling:p.vars.feeling||'a clear intended feeling',
+    sections:p.vars.sections||'the approved page and section list',
+    track:p.settings.track,
+    hosting:p.settings.hosting,
+    tools:toolNames,
+    model:MODELS[modelForStep(n)].name,
+    review:p.settings.tools.coderabbit?'CodeRabbit-assisted pull-request review':'manual diff and pull-request review'
+  };
+}
+
+function userPrompt(n){
+  return USER_PROMPTS[n](promptContext(n));
+}
+
+function currentTask(n=project().currentStep){
+  const state = stepState(n);
+  return filteredTasks(n).find(task=>!state.tasks[task.id]) || null;
+}
+
+function allTasksDone(n){
+  return filteredTasks(n).every(task=>!!stepState(n).tasks[task.id]);
+}
+
+function allGatesDone(n){
+  return STEP_GATES[n].every(gate=>!!stepState(n).gates[gate.id]);
+}
+
+function completedCount(){
+  return STEP_META.slice(0,10).filter(step=>stepState(step.n).done).length;
+}
+
+function progressPercent(){
+  return Math.round(completedCount()/10*100);
+}
+
+function rulePill(type, compact=false){
+  const rule = RULES[type] || RULES.default;
+  return `<span class="rule-pill ${type}" aria-label="${esc(rule.short)}">${rule.icon}${compact?'':` <span>${esc(rule.short)}</span>`}</span>`;
+}
+
+function legendHtml(){
+  return `<div class="legend-strip" aria-label="Rule badge legend">
+    ${rulePill('req')}${rulePill('default')}${rulePill('habit')}
+  </div>`;
+}
+
+function inlineMarkdown(value=''){
+  const codes = [];
+  let text = String(value).replace(/`([^`]+)`/g,(_,code)=>{
+    const token = `%%CODE${codes.length}%%`; codes.push(`<code>${esc(code)}</code>`); return token;
+  });
+  text = esc(text)
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g,'<em>$1</em>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  codes.forEach((code,index)=>{text=text.replace(`%%CODE${index}%%`,code);});
+  return text;
+}
+
+function ruleTypeFromText(text=''){
+  if(text.includes('🛑')) return 'req';
+  if(text.includes('🎓')) return 'habit';
+  if(text.includes('✅')) return 'default';
+  return null;
+}
+
+function markdownToHtml(markdown=''){
+  const lines = String(markdown).replace(/\r/g,'').split('\n');
+  let html = '';
+  let i = 0;
+  const special = line => /^(#{1,6})\s/.test(line) || /^```/.test(line) ||
+    /^\s*[-*]\s+/.test(line) || /^\s*\d+\.\s+/.test(line) ||
+    (/^\|/.test(line) && /\|/.test(line.slice(1)));
+  while(i<lines.length){
+    const line = lines[i];
+    if(!line.trim()){i++;continue;}
+    if(/^---+$/.test(line.trim())){i++;continue;}
+    const fence = line.match(/^```(.*)$/);
+    if(fence){
+      const code=[]; i++;
+      while(i<lines.length && !/^```/.test(lines[i])){code.push(lines[i]);i++;}
+      i++;
+      html += `<pre><code>${esc(code.join('\n'))}</code></pre>`;
+      continue;
+    }
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if(heading){
+      const level = Math.min(5,Math.max(2,heading[1].length+1));
+      html += `<h${level}>${inlineMarkdown(heading[2])}</h${level}>`;
+      i++;continue;
+    }
+    if(line.trim().startsWith('|') && i+1<lines.length && /^\s*\|?[\s:|-]+\|/.test(lines[i+1])){
+      const rows=[]; rows.push(line); i+=2;
+      while(i<lines.length && lines[i].trim().startsWith('|')){rows.push(lines[i]);i++;}
+      const cells = row=>row.trim().replace(/^\||\|$/g,'').split('|').map(cell=>cell.trim());
+      html += '<div class="tbl-wrap"><table><thead><tr>'+cells(rows[0]).map(cell=>`<th>${inlineMarkdown(cell)}</th>`).join('')+'</tr></thead><tbody>';
+      rows.slice(1).forEach(row=>{html+='<tr>'+cells(row).map(cell=>`<td>${inlineMarkdown(cell)}</td>`).join('')+'</tr>';});
+      html += '</tbody></table></div>';
+      continue;
+    }
+    const unordered = line.match(/^\s*[-*]\s+(.+)$/);
+    const ordered = line.match(/^\s*\d+\.\s+(.+)$/);
+    if(unordered || ordered){
+      const tag = ordered?'ol':'ul';
+      html += `<${tag}>`;
+      while(i<lines.length){
+        const match = lines[i].match(tag==='ol'?/^\s*\d+\.\s+(.+)$/:/^\s*[-*]\s+(.+)$/);
+        if(!match) break;
+        const type = ruleTypeFromText(match[1]);
+        html += `<li${type?` class="canonical-rule ${type}"`:''}>${inlineMarkdown(match[1])}</li>`;
+        i++;
+      }
+      html += `</${tag}>`;
+      continue;
+    }
+    const paragraph=[line.trim()]; i++;
+    while(i<lines.length && lines[i].trim() && !special(lines[i])){
+      paragraph.push(lines[i].trim()); i++;
+    }
+    const raw = paragraph.join(' ');
+    const type = ruleTypeFromText(raw);
+    html += type
+      ? `<div class="canonical-rule ${type}">${inlineMarkdown(raw)}</div>`
+      : `<p>${inlineMarkdown(raw)}</p>`;
+  }
+  return html;
+}
+
+function splitSource(text){
+  const start = text.indexOf('# PART B');
+  if(start<0) throw new Error('Parts B–E were not found.');
+  SOURCE.raw = text.slice(start).trim();
+  const labels = ['B','C','D','E'];
+  labels.forEach((label,index)=>{
+    const from = SOURCE.raw.indexOf(`# PART ${label}`);
+    const next = index<labels.length-1 ? SOURCE.raw.indexOf(`# PART ${labels[index+1]}`) : SOURCE.raw.length;
+    SOURCE.parts[label] = SOURCE.raw.slice(from,next).trim();
+  });
+  STEP_META.forEach((step,index)=>{
+    const marker = `## Step ${step.n} —`;
+    const from = SOURCE.parts.C.indexOf(marker);
+    const nextMarker = index<STEP_META.length-1 ? `## Step ${step.n+1} —` : '# PART D';
+    const to = index<STEP_META.length-1 ? SOURCE.parts.C.indexOf(nextMarker,from+marker.length) : SOURCE.parts.C.length;
+    SOURCE.steps[step.n] = from>=0 ? SOURCE.parts.C.slice(from,to<0?SOURCE.parts.C.length:to).trim() : '';
+  });
+  SOURCE.ready = true;
+}
+
+async function loadSource(){
+  try{
+    const response = await fetch('docs/playbook-source.md',{cache:'no-store'});
+    if(!response.ok) throw new Error(`Source returned ${response.status}`);
+    splitSource(await response.text());
+  }catch(error){
+    SOURCE.error = 'The canonical playbook could not be loaded. Serve the repository over HTTP and reload.';
+  }
+}
+
+function toast(message, warn=false){
+  const el = $('#toast');
+  if(!el) return;
+  el.textContent = message;
+  el.className = warn?'on warn':'on';
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(()=>{el.className='';},3800);
+}
+
+function copyText(text, message='Copied — ready to paste.'){
+  const fallback = ()=>{
+    const input=document.createElement('textarea');
+    input.value=text;input.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(input);input.select();
+    try{document.execCommand('copy');}catch(error){}
+    input.remove();toast(message);
+  };
+  if(navigator.clipboard?.writeText){
+    navigator.clipboard.writeText(text).then(()=>toast(message)).catch(fallback);
+  }else fallback();
+}
+
+function downloadText(filename,text){
+  const blob = new Blob([text],{type:'text/markdown;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href=url;link.download=filename;document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function navigationItems(){
+  return [
+    ['home','You are here',ICONS.home],
+    ['map','The map',ICONS.map],
+    ['projects','Projects',ICONS.projects],
+    ['reference','Reference',ICONS.book],
+    ['settings','Settings',ICONS.gear]
+  ];
+}
+
+function renderNavigation(){
+  const p = project();
+  const items = navigationItems();
+  $('.sidebar').innerHTML = `<div class="brand-v2"><span class="mark">W</span>The Walkthrough<small>PREMIUM WEBSITE FIELD GUIDE</small></div>
+    ${items.map(([key,label,icon])=>`<button class="nav-item ${p.view===key?'active':''}" data-nav="${key}" ${p.view===key?'aria-current="page"':''}>${icon}<span>${esc(label.toUpperCase())}</span></button>`).join('')}
+    <div class="spacer"></div>
+    <button class="legend-button" data-action="legend">🛑 ✅ 🎓 &nbsp; BADGE LEGEND</button>
+    <div class="side-coins">${creditDots(24)}<span>FRONTIER CREDITS</span></div>`;
+  $('.bottomnav').innerHTML = items.map(([key,label,icon])=>
+    `<button class="nav-item ${p.view===key?'active':''}" data-nav="${key}" ${p.view===key?'aria-current="page"':''}>${icon}<span>${esc(label.toUpperCase())}</span></button>`
+  ).join('');
+  $('.topbar').innerHTML = `<div class="brand-v2"><span class="mark">W</span>The Walkthrough</div>
+    <div class="topstats" aria-label="${project().frontier.remaining} frontier credits remaining">${creditDots(28)}</div>`;
+}
+
+function creditDots(size=24){
+  const p = project();
+  return Array.from({length:p.frontier.total},(_,index)=>
+    `<span class="credit-dot ${index>=p.frontier.remaining?'spent':''}" style="width:${size}px;height:${size}px" title="${index<p.frontier.remaining?'Available':'Spent'} frontier credit">FC</span>`
+  ).join('');
+}
+
+function badgeRow(n){
+  const key = modelForStep(n);
+  const model = MODELS[key];
+  const meta = STEP_META[n];
+  return `<div class="badges">
+    <span class="badge model" style="color:${model.colour}"><span class="dot"></span>MODEL · ${esc(model.name.toUpperCase())}</span>
+    <span class="badge">EFFORT · ${esc(meta.effort)}</span>
+    <span class="badge">MODE · ${esc(meta.mode)}</span>
+  </div>`;
+}
+
+function viewHeader(kicker,title,description){
+  return `<header class="view-head"><div><div class="view-kicker">${esc(kicker)}</div><h1>${esc(title)}</h1>${description?`<p>${esc(description)}</p>`:''}</div>
+    <button class="legend-button" data-action="legend">🛑 ✅ 🎓 &nbsp; RULE LEGEND</button></header>`;
+}
+
+function modelWarning(n){
+  const p=project(),meta=STEP_META[n],chosen=modelForStep(n);
+  if(meta.model==='kimi' && !p.settings.tools.kimi){
+    return `<div class="warning-card">Kimi Code is marked unavailable, so this project is showing ${esc(MODELS[chosen].name)} as the current builder. The canonical bake-off guidance remains available in Reference.</div>`;
+  }
+  if(meta.model==='codex' && !p.settings.tools.codex){
+    return `<div class="warning-card">Codex is marked unavailable, so this project is using ${esc(MODELS[chosen].name)}. Review the canonical alternatives before starting.</div>`;
+  }
+  return '';
+}
+
+function exampleVisual(n){
+  const example=EXAMPLES[n];
+  if(example.image){
+    return `<img src="${esc(example.image)}" alt="${esc(example.alt||`FORMA-9 illustrative artifact for Step ${n}`)}">`;
+  }
+  return `<div class="molecule" aria-hidden="true"><div class="orbit"></div><div class="core"></div></div>`;
+}
+
+function renderExample(n,compact=false){
+  const example=EXAMPLES[n];
+  const content = exampleTab==='prompt' ? example.prompt : example.result;
+  return `<section class="example-card" aria-label="Illustrative FORMA-9 example for Step ${n}">
+    <div class="example-label">Illustrative example · fictional project · AI-generated</div>
+    <div class="example-visual">${exampleVisual(n)}</div>
+    <div class="example-body"><div class="example-step">FORMA-9 · STEP ${n}</div><h3>${esc(example.title)}</h3>
+      <p>${compact?'One fictional premium peptide storefront, followed from setup through maintenance.':'This is a concrete teaching artifact, not a real client result, operating store, medical product, or audit.'}</p></div>
+    ${compact?'':`<div class="example-tabs">
+      <button class="${exampleTab==='result'?'on':''}" data-action="example-tab" data-tab="result" data-step="${n}">ACTUAL RESULT</button>
+      <button class="${exampleTab==='prompt'?'on':''}" data-action="example-tab" data-tab="prompt" data-step="${n}">FILLED PROMPT</button>
+    </div>
+    <div class="artifact"><div class="artifact-title">${exampleTab==='prompt'?'Exact filled prompt':'Concrete illustrative result'}</div><pre>${esc(content)}</pre>
+      <button class="btn btn-ghost small" style="margin-top:12px" data-action="copy-example" data-step="${n}">${ICONS.copy} COPY</button></div>`}
+  </section>`;
+}
+
+function renderProgressBanner(){
+  const p=project(),percent=progressPercent();
+  const message = percent===0?'Start with the safety net.':percent<50?'The system is taking shape.':percent<100?'The finish line is visible.':'The project is launched.';
+  return `<div class="progress-pill"><div><div class="msg">${esc(message)}</div>
+    <div class="sub">STEP ${p.currentStep} OF 11 · ${esc(p.name.toUpperCase())} · ${esc(p.settings.track.toUpperCase())} TRACK</div></div>
+    <div class="ring"><div class="disc" style="--pct:${percent}"></div><div class="hole">${percent}%</div></div></div>`;
+}
+
+function renderTaskHero(){
+  const p=project(),n=p.currentStep,meta=STEP_META[n],state=stepState(n);
+  const task=currentTask(n);
+  let body=`<div class="eyebrow">YOU ARE HERE</div><h1>Step ${n} — ${esc(meta.title)}</h1>${badgeRow(n)}${modelWarning(n)}`;
+  if(n===10){
+    body += `<div class="task-count">ONGOING MAINTENANCE</div>
+      <div class="task-text">${inlineMarkdown(STEP_TASKS[10][0].text)}</div>
+      <div class="hero-actions"><button class="btn btn-primary" data-action="copy-current">${ICONS.copy} COPY THE PROMPT</button>
+      <button class="btn btn-ghost" data-action="stuck">I’M STUCK</button>
+      <button class="btn btn-ghost" data-action="open-step" data-step="10">SEE FULL STEP</button></div>`;
+  }else if(task){
+    const tasks=filteredTasks(n),index=tasks.findIndex(item=>item.id===task.id);
+    body += `<div class="task-count">TASK ${index+1} OF ${tasks.length} &nbsp; ${rulePill(task.rule,true)}</div>
+      <div class="task-text">${inlineMarkdown(task.text)}</div>
+      <div class="hero-actions"><button class="btn btn-primary" data-action="copy-current">${ICONS.copy} COPY THE PROMPT</button>
+      <button class="btn btn-ghost" data-action="stuck">I’M STUCK</button>
+      <button class="btn btn-green" data-action="task-done">DONE → NEXT</button></div>`;
+  }else{
+    const gates=STEP_GATES[n];
+    body += `<div class="gate-note"><strong>You are finished when:</strong> confirm each gate honestly. The step cannot complete until every visible gate is checked.</div>`;
+    gates.forEach(gate=>{
+      const done=!!state.gates[gate.id];
+      body += `<button class="check-row ${done?'done':''}" data-action="toggle-gate" data-step="${n}" data-id="${gate.id}" aria-pressed="${done}">
+        <span class="tick">${ICONS.check}</span><span class="lbl">${inlineMarkdown(gate.text)}<span class="meta">${rulePill(gate.rule,true)}</span></span>${done?'<span class="done-tag">Done</span>':''}</button>`;
+    });
+    body += `<div class="hero-actions" style="margin-top:13px"><button class="btn btn-ghost" data-action="stuck">I’M STUCK</button>
+      <button class="btn btn-green" data-action="complete-step" ${allGatesDone(n)?'':'disabled'}>COMPLETE STEP →</button></div>`;
+  }
+  return `<section class="hero">${body}</section>`;
+}
+
+function formatDuration(ms){
+  const total=Math.max(0,Math.floor(ms/1000));
+  const hours=Math.floor(total/3600),minutes=Math.floor((total%3600)/60),seconds=total%60;
+  return [hours,minutes,seconds].map(value=>String(value).padStart(2,'0')).join(':');
+}
+
+function sessionElapsed(session){
+  if(!session) return 0;
+  return (session.elapsedMs||0)+(session.running&&session.startedAt?Date.now()-session.startedAt:0);
+}
+
+function renderSessionCard(){
+  const p=project(),session=p.frontier.active;
+  const activeHere=session?.step===p.currentStep;
+  let actions='';
+  if(!session){
+    actions=`<button class="btn btn-ghost small" data-action="session-start" ${p.frontier.remaining>0?'':'disabled'}>SPEND 1 CREDIT & START</button>`;
+  }else if(session.running){
+    actions=`<button class="btn btn-ghost small" data-action="session-pause">PAUSE</button><button class="btn btn-ghost small" data-action="session-finish">FINISH SESSION</button>`;
+  }else{
+    actions=`<button class="btn btn-primary small" data-action="session-resume">RESUME</button><button class="btn btn-ghost small" data-action="session-finish">FINISH SESSION</button>`;
+  }
+  return `<section class="card session-card"><h3>FRONTIER SESSION</h3>
+    <div class="credit-row">${creditDots(24)}</div>
+    <div class="session-time" data-timer-display>${formatDuration(sessionElapsed(session))}</div>
+    <div class="coin-cap">${session?(activeHere?`Timing Step ${p.currentStep}.`:`Timing Step ${session.step}; open that step to continue.`):'Start only when this task genuinely needs a frontier-model session.'}</div>
+    <div class="session-actions" style="margin-top:13px">${actions}</div></section>`;
+}
+
+function renderNotesCard(){
+  const p=project(),n=p.currentStep;
+  return `<section class="card notes-card"><h3>STEP ${n} NOTES</h3>
+    <textarea class="field" data-note-step="${n}" aria-label="Notes for Step ${n}" placeholder="What did you decide, learn, or need to revisit?">${esc(stepState(n).note)}</textarea>
+    <button class="btn btn-ghost small" data-action="export-notes">${ICONS.export} EXPORT ALL NOTES</button></section>`;
+}
+
+function renderWorkTools(){
+  return `<div class="work-tools">${renderNotesCard()}${renderSessionCard()}</div>`;
+}
+
+function renderRail(){
+  const p=project();
+  $('#rail').innerHTML = `${renderExample(p.currentStep)}
+    <div class="rail-tools"><div class="tool-stat"><div class="n">${completedCount()}/10</div><div class="l">Steps complete</div></div>
+    <div class="tool-stat"><div class="n">${p.frontier.remaining}/${p.frontier.total}</div><div class="l">Credits left</div></div></div>`;
+}
+
+function renderHome(){
+  const p=project();
+  $('#main').innerHTML = `${viewHeader('Current project',p.name,'One task at a time, with the source and a concrete example close by.')}
+    ${legendHtml()}${renderProgressBanner()}${renderTaskHero()}${renderWorkTools()}
+    <div class="rail-inline">${renderExample(p.currentStep)}</div>`;
+  renderRail();
+}
+
+function renderMap(){
+  const p=project();
+  const cards=STEP_META.map(meta=>{
+    const state=stepState(meta.n);
+    const current=meta.n===p.currentStep;
+    const future=meta.n>p.currentStep&&!state.done;
+    const key=modelForStep(meta.n),model=MODELS[key];
+    const status=state.done?'Complete':current?'You are here':future?'Preview':'Available';
+    return `<button class="journey-card ${current?'current':''} ${future?'future':''}" data-action="open-step" data-step="${meta.n}">
+      <span class="journey-orb" style="background:${model.colour}">${state.done?ICONS.check:meta.n}</span>
+      <span><span class="state">${esc(status)} · ${esc(model.name)}</span><span class="title">${esc(meta.title)}</span>
+      <span class="summary">${esc(PREVIEWS[meta.n].split('. ').slice(0,1).join('. '))}</span></span></button>`;
+  }).join('');
+  $('#main').innerHTML=`${viewHeader('The journey','Eleven steps, one proven loop','Look ahead without being dropped into the full instruction set. Future steps open as warm previews.')}
+    ${legendHtml()}<div class="path">${cards}</div>`;
+  renderRail();
+}
+
+function renderProjects(){
+  const active=project();
+  const cards=STORE.projects.map(item=>{
+    const done=STEP_META.slice(0,10).filter(step=>item.perStep?.[step.n]?.done).length;
+    return `<article class="project-card ${item.id===active.id?'current':''}"><div class="view-kicker">${item.id===active.id?'Current project':'Saved project'}</div>
+      <h2>${esc(item.name)}</h2><div class="project-meta">Step ${item.currentStep} · ${done}/10 complete · ${esc(item.settings.track)} track</div>
+      <div class="project-actions"><button class="btn btn-primary small" data-action="project-open" data-id="${item.id}">${item.id===active.id?'CONTINUE':'OPEN'}</button>
+      <button class="btn btn-ghost small" data-action="project-rename" data-id="${item.id}">RENAME</button>
+      ${STORE.projects.length>1?`<button class="btn btn-danger small" data-action="project-delete" data-id="${item.id}">DELETE</button>`:''}</div></article>`;
+  }).join('');
+  $('#main').innerHTML=`${viewHeader('Project shelf','Your walkthroughs','Every project keeps its own variables, settings, notes, credits, timers, and progress.')}
+    <div class="project-grid">${cards}<article class="project-card new-project"><div class="view-kicker">New journey</div><h2>Start another project</h2>
+    <div class="project-meta">Your global defaults will be copied into it.</div><button class="btn btn-primary" data-action="project-create">CREATE PROJECT</button></article></div>`;
+  $('#rail').innerHTML=`<div class="card"><h3>PROJECT STORAGE</h3><p class="coin-cap">Projects are stored only in this browser. Export notes before clearing browser data.</p></div>`;
+}
+
+function renderSettings(){
+  const p=project(),s=p.settings;
+  const modelOptions=['sonnet','codex','opus','fable'].map(key=>`<option value="${key}" ${s.defaultModel===key?'selected':''}>${esc(MODELS[key].name)}</option>`).join('');
+  const hosting=['Cloudflare Pages','Cloudflare Workers / OpenNext','Vercel','Other static host'].map(value=>`<option ${s.hosting===value?'selected':''}>${esc(value)}</option>`).join('');
+  $('#main').innerHTML=`${viewHeader('Project controls','Settings','Changes apply immediately to prompts, availability warnings, credits, and track-specific guidance.')}
+    <div class="settings-grid">
+      <section class="setting-card"><h2>Model and tools</h2><p>Set the routine default and mark the tools you actually have.</p>
+        <div class="field"><label>DEFAULT MODEL</label><select data-setting="defaultModel">${modelOptions}</select></div>
+        <div class="toggle-row"><label for="tool-codex">Codex</label><input class="toggle" id="tool-codex" type="checkbox" data-tool="codex" ${s.tools.codex?'checked':''}></div>
+        <div class="toggle-row"><label for="tool-kimi">Kimi Code</label><input class="toggle" id="tool-kimi" type="checkbox" data-tool="kimi" ${s.tools.kimi?'checked':''}></div>
+        <div class="toggle-row"><label for="tool-cr">CodeRabbit</label><input class="toggle" id="tool-cr" type="checkbox" data-tool="coderabbit" ${s.tools.coderabbit?'checked':''}></div>
+      </section>
+      <section class="setting-card"><h2>Project track and hosting</h2><p>Client work reveals production ceremony; practice keeps the lap lighter.</p>
+        <div class="field"><label>TRACK</label><select data-setting="track"><option value="practice" ${s.track==='practice'?'selected':''}>Practice</option><option value="client" ${s.track==='client'?'selected':''}>Client production</option></select></div>
+        <div class="field"><label>HOSTING</label><select data-setting="hosting">${hosting}</select></div>
+      </section>
+      <section class="setting-card"><h2>Frontier-model credits</h2><p>Edit the personal pause point for expensive sessions.</p>
+        <div class="field"><label>CREDITS PER PROJECT</label><input type="number" min="0" max="20" value="${s.frontierCredits}" data-setting="frontierCredits"></div>
+        <div class="budget-note">This is a personal usage budget designed to prevent anxious overuse of your most expensive model. It is not a software-engineering rule.</div>
+      </section>
+      <section class="setting-card"><h2>Project brief variables</h2><p>These values fill the app-authored guided prompts.</p>
+        <div class="field"><label>PROJECT NAME</label><input value="${esc(p.name)}" data-project-field="name"></div>
+        <div class="field"><label>SITE IDEA</label><textarea data-project-field="idea">${esc(p.vars.idea)}</textarea></div>
+        <div class="field"><label>AUDIENCE</label><input value="${esc(p.vars.audience)}" data-project-field="audience"></div>
+        <div class="field"><label>ONE FEELING</label><input value="${esc(p.vars.feeling)}" data-project-field="feeling"></div>
+        <div class="field"><label>PAGES AND SECTIONS</label><textarea data-project-field="sections">${esc(p.vars.sections)}</textarea></div>
+        <button class="btn btn-primary" data-action="save-project-fields">SAVE VARIABLES</button>
+      </section>
+    </div>`;
+  $('#rail').innerHTML=`${renderSessionCard()}<div class="card"><h3>LIVE ADAPTATION</h3><p class="coin-cap">Current recommendation: ${esc(MODELS[modelForStep(p.currentStep)].name)} · ${esc(s.hosting)} · ${esc(s.track)} track.</p></div>`;
+}
+
+function renderReference(){
+  let content='';
+  if(SOURCE.error){
+    content=`<div class="warning-card">${esc(SOURCE.error)}</div>`;
+  }else if(!SOURCE.ready){
+    content='<div class="empty-state">Loading the canonical playbook…</div>';
+  }else{
+    const titles={B:'Part B — Operating rules',C:'Part C — The 11 steps',D:'Part D — Quick reference',E:'Part E — Troubleshooting, costs, and Project Zero'};
+    content=Object.entries(titles).map(([key,title])=>`<section class="acc"><button class="acc-head" data-action="reference-toggle" aria-expanded="false">${esc(title)}<span class="chev">›</span></button>
+      <div class="acc-body"><div class="source-label">Canonical playbook · verbatim source</div><div class="canonical">${markdownToHtml(SOURCE.parts[key])}</div></div></section>`).join('');
+  }
+  $('#main').innerHTML=`${viewHeader('Canonical source','Reference','Parts B–E remain available in full, regardless of project track or tool settings.')}
+    ${legendHtml()}${content}`;
+  $('#rail').innerHTML=`<div class="card"><h3>CONTENT RULE</h3><p class="coin-cap">Canonical playbook text is loaded directly from docs/playbook-source.md. Preview summaries and FORMA-9 artifacts are labelled separately.</p></div>`;
+}
+
+function render(){
+  const p=project();
+  $('#setupView').style.display='none';
+  $('#app').classList.add('on');
+  renderNavigation();
+  if(p.view==='map') renderMap();
+  else if(p.view==='projects') renderProjects();
+  else if(p.view==='reference') renderReference();
+  else if(p.view==='settings') renderSettings();
+  else renderHome();
+  updateTimerDisplay();
+}
+
+function checklistHtml(n,interactive){
+  const state=stepState(n);
+  let html='<div class="fieldblock"><h4>Guided task checklist</h4>';
+  filteredTasks(n).forEach(task=>{
+    const done=!!state.tasks[task.id];
+    html += `<button class="check-row ${done?'done':''} ${interactive?'':'locked'}" ${interactive?`data-action="sheet-task" data-step="${n}" data-id="${task.id}"`:'disabled'} aria-pressed="${done}">
+      <span class="tick">${ICONS.check}</span><span class="lbl">${inlineMarkdown(task.text)}<span class="meta">${rulePill(task.rule,true)}</span></span>${done?'<span class="done-tag">Done</span>':''}</button>`;
+  });
+  html+='</div>';
+  if(STEP_GATES[n].length){
+    html+='<div class="fieldblock"><h4>Gates</h4>';
+    STEP_GATES[n].forEach(gate=>{
+      const done=!!state.gates[gate.id];
+      html += `<button class="check-row ${done?'done':''} ${interactive?'':'locked'}" ${interactive?`data-action="sheet-gate" data-step="${n}" data-id="${gate.id}"`:'disabled'} aria-pressed="${done}">
+        <span class="tick">${ICONS.check}</span><span class="lbl">${inlineMarkdown(gate.text)}<span class="meta">${rulePill(gate.rule,true)}</span></span>${done?'<span class="done-tag">Done</span>':''}</button>`;
+    });
+    html+='</div>';
+  }
+  return html;
+}
+
+function openStep(n,forceFull=false){
+  const p=project(),state=stepState(n),future=n>p.currentStep&&!state.done;
+  const preview=future&&!forceFull;
+  if(!$('#overlay').classList.contains('on')) lastFocus=document.activeElement;
+  let body='';
+  if(preview){
+    body=`<div class="preview-card"><div class="source-label">Friendly preview · app-authored</div>
+      <p class="preview-lead">${esc(PREVIEWS[n])}</p>
+      <div class="preview-note"><span>👀</span><span>Looking ahead does not start this step or change your progress. Open full detail only when you want the complete canonical instructions.</span></div>
+      <div style="margin-top:20px">${renderExample(n,true)}</div>
+      <div class="hero-actions" style="margin-top:20px"><button class="btn btn-primary" data-action="show-full" data-step="${n}">SHOW FULL DETAIL</button></div></div>`;
+  }else{
+    const canonical=SOURCE.steps[n]
+      ? `<div class="source-label">Canonical playbook · verbatim Step ${n}</div><div class="canonical">${markdownToHtml(SOURCE.steps[n])}</div>`
+      : `<div class="warning-card">${esc(SOURCE.error||'Canonical step content is still loading.')}</div>`;
+    const interactive=n<=p.currentStep||state.done;
+    body=`<div class="sheet-grid"><div>${canonical}
+      <div class="fieldblock"><h4>Guided prompt</h4><div class="prompt-block"><div class="ph"><span class="t">APP-AUTHORED · FILLED FROM SETTINGS</span>
+      <button class="btn btn-ghost small" data-action="copy-step-prompt" data-step="${n}">${ICONS.copy} COPY</button></div><pre>${esc(userPrompt(n))}</pre></div></div>
+      ${checklistHtml(n,interactive)}</div><aside class="sheet-example">${renderExample(n)}</aside></div>`;
+  }
+  const sheet=$('#sheet');
+  sheet.className=`sheet ${preview?'preview':'full'}`;
+  sheet.setAttribute('aria-label',`${preview?'Preview':'Full detail'} — Step ${n}: ${STEP_META[n].title}`);
+  sheet.innerHTML=`<button class="sheet-close" data-action="close-sheet" aria-label="Close">✕</button>
+    <div class="step-head"><div class="stepno" style="color:${MODELS[modelForStep(n)].colour}">STEP ${n} · ${preview?'PREVIEW':'FULL DETAIL'}</div>
+    <h2>${esc(STEP_META[n].title)}</h2></div>${body}`;
+  $('#overlay').classList.add('on');
+  $('#app').inert=true;
+  document.body.style.overflow='hidden';
+  $('[data-action="close-sheet"]',sheet)?.focus();
+}
+
+function openLegend(){
+  lastFocus=document.activeElement;
+  const sheet=$('#sheet');
+  sheet.className='sheet';
+  sheet.setAttribute('aria-label','Rule badge legend');
+  sheet.innerHTML=`<button class="sheet-close" data-action="close-sheet" aria-label="Close">✕</button>
+    <div class="step-head"><div class="stepno" style="color:var(--lime)">THE THREE KINDS OF RULE</div><h2>How seriously should I take this?</h2></div>
+    ${legendHtml()}
+    <div class="canonical">
+      <div class="canonical-rule req"><strong>🛑 Production requirement</strong><br>Non-negotiable on real/client work. These protect data, secrets, users, and production.</div>
+      <div class="canonical-rule default"><strong>✅ Recommended default</strong><br>A strong starting choice, not a law. Deviate when you have a reason.</div>
+      <div class="canonical-rule habit"><strong>🎓 Personal habit / budget</strong><br>A learning or self-control rule for this player, not universal engineering truth.</div>
+    </div>`;
+  $('#overlay').classList.add('on');
+  $('#app').inert=true;
+  document.body.style.overflow='hidden';
+  $('[data-action="close-sheet"]',sheet)?.focus();
+}
+
+function closeSheet(){
+  $('#overlay').classList.remove('on');
+  $('#sheet').innerHTML='';
+  $('#app').inert=false;
+  document.body.style.overflow='';
+  if(lastFocus?.focus) lastFocus.focus();
+  lastFocus=null;
+}
+
+function trapDialogFocus(event){
+  if(event.key==='Escape' && $('#overlay').classList.contains('on')){
+    event.preventDefault();closeSheet();return;
+  }
+  if(event.key!=='Tab'||!$('#overlay').classList.contains('on')) return;
+  const focusable=$$('button:not([disabled]),a[href],input:not([disabled]),textarea:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])',$('#sheet')).filter(el=>!el.hidden);
+  if(!focusable.length) return;
+  const first=focusable[0],last=focusable[focusable.length-1];
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+  else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+}
+
+function markTaskDone(n,id){
+  stepState(n).tasks[id]=true;
+  saveStore();render();
+  toast('Task complete. The next small action is ready.');
+}
+
+function toggleTask(n,id){
+  stepState(n).tasks[id]=!stepState(n).tasks[id];
+  saveStore();
+}
+
+function toggleGate(n,id){
+  stepState(n).gates[id]=!stepState(n).gates[id];
+  saveStore();
+}
+
+function celebrate(message,projectFinish=false){
+  toast(message);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const burst=document.createElement('div');
+  burst.className='celebration';
+  burst.setAttribute('aria-hidden','true');
+  const colours=['#c7f36b','#7ee9ff','#ff7ac0','#ffc800','#b478ff'];
+  burst.innerHTML=Array.from({length:projectFinish?18:10},(_,index)=>
+    `<i style="--x:${(index%6-2.5)*38}px;--y:${-45-(index%4)*25}px;--c:${colours[index%colours.length]};--d:${index*25}ms"></i>`
+  ).join('');
+  document.body.appendChild(burst);
+  setTimeout(()=>burst.remove(),1300);
+}
+
+function completeStep(n){
+  if(!allTasksDone(n)||!allGatesDone(n)) return;
+  const p=project();
+  stepState(n).done=true;
+  if(n===9){
+    p.finished=true;p.currentStep=10;p.view='home';
+    saveStore();render();celebrate('Project journey complete — maintenance mode is ready.',true);
+    return;
+  }
+  p.currentStep=Math.min(10,n+1);
+  p.view='home';
+  saveStore();render();
+  celebrate(`Step ${n} complete. Step ${p.currentStep} is ready.`);
+}
+
+function stuckPrompt(){
+  const p=project(),n=p.currentStep,task=currentTask(n);
+  const current=task?.text || STEP_GATES[n].map(gate=>gate.text).join(' · ') || STEP_TASKS[n][0].text;
+  return `I am following The Visual Playbook for ${p.name}. Step ${n}: ${STEP_META[n].title}. Current task or gate: ${current} Expected model / effort / mode: ${MODELS[modelForStep(n)].name} / ${STEP_META[n].effort} / ${STEP_META[n].mode}. What is happening instead: [describe the exact result, error, or visual difference]. Help me diagnose whether this is a specification, context, visual, logic/debugging, architectural, or environment/integration failure. Then give me one small next action and wait.`;
+}
+
+function notesMarkdown(){
+  const p=project();
+  const sections=STEP_META.map(meta=>{
+    const note=stepState(meta.n).note.trim();
+    return note?`## Step ${meta.n} — ${meta.title}\n\n${note}`:'';
+  }).filter(Boolean);
+  return `# ${p.name} — Walkthrough notes\n\nExported ${new Date().toLocaleString()}\n\n${sections.length?sections.join('\n\n'):'No notes yet.'}\n`;
+}
+
+function startSession(){
+  const p=project();
+  if(p.frontier.active||p.frontier.remaining<1) return;
+  const ok=window.confirm('Start a frontier-model session for this step? This will spend 1 personal frontier credit.');
+  if(!ok) return;
+  p.frontier.remaining--;
+  p.frontier.active={id:uid(),step:p.currentStep,startedAt:Date.now(),elapsedMs:0,running:true};
+  saveStore();render();toast('Frontier session started. One personal credit was spent.');
+}
+
+function pauseSession(){
+  const session=project().frontier.active;
+  if(!session?.running) return;
+  session.elapsedMs=sessionElapsed(session);session.startedAt=null;session.running=false;
+  saveStore();render();toast('Session paused.');
+}
+
+function resumeSession(){
+  const session=project().frontier.active;
+  if(!session||session.running) return;
+  session.startedAt=Date.now();session.running=true;
+  saveStore();render();toast('Session resumed.');
+}
+
+function finishSession(){
+  const p=project(),session=p.frontier.active;
+  if(!session) return;
+  session.elapsedMs=sessionElapsed(session);session.startedAt=null;session.running=false;session.finishedAt=new Date().toISOString();
+  p.frontier.history.push(session);p.frontier.active=null;
+  saveStore();render();toast(`Session saved at ${formatDuration(session.elapsedMs)}.`);
+}
+
+function updateTimerDisplay(){
+  const session=project()?.frontier?.active;
+  $$('[data-timer-display]').forEach(el=>{el.textContent=formatDuration(sessionElapsed(session));});
+}
+
+function setFrontierTotal(value){
+  const p=project(),next=Math.max(0,Math.min(20,Number(value)||0));
+  const spent=p.frontier.history.length+(p.frontier.active?1:0);
+  p.settings.frontierCredits=next;p.frontier.total=next;p.frontier.remaining=Math.max(0,next-spent);
+  saveStore();render();
+}
+
+function openProjectSetup(options={}){
+  const editing=!!options.editing;
+  const first=!!options.first;
+  const existing=editing?project():null;
+  const values={
+    name:existing?.name||'',idea:existing?.vars.idea||'',audience:existing?.vars.audience||'',
+    feeling:existing?.vars.feeling||'',sections:existing?.vars.sections||''
+  };
+  $('#app').classList.remove('on');
+  const setup=$('#setupView');
+  setup.style.display='block';
+  setup.innerHTML=`<div class="setup-wrap"><form class="setup-card" id="v2SetupForm">
+    <div class="view-kicker">${editing?'Project variables':'New project'}</div><h1>${editing?'Edit the project brief':'Start the walkthrough'}</h1>
+    <div class="sub">These values fill guided prompts. You can change them later without losing progress.</div>
+    <div class="field"><label for="setup-name">PROJECT NAME</label><input id="setup-name" name="name" value="${esc(values.name)}" placeholder="My project" required></div>
+    <div class="field"><label for="setup-idea">SITE IDEA</label><textarea id="setup-idea" name="idea" placeholder="What are you building?" required>${esc(values.idea)}</textarea></div>
+    <div class="field"><label for="setup-audience">AUDIENCE</label><input id="setup-audience" name="audience" value="${esc(values.audience)}" placeholder="Who is it for?" required></div>
+    <div class="field"><label for="setup-feeling">ONE FEELING</label><input id="setup-feeling" name="feeling" value="${esc(values.feeling)}" placeholder="e.g. calm confidence" required></div>
+    <div class="field"><label for="setup-sections">PAGES AND SECTIONS</label><textarea id="setup-sections" name="sections" placeholder="hero, catalog, about, contact…" required>${esc(values.sections)}</textarea></div>
+    <div class="hero-actions"><button class="btn btn-primary" type="submit">${editing?'SAVE CHANGES':'CREATE PROJECT'}</button>
+    ${!first&&(editing||STORE.projects.length)?'<button class="btn btn-ghost" type="button" data-action="setup-cancel">CANCEL</button>':''}</div></form></div>`;
+  $('#v2SetupForm').addEventListener('submit',event=>{
+    event.preventDefault();
+    const form=new FormData(event.currentTarget);
+    if(editing){
+      const p=project();p.name=String(form.get('name')).trim();
+      p.vars={idea:String(form.get('idea')).trim(),audience:String(form.get('audience')).trim(),feeling:String(form.get('feeling')).trim(),sections:String(form.get('sections')).trim()};
+      p.setupDone=true;p.view='settings';
+    }else{
+      const created=newProject(String(form.get('name')).trim(),{
+        idea:String(form.get('idea')).trim(),audience:String(form.get('audience')).trim(),
+        feeling:String(form.get('feeling')).trim(),sections:String(form.get('sections')).trim()
+      });
+      created.setupDone=true;
+      STORE.projects.push(created);STORE.activeProjectId=created.id;
+    }
+    saveStore();setup.innerHTML='';setup.style.display='none';render();
+  });
+}
+
+function renameProject(id){
+  const item=STORE.projects.find(p=>p.id===id);if(!item)return;
+  const next=window.prompt('Rename this project:',item.name);
+  if(next?.trim()){item.name=next.trim();saveStore();render();}
+}
+
+function deleteProject(id){
+  const item=STORE.projects.find(p=>p.id===id);
+  if(!item||STORE.projects.length===1) return;
+  const ok=window.confirm(`Delete “${item.name}” and its local progress? Exported notes will not be affected.`);
+  if(!ok) return;
+  STORE.projects=STORE.projects.filter(p=>p.id!==id);
+  if(STORE.activeProjectId===id) STORE.activeProjectId=STORE.projects[0].id;
+  saveStore();render();toast('Project deleted from this browser.');
+}
+
+function saveProjectFields(){
+  const p=project();
+  const fields={};
+  $$('[data-project-field]').forEach(input=>{fields[input.dataset.projectField]=input.value.trim();});
+  if(fields.name) p.name=fields.name;
+  ['idea','audience','feeling','sections'].forEach(key=>{p.vars[key]=fields[key]||'';});
+  saveStore();render();toast('Project variables saved. Guided prompts are updated.');
+}
+
+function handleClick(event){
+  const target=event.target.closest('[data-action],[data-nav]');
+  if(!target) return;
+  if(target.dataset.nav){
+    const p=project();p.view=target.dataset.nav;saveStore();render();return;
+  }
+  const action=target.dataset.action;
+  if(action==='legend'){openLegend();return;}
+  if(action==='close-sheet'){closeSheet();return;}
+  if(action==='show-full'){openStep(Number(target.dataset.step),true);return;}
+  if(action==='open-step'){exampleTab='result';openStep(Number(target.dataset.step));return;}
+  if(action==='copy-current'){copyText(userPrompt(project().currentStep));return;}
+  if(action==='copy-step-prompt'){copyText(userPrompt(Number(target.dataset.step)));return;}
+  if(action==='copy-example'){
+    const n=Number(target.dataset.step),example=EXAMPLES[n];
+    copyText(exampleTab==='prompt'?example.prompt:example.result,'FORMA-9 artifact copied.');return;
+  }
+  if(action==='example-tab'){
+    exampleTab=target.dataset.tab;
+    const n=Number(target.dataset.step);
+    if(target.closest('#sheet')) openStep(n,true); else render();
+    return;
+  }
+  if(action==='task-done'){
+    const task=currentTask();if(task)markTaskDone(project().currentStep,task.id);return;
+  }
+  if(action==='toggle-gate'){
+    toggleGate(Number(target.dataset.step),target.dataset.id);render();return;
+  }
+  if(action==='complete-step'){completeStep(project().currentStep);return;}
+  if(action==='stuck'){copyText(stuckPrompt(),'Diagnosis prompt copied — add the exact result or error.');return;}
+  if(action==='sheet-task'){
+    const n=Number(target.dataset.step);toggleTask(n,target.dataset.id);saveStore();render();openStep(n,true);return;
+  }
+  if(action==='sheet-gate'){
+    const n=Number(target.dataset.step);toggleGate(n,target.dataset.id);saveStore();render();openStep(n,true);return;
+  }
+  if(action==='reference-toggle'){
+    const acc=target.closest('.acc');const open=acc.classList.toggle('open');
+    target.setAttribute('aria-expanded',String(open));return;
+  }
+  if(action==='session-start'){startSession();return;}
+  if(action==='session-pause'){pauseSession();return;}
+  if(action==='session-resume'){resumeSession();return;}
+  if(action==='session-finish'){finishSession();return;}
+  if(action==='export-notes'){
+    downloadText(`${project().name.toLowerCase().replace(/[^a-z0-9]+/g,'-')||'project'}-walkthrough-notes.md`,notesMarkdown());
+    toast('Notes exported as Markdown.');return;
+  }
+  if(action==='project-open'){
+    STORE.activeProjectId=target.dataset.id;project().view='home';saveStore();render();return;
+  }
+  if(action==='project-create'){openProjectSetup({editing:false});return;}
+  if(action==='project-rename'){renameProject(target.dataset.id);return;}
+  if(action==='project-delete'){deleteProject(target.dataset.id);return;}
+  if(action==='save-project-fields'){saveProjectFields();return;}
+  if(action==='setup-cancel'){
+    $('#setupView').innerHTML='';$('#setupView').style.display='none';$('#app').classList.add('on');render();return;
+  }
+}
+
+function handleChange(event){
+  const input=event.target,p=project();
+  if(input.matches('[data-tool]')){
+    p.settings.tools[input.dataset.tool]=input.checked;
+    STORE.defaults.tools[input.dataset.tool]=input.checked;
+    saveStore();render();return;
+  }
+  if(input.matches('[data-setting]')){
+    const key=input.dataset.setting;
+    if(key==='frontierCredits'){setFrontierTotal(input.value);return;}
+    p.settings[key]=input.value;
+    if(key==='defaultModel') STORE.defaults.defaultModel=input.value;
+    saveStore();render();
+  }
+}
+
+function handleInput(event){
+  const input=event.target;
+  if(input.matches('[data-note-step]')){
+    stepState(Number(input.dataset.noteStep)).note=input.value;
+    saveStore();
+  }
+}
+
+async function boot(){
+  STORE=loadStore();
+  document.addEventListener('click',handleClick);
+  document.addEventListener('change',handleChange);
+  document.addEventListener('input',handleInput);
+  document.addEventListener('keydown',trapDialogFocus);
+  $('#overlay').addEventListener('click',event=>{if(event.target.id==='overlay')closeSheet();});
+  timerTick=setInterval(updateTimerDisplay,1000);
+  loadSource().then(()=>{
+    if($('#app').classList.contains('on')) render();
+  });
+  if(!project().setupDone) openProjectSetup({editing:true,first:true});
+  else render();
+}
+
+boot();
+})();
 </script>
 </body>
 </html>
