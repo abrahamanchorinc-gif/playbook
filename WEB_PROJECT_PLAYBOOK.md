@@ -64,7 +64,10 @@ When the agent receives a message like that and no `/docs/PROJECT_STATUS.md` exi
 2. If the model/effort/mode match, ask the human a short, warm, plain-English set of questions — the minimum needed to start Phase 0. For example:
    > *"What's the website we're doing today? Who is it for, and what's the one thing you want a visitor to do? Roughly what pages or sections do you imagine? Is this a practice project or client work?"*
 3. Keep it to one message, no jargon, no long form to fill in. "I don't know yet, you decide" is an acceptable answer to any of these — the agent proposes something reasonable and asks the human to confirm rather than blocking on it.
-4. Once answered, begin Phase 0 immediately (Section 11) using those answers — no separate "go" needed unless the golden rule itself required a model switch first.
+4. **If the answer is client work, ask one short follow-up before touching anything:**
+   > *"Since this is client work — does the client already have a GitHub account and a Cloudflare account, or do I need to help you set those up under their business email? If they already exist, what are they, and does anyone else need access?"*
+   `[REQUIRED]` Client repositories and hosting are created under the **client's own** accounts (their business email), never the practitioner's personal accounts — see Section 12. Get this answer before creating any repository, not after.
+5. Once answered, begin Phase 0 immediately (Section 11) using those answers — no separate "go" needed unless the golden rule itself required a model switch first.
 
 The longer initialization prompt in Section 2 still works if the human would rather write all the project details out themselves upfront — it is an alternative entry point, not the only one.
 
@@ -2234,6 +2237,7 @@ This section consolidates controls that are `[REQUIRED]` on the client track.
 
 ### Repository and review
 
+- `[REQUIRED]` **The repository, and the hosting account, belong to the client** — created under the client's own GitHub account/organization and Cloudflare account (their business email), not the practitioner's personal accounts. The practitioner is added as a collaborator. This is settled at Phase 0, before any repository or hosting project is created (see Section 1's brand-new-project questions). If the practitioner set these accounts up on the client's behalf, ownership (billing, account recovery, admin rights) still transfers to the client — being the one who clicked "create" does not make it the practitioner's account.
 - Private repository with access limited to real participants.
 - Protected `main`, pull requests, required **GitHub Actions** CI, and an honest solo-review policy.
 - Feature branches for normal work; hotfix branch only for incidents.
