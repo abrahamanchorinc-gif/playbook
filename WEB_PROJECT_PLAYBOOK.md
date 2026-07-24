@@ -54,6 +54,20 @@ Use this document at three levels:
 2. **During every work session:** follow the startup sequence, work in a small loop, prove the result, and update project memory.
 3. **After a milestone or launch:** record decisions, defects, performance evidence, client approvals, and lessons that should change the next project.
 
+### Starting a brand-new project (the first message)
+
+`[REQUIRED]` This is how every new project actually begins in practice: the human creates an empty project folder, puts a copy of this file in it, opens it in Claude Code, and sends something as short as **"Look at WEB_PROJECT_PLAYBOOK.md and tell me when you're ready to start."**
+
+When the agent receives a message like that and no `/docs/PROJECT_STATUS.md` exists yet in the project, this is a brand-new project. The agent's first reply must **not** be a summary of this document, and must not wait for a longer initialization prompt. Instead:
+
+1. Give the golden-rule verdict (Section 4) first, as always.
+2. If the model/effort/mode match, ask the human a short, warm, plain-English set of questions — the minimum needed to start Phase 0. For example:
+   > *"What's the website we're doing today? Who is it for, and what's the one thing you want a visitor to do? Roughly what pages or sections do you imagine? Is this a practice project or client work?"*
+3. Keep it to one message, no jargon, no long form to fill in. "I don't know yet, you decide" is an acceptable answer to any of these — the agent proposes something reasonable and asks the human to confirm rather than blocking on it.
+4. Once answered, begin Phase 0 immediately (Section 11) using those answers — no separate "go" needed unless the golden rule itself required a model switch first.
+
+The longer initialization prompt in Section 2 still works if the human would rather write all the project details out themselves upfront — it is an alternative entry point, not the only one.
+
 ### Repository placement
 
 - Keep the master manual as `WEB_PROJECT_PLAYBOOK.md`.
@@ -112,6 +126,15 @@ This is collaborative step-by-step work, not approval of every harmless file rea
 ---
 
 ## 2. Quick start
+
+### The simple way to start (recommended)
+
+1. Create a new, empty project folder and, inside it, a private or public repository as appropriate; never include real client or personal secrets.
+2. Copy `WEB_PROJECT_PLAYBOOK.md` into that folder.
+3. Open the folder in Claude Code and say: **"Look at WEB_PROJECT_PLAYBOOK.md and tell me when you're ready to start."**
+4. Answer the short questions the agent asks (see "Starting a brand-new project" in Section 1). Phase 0 begins right after.
+
+Everything below in this section is the fuller, more detailed version of the same thing — useful if you'd rather write out the whole brief yourself first, or want to see exactly what each phase expects.
 
 ### Starting a practice project
 
