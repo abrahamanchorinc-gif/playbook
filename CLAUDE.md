@@ -39,17 +39,21 @@ mode") — pick the specific value every time.
 
 If the current model/effort/mode already match, say so in one line and
 proceed. If any of the three is wrong, name the correct MODEL / EFFORT /
-MODE and STOP — do not start the work yet.
+MODE and STOP COMPLETELY — do not start the work, and do not answer the
+substance of the prompt either, even if the answer is quick or already
+known. The verdict is the entire response. (This closes a real gap: I used
+to flag the mismatch and then answer anyway, which defeats the point.)
 
 **If I don't switch:** on my very next message in that same thread, before
 doing anything else, ask why and encourage the switch again — restate which
 MODEL / EFFORT / MODE is correct and why it matters for this task. Only
-proceed on the unmatched setting if I explicitly say something like "no,
-don't switch, just use this" for that turn. That override is one-time —
-it applies to that single task only. The moment that turn is done, go
-straight back to giving the full verdict on my next prompt, no matter how
-many turns it's been since the last switch discussion. Never silently drop
-back into skipping the check.
+proceed — on the unmatched setting, and only then answering the actual
+prompt — if I explicitly say something like "no, don't switch, just use
+this" for that turn. That override is one-time — it applies to that single
+task only. The moment that turn is done, go straight back to giving the
+full verdict and stopping again if unmatched, no matter how many turns
+it's been since the last switch discussion. Never silently drop back into
+skipping the check, and never treat a past override as standing permission.
 
 Never silently do easy work on an expensive model, at high effort, or in a
 looser mode than the task needs.
@@ -62,10 +66,10 @@ else does.
 
 ## How to work in this repo
 
-**This repo is on the practice track (playbook v2, B.5).** The habits below are
-the 🎓 personal auto-checkpoint habit for practice repos specifically — they
-exist because I asked to stop thinking about Git while learning. They are not
-universal engineering rules.
+**This repo is on the practice track (WEB_PROJECT_PLAYBOOK.md Section 9).** The
+habits below are the personal auto-checkpoint habit for practice repos
+specifically — they exist because I asked to stop thinking about Git while
+learning. They are not universal engineering rules.
 
 Before starting any coding task, commit the current state first (message:
 "checkpoint before [task]"). This is my undo point — never skip it.
@@ -78,13 +82,15 @@ patching on top of broken code.
 
 Never force-push, never rewrite history, never delete branches without asking.
 
-**Client repos use the client production track instead (playbook v2, B.5 and
-B.7):** protected `main`, pull requests, required CI checks, human approval
-before merge, no silent auto-checkpoint-and-push. Do not apply this repo's
-practice-track habits to a client repo — check B.5 there instead.
+**Client repos use the client production track instead (WEB_PROJECT_PLAYBOOK.md
+Sections 9 and 12):** protected `main`, pull requests, required CI checks,
+human approval before merge, no silent auto-checkpoint-and-push. Do not apply
+this repo's practice-track habits to a client repo — check that project's own
+`/docs/PLAYBOOK.md` instead.
 
 ## Project rules
 
-Before any task, read /docs/SPEC.md, /docs/DESIGN.md, /docs/ARCHITECTURE.md and
-/docs/MOTION.md. Never violate them. Never mix GSAP and Motion in the same
-component.
+This repo's job is maintaining `WEB_PROJECT_PLAYBOOK.md` itself — the master
+manual copied into every new website project. There is no separate
+SPEC/DESIGN/ARCHITECTURE/MOTION set here; those get created per-project when
+the playbook is used to build an actual site.

@@ -8,6 +8,14 @@
             "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"Golden rule reminder: before acting on this prompt, state your MODEL / EFFORT / MODE verdict per the golden rule in CLAUDE.md - this applies to every prompt, including pure discussion, with no exceptions.\"}}'"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"Model-mismatch reminder: if your MODEL / EFFORT / MODE verdict does not match what is currently active, stop completely - do not answer the prompt itself, only give the verdict and wait for the human to switch or explicitly say just use this model.\"}}'"
+          }
+        ]
       }
     ]
   }

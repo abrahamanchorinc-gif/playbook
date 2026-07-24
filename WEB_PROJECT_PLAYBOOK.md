@@ -1,6 +1,6 @@
 # The AI-Assisted Web Project Playbook
 
-**Version:** 0.9 review candidate
+**Version:** 0.9.1 post-review restoration
 
 **Last updated:** 24 July 2026
 
@@ -10,7 +10,7 @@
 
 **Scope:** brochure sites, marketing sites, portfolios, interactive brand experiences, and small full-stack web projects
 
-**Status:** operational draft; complete the specialist review pipeline in Section 23 before freezing Version 1.0
+**Status:** operational draft; one specialist review is done and its findings applied (Section 23). Under the standing moratorium, the next step is to use this on a real website, then freeze Version 1.0 — not to run further reviews.
 
 This is a repository-native operating manual, not a course, dashboard, or progress app. Keep it in Git, read it before work begins, and update it when evidence changes the workflow.
 
@@ -40,8 +40,9 @@ This is a repository-native operating manual, not a course, dashboard, or progre
 20. [Troubleshooting by cause](#20-troubleshooting-by-cause)
 21. [Copy-ready templates](#21-copy-ready-templates)
 22. [Playbook lifecycle, changelog, and evidence loop](#22-playbook-lifecycle-changelog-and-evidence-loop)
-23. [Specialist review pipeline](#23-specialist-review-pipeline)
+23. [Review status and freeze](#23-review-status-and-freeze)
 24. [Official-source verification appendix](#24-official-source-verification-appendix)
+25. [Plain-English glossary](#25-plain-english-glossary)
 
 ---
 
@@ -602,13 +603,26 @@ The older labels “Production Requirement,” “Recommended Default,” and �
 
 ## 4. Golden model-routing rule
 
-> `[REQUIRED]` **Before every task, the agent must output a one- or two-sentence recommendation naming the exact model to use and why.**
+> `[REQUIRED]` **Before acting on ANY prompt, no matter how small — including pure discussion — the agent's first output is a three-part verdict: MODEL / EFFORT / MODE, each one named exactly, plus a one-line why. Never leave any of the three vague.**
 
-- If the current model is right, say so and proceed.
-- If the current model is wrong, name the correct model, explain why, and stop. Do not perform the task until the user confirms the switch.
+This applies to every prompt, with no exceptions. The three parts are:
+
+- **MODEL** — which model, from the routing table below.
+- **EFFORT** — low / medium (normal) / high / max-ultracode, per the effort guide below.
+- **MODE** — how much freedom the agent has while it works: `PLAN` (look and think only, no file changes), `ASK-each-time` (proposes every change and waits for a yes), or `AUTO-accept` (applies edits itself within the bounded conditions in Section 9). Bypass-permissions / full-auto is banned on every track, at any stakes level — never recommend it. Full mode detail: Section 9.
+
+**Enforcement:**
+
+- If the current model, effort, and mode already match, say so in one line and proceed.
+- If any of the three is wrong, name the correct MODEL / EFFORT / MODE and **stop completely** — do not start the work, and do not answer the substance of the prompt either, even if the answer would be quick or the agent already knows it. The verdict is the entire response. This closes a real gap: previously the agent flagged the mismatch but then answered anyway, which defeats the point of the rule.
+- **If the human does not switch:** on the very next message, before doing anything else, ask why and re-encourage the switch — restate the correct MODEL / EFFORT / MODE and why it matters. Only proceed — on the unmatched setting, and only then answering the actual prompt — if the human explicitly says something like "no, don't switch, just use this." That override is one-time, for that single task only; on the next prompt, return to giving the full verdict and stopping again if unmatched. Never silently drop the check, and never treat a prior override as standing permission for later prompts.
 - If the agent cannot see its model identity, say that plainly, recommend the correct model, and ask the human to verify the selector.
 - If the exact recommended model is unavailable, report that fact and stop for a human routing decision; do not silently substitute another model.
-- Never quietly use an unnecessarily expensive model for routine work.
+- Never quietly do easy work on an unnecessarily expensive model, at higher effort than needed, or in a looser mode than the task warrants.
+
+> `[REQUIRED]` **Copyable prompts always go in a fenced code block.** Any time the agent writes a prompt for the human to copy and reuse — for another tool, or to save for later — it goes inside triple-backtick fences, never as plain paragraph text. The code block is what renders with a copy button.
+
+> `[PERSONAL RULE]` **Enforce the verdict with a hook, not just this file.** A rule that lives only in a Markdown file is read once at the start of a session and can silently drop out of a long conversation. In each new project, also add a `UserPromptSubmit` hook (see Section 21) that re-injects a short reminder of this rule on every prompt. This exists because a file-only version of this rule was silently skipped once.
 
 This routing table is the **current operating policy**, last verified 24 July 2026. It is not a timeless ranking, a vendor benchmark, or a claim that one model always wins.
 
@@ -673,15 +687,20 @@ Escalate only when the diagnosis and attempt justify the cost.
 ### Compact routing rule for project templates
 
 ```text
-Before every task, recommend the exact model in 1–2 sentences.
-Default: Sonnet 5 for routine work; Opus 4.8 high for architecture,
+Before acting on any prompt, give a three-part verdict — MODEL / EFFORT /
+MODE — each named exactly, plus a one-line why.
+MODEL default: Sonnet 5 for routine work; Opus 4.8 high for architecture,
 many-file changes, or a bug surviving two proper Sonnet attempts;
 Fable 5 max/ultracode only for exceptional work or after proper Sonnet
 and Opus attempts; GPT-5.6 Sol for complex engineering, long-context
 implementation, hard audits, and independent review; Kimi K3 for
 reference-driven frontend only after a bake-off; Gemini/Antigravity for
-exploratory browser QA only. If this is the wrong model, name the right
-one and stop until the human confirms the switch.
+exploratory browser QA only.
+EFFORT: low / medium / high / max-ultracode — the lowest that reliably works.
+MODE: PLAN, ASK-each-time, or AUTO-accept (never bypass/full-auto).
+If any of the three is wrong, name the correct one and stop until the human
+confirms the switch. If they don't switch, next message ask why and
+re-encourage before proceeding. Copyable prompts always go in a code block.
 ```
 
 ---
@@ -744,6 +763,9 @@ If a practice project becomes client work:
 
 | File | Purpose |
 |---|---|
+| `CLAUDE.md` (repo root) | Instruction file Claude Code reads automatically each session; from the Section 21 template |
+| `AGENTS.md` (repo root) | Vendor-neutral instruction file other agents read; identical intent to `CLAUDE.md`, from the Section 21 template |
+| `.claude/settings.json` | The golden-rule enforcement hook (Section 21) |
 | `/docs/PLAYBOOK.md` | The project-specific operating rules derived from this manual |
 | `/docs/PROJECT_STATUS.md` | Current truth: phase, branch, decisions, blockers, checks, next action |
 | `/docs/SPEC.md` | Users, goals, scope, states, content, acceptance criteria, exclusions |
@@ -792,6 +814,8 @@ Use when the task has real architectural depth, many coupled files, or a well-ev
 #### Claude Fable 5
 
 Use for exceptional synthesis, difficult long-running work, or the final escalation path after proper lower-cost attempts. Max/ultracode is a scarce gate, not a default setting. It still needs requirements, tests, and human review.
+
+> `[PERSONAL RULE]` **Fable budget — 2 sessions per project.** A per-project budget of two Fable sessions exists *because this founder specifically tends to reach for the most expensive model when anxious, and it has repeatedly cost real usage.* It is a self-control mechanism, honestly labelled — not an engineering rule. The agent tracks how many times Fable has been opened on the current project and, on a third attempt, pauses to ask whether the problem genuinely justifies it (per the escalation conditions in Section 4). If it does, use Fable — the budget exists to force that pause, not to forbid the tool.
 
 #### GPT-5.6 Sol
 
@@ -915,6 +939,7 @@ Before either action, inspect dependencies, data/schema implications, other peop
 - Use a feature branch for risky, multi-file, or experimental work.
 - Keep the default branch runnable.
 - `[RECOMMENDED]` For a solo beginner, keep one active implementation branch at a time unless parallel independent work or an urgent hotfix justifies another. This is a clarity default, not an absolute technical law.
+- `[PERSONAL RULE]` **Auto-checkpoint habit (practice track only).** On a practice repository, the agent commits a checkpoint *before* starting a coding task (message: `checkpoint before [task]`) and commits + pushes *after* the human confirms the result looks right — without being asked each time. This exists because this founder asked to stop thinking about Git while learning; the checkpoint is the undo point. It is a personal habit, not an engineering law, and it applies **only** on practice repositories. It does **not** apply to client work, where every commit and push is inspected and explicitly approved per the client track and Section 9's approval policy. If a change goes wrong, the agent offers to revert to the last checkpoint rather than patching on top of broken code.
 
 #### Client track
 
@@ -1192,17 +1217,21 @@ Plan, then bounded edit. Ask before creating remote repositories, installing ext
 2. Inventory the repository without editing.
 3. Classify the project as practice or client.
 4. Create or confirm `.gitignore`, package-manager policy, runtime versions, and folder conventions.
-5. Create `/docs/PLAYBOOK.md`, `PROJECT_STATUS.md`, `SPEC.md`, and `DESIGN.md` from Section 21.
-6. Add optional documents only when justified.
-7. Record branch, environment, deployment, access, and unresolved decisions.
-8. For client work, configure private repository, protected `main`, pull-request path, and access ownership.
-9. Run a secret scan or repository search appropriate to the stack.
-10. Ask before the first commit or remote push.
+5. Create the root instruction files `CLAUDE.md` and `AGENTS.md` from the Section 21 templates, and add the golden-rule enforcement hook from Section 21 in `.claude/settings.json`.
+6. Create `/docs/PLAYBOOK.md` as a concise project-specific operating file **derived from this master playbook** (it is not a Section 21 template — copy the applicable operating rules across, keeping the golden model-routing rule, the approval/auto-edit policy, Git safety, the chosen track, required checks, and the collaboration rhythm).
+7. Create `/docs/PROJECT_STATUS.md`, `/docs/SPEC.md`, and `/docs/DESIGN.md` from the Section 21 templates.
+8. Add optional documents only when justified.
+9. Record branch, environment, deployment, access, and unresolved decisions.
+10. For client work, configure private repository, protected `main`, pull-request path, and access ownership.
+11. Run a secret scan or repository search appropriate to the stack.
+12. Ask before the first commit or remote push.
 
 **Files created or updated**
 
 - `.gitignore`
 - package/runtime configuration as applicable
+- `CLAUDE.md` and `AGENTS.md` (root instruction files)
+- `.claude/settings.json` (golden-rule enforcement hook)
 - `/docs/PLAYBOOK.md`
 - `/docs/PROJECT_STATUS.md`
 - `/docs/SPEC.md`
@@ -2844,20 +2873,28 @@ Current work state is `/docs/PROJECT_STATUS.md`.
 
 1. Read `PLAYBOOK.md` and `PROJECT_STATUS.md`.
 2. Read only the additional documents relevant to the task.
-3. Recommend the exact model in 1–2 sentences:
-   - Sonnet 5: routine work.
-   - Opus 4.8 high: architecture, many-file changes, or a bug surviving
-     two proper Sonnet attempts.
-   - Fable 5 max/ultracode: exceptional work or after proper Sonnet and
-     Opus attempts.
-   - GPT-5.6 Sol: complex engineering, long-context implementation,
-     difficult audits, and independent review.
-   - Kimi K3: reference-driven frontend only after a bake-off.
-   - Gemini/Antigravity: exploratory browser QA only.
-4. If this is the wrong model, name the correct model and stop until the
-   human confirms the switch. If it is correct, state that and proceed.
+3. Give the three-part verdict — MODEL / EFFORT / MODE — each named exactly,
+   plus a one-line why. Never leave any of the three vague.
+   - MODEL — Sonnet 5: routine work. Opus 4.8: architecture, many-file
+     changes, or a bug surviving two proper Sonnet attempts. Fable 5:
+     exceptional work or after proper Sonnet and Opus attempts.
+     GPT-5.6 Sol: complex engineering, long-context implementation,
+     difficult audits, and independent review. Kimi K3: reference-driven
+     frontend only after a bake-off. Gemini/Antigravity: exploratory
+     browser QA only.
+   - EFFORT — low / medium / high / max-ultracode; the lowest that
+     reliably works. Do not raise effort for a vague prompt.
+   - MODE — PLAN, ASK-each-time, or AUTO-accept (see Approval and auto-edit
+     below). Never bypass-permissions / full-auto, on any track.
+4. If the current model, effort, and mode all match, say so and proceed.
+   If any is wrong, name the correct MODEL / EFFORT / MODE and stop until
+   the human confirms the switch. If the human does not switch, on the next
+   message ask why and re-encourage the switch before doing anything else;
+   only proceed unmatched on an explicit one-time "just use this."
 5. Run `git status`; confirm the branch and preserve unrelated changes.
 6. Restate the task boundary, acceptance criteria, and required checks.
+7. When writing a prompt for the human to copy and reuse, always put it in a
+   fenced code block, never plain paragraph text.
 
 ## Collaboration rhythm
 
@@ -2921,15 +2958,20 @@ Claude-based agents, and other repository agents.
 Read `/docs/PLAYBOOK.md` and `/docs/PROJECT_STATUS.md` first. Read only
 the other project documents relevant to the current task.
 
-Before every task, give a 1–2 sentence exact model recommendation.
-Default to Sonnet 5 for routine work; Opus 4.8 high for architecture,
+Before acting on any prompt, give a three-part verdict — MODEL / EFFORT /
+MODE — each named exactly, plus a one-line why. Never leave any vague.
+MODEL: Sonnet 5 for routine work; Opus 4.8 high for architecture,
 many-file changes, or a bug surviving two proper Sonnet attempts;
 Fable 5 max/ultracode only for exceptional work or after proper Sonnet
 and Opus attempts; GPT-5.6 Sol for complex engineering, long-context
 implementation, hard audits, and independent review; Kimi K3 for
 reference-driven frontend only after a bake-off; Gemini/Antigravity for
-exploratory browser QA only. If the active model is wrong, name the
-correct one and stop until the human confirms the switch.
+exploratory browser QA only.
+EFFORT: low / medium / high / max-ultracode — the lowest that reliably works.
+MODE: PLAN, ASK-each-time, or AUTO-accept; never bypass/full-auto on any track.
+If any of the three is wrong, name the correct one and stop until the human
+confirms the switch. If they do not switch, next message ask why and
+re-encourage before proceeding. Copyable prompts always go in a code block.
 
 Then:
 
@@ -2954,6 +2996,37 @@ Before a consequential or unfamiliar action, explain the exact action,
 affected files, external/secret access, validation, and rollback, then
 wait for approval. Ask separately before commit and push.
 ```
+
+### `.claude/settings.json` — golden-rule enforcement hooks
+
+`[PERSONAL RULE]` Add this in each new project so the golden rule (Section 4) is re-injected on every prompt, not just read once at the start of a session. A rule that lives only in `CLAUDE.md` can silently drop out of a long conversation; these hooks prevent that. Two reminders fire on every prompt: one for the three-part verdict itself, and one for the "stop completely on a mismatch" rule — the second exists because the agent once flagged a model mismatch and then answered the question anyway, which defeats the point. If `.claude/settings.json` already exists, merge the `hooks` key in rather than overwriting the file.
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"Golden rule reminder: before acting on this prompt, state your MODEL / EFFORT / MODE verdict per the golden rule in CLAUDE.md - this applies to every prompt, including pure discussion, with no exceptions.\"}}'"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"Model-mismatch reminder: if your MODEL / EFFORT / MODE verdict does not match what is currently active, stop completely - do not answer the prompt itself, only give the verdict and wait for the human to switch or explicitly say just use this model.\"}}'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Honest limit: the hooks re-inject their reminders every turn, which makes forgetting far harder — but they do not physically force the response. The agent still has to act on the reminder. If the agent ever skips the verdict, or answers anyway after flagging a mismatch, that is a real lapse worth flagging, not a silent mechanism failure. In tools other than Claude Code (for example Codex), the rule text in `AGENTS.md` still applies as a soft instruction; whether that tool has an equivalent per-prompt hook is tool-specific — check its own settings. Some tools offer to migrate Claude Code hooks automatically; test with a trivial prompt afterward to confirm it fires.
 
 ### `/docs/PROJECT_STATUS.md`
 
@@ -3325,6 +3398,17 @@ Use official primary sources. Do not make model, plan, price, feature, compatibi
 
 ### Changelog
 
+#### 0.9.1 — 24 July 2026 — post-review restoration
+
+- Applied the confirmed findings of the Fable 5 specialist review.
+- Restored the founder's full golden rule: the per-task verdict is now the three-part **MODEL / EFFORT / MODE** (not model only), with the if-you-don't-switch protocol and the copyable-prompts-in-code-blocks rule; the same three-part verdict now appears in the `CLAUDE.md` and `AGENTS.md` templates.
+- Restored the practice-track auto-checkpoint habit as a `PERSONAL RULE`, scoped to practice repos only, distinct from the strict client-track Git controls (correcting the 0.9 over-broad removal).
+- Restored the Fable budget (2 sessions per project) as a `PERSONAL RULE`, enforced in conversation.
+- Added a plain-English glossary (Section 25) covering the beginner Git/run/checks/hosting/AI/bug terms.
+- Added the `UserPromptSubmit` golden-rule enforcement hook to Phase 0 and the Section 21 templates.
+- Fixed cross-reference bugs: `/docs/PLAYBOOK.md` is derived from the master (not a Section 21 template); `CLAUDE.md`/`AGENTS.md`/the hook are now created in Phase 0 and listed in Section 6; the "master task" / "original source playbook" ghost references in Section 23 were removed.
+- Trimmed Section 23 from a mandatory four-model review pipeline to a short review-status + moratorium + freeze note, honouring the standing "build before reviewing again" moratorium.
+
 #### 0.9 — 24 July 2026 — review candidate
 
 - Replaced the walkthrough/progress-app concept with a single repository-native Markdown operating manual.
@@ -3343,7 +3427,7 @@ Use official primary sources. Do not make model, plan, price, feature, compatibi
 
 #### 1.0 — pending
 
-Freeze only after Section 23 reviews, corrections, consistency audit, and final human approval.
+Freeze after the human skims the Section 23 consistency self-audit, accepts or waives any open items, and — per the moratorium — has used this playbook on at least one real website.
 
 ### Retrospective and evidence loop
 
@@ -3395,50 +3479,32 @@ Adopt the change only when its scope and evidence justify it. Mark project-speci
 
 ---
 
-## 23. Specialist review pipeline
+## 23. Review status and freeze
 
-Use this pipeline to turn Version 0.9 into a defensible Version 1.0.
+### Review status
 
-### Review packet
+A specialist review of this candidate has already been done (a Fable 5 pass across internal consistency, regressions against the previous playbook, beginner fit, golden-rule alignment, and technical honesty). Its confirmed findings were applied: the three-part golden rule, the practice-track auto-checkpoint habit, the Fable budget, and cross-reference fixes were restored, and this pipeline was trimmed to match the founder's standing decision below.
 
-Every reviewer receives:
+### Do not run a multi-model review-of-reviews before shipping
 
-- the original source playbook;
-- this revised candidate;
-- the master task;
-- the consistency checklist below;
-- a request to cite exact sections and propose corrected replacement text;
-- a reminder not to redesign the product into an app.
+`[PERSONAL RULE]` A moratorium is in force: **no new tools, no more reviews-of-reviews, and no multi-vendor review pipeline until a real website has actually shipped through this playbook.** The founder has a documented pattern of polishing the system instead of building with it. One review has happened; the next step is to *use* this document on a real project, not to review it again. Treat the checklist below as a quick self-audit the human can skim before freezing 1.0 — not as a mandate to commission four more model reviews.
 
-### Required sequence
+### Freeze to Version 1.0
 
-1. **Fable 5 review:** provide the original source and revised candidate. Ask for contradictions, missing lifecycle steps, weak beginner guidance, and lost useful material.
-2. **GPT-5.6 Sol review:** audit engineering, Git safety, permissions, security, testing, CI, Cloudflare, accessibility, performance, and operational completeness.
-3. **Kimi K3 review:** restrict scope to frontend, animation, responsive implementation, reference fidelity, and visual-quality workflow.
-4. **Gemini/Antigravity simulation:** run a beginner/deadline workflow simulation and exploratory browser/tooling critique; treat it as supplementary.
-5. **Fable 5 reconciliation:** give Fable the revised candidate and all reviewer reports. Ask it to classify findings as accept/reject/needs human decision with reasons.
-6. **Fresh final editor:** in a new conversation, edit only from the source, candidate, evidence, and reconciled findings; avoid accumulated chat assumptions.
-7. **Verification:** accept only corrections that are reproduced, source-supported, internally consistent, and appropriate for the stated audience.
-8. **Freeze Version 1.0:** update version/date/changelog/source appendix, record reviewer names/models and human approval, and preserve the reviewed file.
-9. **Future evidence:** run the playbook on real projects and propose later changes through Section 22.
+Freeze after: the human skims the consistency checklist below, accepts any open items or records a waiver, and updates the version, date, and changelog. Real-project evidence then drives future changes through Section 22 — that is the only review that now matters.
 
-### Reviewer instructions
-
-- Do not grade prose style alone; trace instructions through the phases and templates.
-- Do not treat vendor marketing, public benchmarks, or another model’s confidence as proof.
-- Flag “required” rules that are really preferences.
-- Flag advice that assumes money, staff, accounts, reviewers, hardware, or services the solo beginner may not have.
-- Preserve the client safety floor.
-- Keep the final deliverable as one usable Markdown manual.
-
-### Mandatory consistency audit
+### Consistency self-audit (skim before freezing)
 
 Before Version 1.0, confirm:
 
 - `[ ]` The deliverable is one Markdown operating manual, not an interactive app.
 - `[ ]` No setup wizard, progress map, localStorage, coins, timer, celebration, gated navigation, or generated `index.html` remains.
-- `[ ]` Section order matches the master task.
+- `[ ]` Section order matches the table of contents in Section 0.
 - `[ ]` Table of contents links to every section.
+- `[ ]` The golden rule requires the three-part MODEL / EFFORT / MODE verdict, with the if-you-don't-switch protocol and the copyable-prompts-in-code-blocks rule.
+- `[ ]` A plain-English glossary is present (Section 21) and defines the beginner Git/CI/hosting terms.
+- `[ ]` The Fable budget (2 sessions per project) is present as a `PERSONAL RULE`.
+- `[ ]` The practice-track auto-checkpoint habit is present as a `PERSONAL RULE` and scoped to practice repos only.
 - `[ ]` Cloudflare is the default deployment platform without being presented as universal.
 - `[ ]` Cloudflare Pages and Workers/OpenNext are correctly distinguished.
 - `[ ]` Cloudflare is not described as a CodeRabbit replacement, and CodeRabbit remains optional.
@@ -3554,3 +3620,77 @@ This candidate does not preserve unsupported or fast-expiring claims from prior 
 - one animation library being universally incompatible with another.
 
 Future editors should add such a claim only when it is necessary, sourced, dated, scoped, and scheduled for reverification.
+
+---
+
+## 25. Plain-English glossary
+
+Plain-language definitions of the terms used in this playbook. You do not need to memorise these — when a term appears and you are unsure, look here. Nothing in the workflow assumes you already know them.
+
+### Git and GitHub
+
+- **Repository (repo):** the home of one project's code and its history. A local repo lives on your computer; a remote repo (on GitHub) is the shared online copy.
+- **Git:** the tool that records the history of your project so you can save points, go back, and see what changed. It is what makes "undo" possible.
+- **GitHub:** the website that hosts your remote repository and runs reviews, checks, and collaboration around it.
+- **Branch:** a separate line of work inside the repo where you can make changes without touching the "real" version. `main` is usually the real, live version.
+- **`main`:** the primary branch — the version that represents the real, current project. On client work it is protected so nothing changes it without review.
+- **Commit:** one saved point in the history, with a short message describing what changed. Think of it as a labelled save.
+- **Checkpoint:** an intentional commit made before or after a task specifically so you have a clean point to return to. (See the practice-track auto-checkpoint habit in Section 9.)
+- **Push:** send your local commits up to the remote repo on GitHub.
+- **Pull request (PR):** a proposal to merge one branch's changes into another (usually into `main`). It shows every changed line and is where reviews and checks happen before the change becomes real.
+- **Merge:** accept a pull request so its changes become part of the target branch.
+- **Revert:** undo a change by returning to an earlier saved state, rather than trying to patch the broken version.
+- **Diff:** the exact before-and-after view of what a change did — which lines were added, removed, or modified.
+- **`git status`:** a command that shows what has changed and which branch you are on. Agents inspect this before editing.
+- **`.gitignore`:** a list of files Git should never track (for example secrets, build output, and `node_modules`).
+- **Hotfix:** a small, urgent correction to a live production problem, made on its own branch straight from `main` and merged back afterward.
+- **Worktree:** a second working folder attached to the same repo, letting you work on another branch without disturbing your main folder. Used to isolate risky or parallel work.
+
+### Running the project
+
+- **Terminal:** the text window where you type commands. A handful of commands cover almost everything you need.
+- **Claude Code:** Claude working directly in your project — reading files, editing them, and running commands — rather than only chatting. It reads `CLAUDE.md` at the start of each session.
+- **Node / npm:** Node runs JavaScript outside a browser; npm installs and manages the packages (reusable code) a project depends on.
+- **Package / dependency:** reusable code your project pulls in instead of writing from scratch.
+- **Lockfile (e.g. `package-lock.json`):** a file that pins the exact versions of every dependency so every machine installs the same thing. "Frozen-lockfile" install means install exactly those versions, no surprises.
+- **Dev server / localhost:** your site running privately on your own computer while you build, usually at an address starting `localhost`.
+- **Build:** turning your source code into the finished files that actually get served to visitors.
+- **Scaffold:** the empty-but-working skeleton of a project — folders, config, and tooling — before any real pages exist.
+
+### Checks, testing, and review
+
+- **CI (Continuous Integration):** robots on GitHub that automatically run your checks (lint, types, tests, build) on every pull request. On the client track, `main` refuses to merge until they pass. This is the real gate.
+- **Lint:** an automated check for style and suspicious-pattern problems in code.
+- **Typecheck:** an automated check that the code's data types are used consistently, catching a class of bugs before the code runs.
+- **Playwright:** a tool that drives a real browser to test that your site's journeys actually work.
+- **axe-core / axe:** an automated accessibility checker. It finds only a subset of problems — a clean result is not proof of accessibility.
+- **Lighthouse:** a lab tool that measures things like performance in a controlled test. Its score is a diagnostic, not proof of real-user experience.
+- **Vertical slice:** one section or page built completely — real content, responsive, accessible, tested — to prove the approach before building everything else.
+- **Bake-off:** a small, fair, same-spec comparison of two models on one representative section, used only when visual quality materially matters.
+- **CodeRabbit:** an optional AI reviewer that comments on pull requests. Its comments are suggestions, not proof, and it does not replace CI or human review.
+
+### Hosting and web
+
+- **Cloudflare Pages:** hosting for static sites; connects to GitHub, and every non-production branch automatically gets a preview URL.
+- **Cloudflare Workers + OpenNext:** how a full-stack Next.js app runs on Cloudflare. Needs a compatibility check before you commit a client project to it.
+- **Cloudflare Access:** real login protection for preview URLs. An obscure link is not protection; Access is.
+- **Turnstile:** Cloudflare's CAPTCHA-alternative for forms. It only protects anything when the token is verified on the server, not just shown in the browser.
+- **Preview / staging / production:** the environments a project moves through — preview is for review, production is the live site real visitors use. Each keeps its own separate configuration and secrets.
+- **DNS:** the system that points your domain name at where the site is actually hosted.
+- **Rollback:** returning the live site to a previous known-good deployment when a change goes wrong.
+
+### AI, models, and tools
+
+- **Model:** which AI is doing the work (for example Sonnet 5, Opus 4.8, Fable 5). See the routing table in Section 4.
+- **Effort / reasoning:** how long a model thinks before answering. Higher effort helps genuinely hard problems but costs more; it does not fix a vague request.
+- **Mode:** how much freedom the agent has while working — PLAN (look only), ASK-each-time (approve every change), or AUTO-accept (applies edits itself within safe bounds). Full detail in Section 9.
+- **Kimi Code:** Moonshot's official command-line tool for running the Kimi K3 model — the supported route, and it runs in any terminal.
+- **Claude Security plugin:** an on-demand scanner you run in Claude Code (`/claude-security`). Its findings are suggestions to consider, not proof that the code is secure.
+- **Hook (UserPromptSubmit hook):** a small automatic action the tool runs on every message you send. This playbook uses one to re-inject the golden rule on every prompt, so the rule cannot silently drop out of a long conversation. Setup is in Section 21.
+
+### Common bug terms
+
+- **Hydration error:** a common framework bug where the page the server built and the page the browser built disagree.
+- **Reduced motion:** a setting some visitors turn on to limit animation; the site must respect it.
+- **RUM (Real-User Monitoring):** performance data collected from actual visitors, as opposed to a lab test.
+- **LCP / INP / CLS (Core Web Vitals):** three field measurements of real-user experience — roughly, how fast the main content loads, how responsive the page feels to interaction, and how much the layout unexpectedly shifts.
