@@ -1434,11 +1434,14 @@ Plan and bounded asset/document edits. Ask before generating paid assets, using 
 - Preserve exact brand assets; never redraw a supplied logo casually.
 - Identify asset gaps and rights/format/performance risks.
 - Produce structured tokens and component/state inventory.
+- `[REQUIRED]` If a reference link cannot be rendered by the agent's own tools (fails to load, hangs, times out, or crashes the browser tool), never guess, never quietly skip it, and never write it up from an incomplete render. Report exactly which link failed and ask the human for a screen recording of the specific site or section instead — see the failure path below. A reference the agent cannot actually see is not a reference it can build from.
 
 **Exact sequence**
 
 1. Run the Golden Model-Routing Rule.
 2. Freeze the approved reference set in `/docs/references/`.
+   - If any reference is a live link, the agent attempts to render and screenshot it directly. If it fails after a reasonable retry (reload once, allow extra load time), the agent stops trying and reports the exact URL(s) that failed and why (e.g. "did not finish loading," "crashed the browser tool"), then asks: *"I can't render this reference myself — heavy animated/3D sites sometimes fail in automated browsing even though they work fine in your own browser. Could you send a short screen recording of [the specific site/section you liked]? I'll inspect it frame by frame."* The agent then reviews the supplied recording at key moments (not just the first frame) to extract the actual layout, timing, and motion detail — with the same rigor as a working screenshot — before writing it into `DESIGN.md`.
+   - This is a tooling limitation, not a signal that the reference is unimportant — do not substitute a similar-looking site or describe the effect from memory/assumption instead of what was actually captured.
 3. Annotate hierarchy, grid, rhythm, density, typography, imagery, color, texture, lighting, and motion—not just mood.
 4. Finalize or clearly stage content; map it to routes.
 5. Define design tokens and responsive behavior.
@@ -1469,7 +1472,8 @@ Plan and bounded asset/document edits. Ask before generating paid assets, using 
 - official logos and supplied artwork remain exact;
 - mobile and desktop hierarchy work with real content;
 - focus and reduced-motion treatments are represented;
-- no important design depends only on bloom, hover, sound, or color.
+- no important design depends only on bloom, hover, sound, or color;
+- every reference the agent could not render was explicitly named to the human, not silently dropped or approximated.
 
 **Completion gate**
 
