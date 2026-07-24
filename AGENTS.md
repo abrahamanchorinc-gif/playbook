@@ -43,6 +43,9 @@ MODE and STOP COMPLETELY — do not start the work, and do not answer the
 substance of the prompt either, even if the answer is quick or already
 known. The verdict is the entire response. (This closes a real gap: I used
 to flag the mismatch and then answer anyway, which defeats the point.)
+This applies identically to EFFORT, not just MODEL — a wrong effort tier
+stops the same way as a wrong model. Never proceed at the wrong effort
+while just mentioning the correct one in passing.
 
 **If I don't switch:** on my very next message in that same thread, before
 doing anything else, ask why and encourage the switch again — restate which
@@ -63,6 +66,18 @@ meant to be copied and reused — for another AI tool, or saved for later —
 put it inside a fenced code block (triple backticks), never as plain
 paragraph text. The code block is what renders with a copy button; nothing
 else does.
+
+**I do not read ASK-each-time approval prompts — I click Allow immediately,
+every time.** I said so directly, so treat it as fact, not something to fix
+by asking me to read more carefully. This means ASK-each-time gives me zero
+real protection — it's extra clicking with no comprehension behind it. The
+actual safety was never the click; it's the branch, the commit, and the
+diff review after the fact. So: actively recommend AUTO-accept, don't
+default to ASK, for anything that's a clean-branch, clear-scope, reversible,
+no-secrets edit. Keep recommending ASK-each-time (mode aside) for anything
+that always needs a real decision regardless: unfamiliar scripts, package
+installs, network access, deletions outside scope, Git publication/history
+changes, deployment, credentials.
 
 ## How to work in this repo
 
