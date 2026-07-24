@@ -1,6 +1,6 @@
 # The AI-Assisted Web Project Playbook
 
-**Version:** 0.9.1 post-review restoration
+**Version:** 0.9.2 Phase 3 stack-choice discipline
 
 **Last updated:** 24 July 2026
 
@@ -1527,7 +1527,8 @@ Plan, then bounded edit. Ask before dependency installation, remote service crea
 
 **Agent responsibilities**
 
-- Compare plain HTML, Astro, Next.js, and CMS options against actual requirements.
+- `[REQUIRED]` Drive the stack recommendation from a technical read of `DESIGN.md`, not a generic heuristic. Identify the **single hardest thing to build** in the approved design — usually the signature motion/3D moment or the most demanding interaction — and name, concretely, what it actually takes to recreate that specific reference at real quality (e.g. "the reference's curved, reflective rotating image drum is real WebGL, so the stack must host a Three.js scene comfortably"). A shortcut like "it's one page, so make it static" is not a valid basis for the choice; it must survive the hardest-effect test. Then pick the smallest stack that can deliver that hardest thing *and* everything else, and say plainly why the rejected options would make the hardest thing worse or harder.
+- Compare plain HTML, Astro, Next.js, and CMS options against actual requirements — measured first against the hardest effect above.
 - Record the chosen rendering and data model.
 - Scaffold only what is needed.
 - Configure deterministic checks and a deploy spike.
@@ -1535,7 +1536,7 @@ Plan, then bounded edit. Ask before dependency installation, remote service crea
 **Exact sequence**
 
 1. Run the Golden Model-Routing Rule.
-2. Write the architecture decision and rejected alternatives.
+2. Write the architecture decision and rejected alternatives — leading with the hardest-effect analysis from Agent responsibilities above (name the hardest thing in `DESIGN.md`, what recreating it actually demands, and why the chosen stack serves it better than the rejected ones).
 3. Pin runtime/package-manager expectations and generate the scaffold.
 4. Establish tokens, global semantics, layout primitives, error boundaries/states, and asset conventions.
 5. Add lint, typecheck, tests, build scripts, accessibility automation, and browser-test foundation appropriate to the stack.
@@ -3460,6 +3461,10 @@ Every release records:
 Use official primary sources. Do not make model, plan, price, feature, compatibility, or limit claims from memory.
 
 ### Changelog
+
+#### 0.9.2 — 24 July 2026 — Phase 3 stack-choice discipline
+
+- Phase 3 now `[REQUIRED]`: the stack recommendation must be driven by a technical read of `DESIGN.md`, tested against the single hardest effect to build (usually the signature 3D/motion moment). "It's one page, so make it static" is explicitly not a valid basis for the choice. Surfaced while running the playbook on the `new-project1` practice site, where the hardest effect (a curved, reflective rotating image drum) demanded a WebGL-capable stack, not a generic static heuristic.
 
 #### 0.9.1 — 24 July 2026 — post-review restoration
 
