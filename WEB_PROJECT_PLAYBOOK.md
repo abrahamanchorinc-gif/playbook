@@ -175,6 +175,29 @@ or perform a destructive action without the permission required by the
 playbook. Update PROJECT_STATUS.md with verified evidence before handoff.
 ```
 
+### The quality bar
+
+`[REQUIRED]` The mechanisms that enforce quality live in several sections (design direction, the bake-off, Phase 4's vertical slice, Phase 8 hardening). This is the same bar, gathered in one place to check against at the vertical slice and again before launch — not a new rule, a checklist of the ones that already exist.
+
+**Design is grounded, not vague:**
+- [ ] The look is defined by 3–5 specific real reference sites (or specific sections of them), not an adjective ("premium," "modern") or a trend name ("the vibe-coding look").
+- [ ] Every visual decision in `DESIGN.md` is measurable — a typography scale, a spacing rhythm, a named color, a described motion — not a mood word alone.
+
+**The vertical slice actually proved it (Phase 4):**
+- [ ] You compared the built slice against the reference yourself, at matched viewport/content/state — not from a screenshot someone else approved.
+- [ ] Concrete differences were named and fixed (composition, typography, spacing, color, motion) — not waved off as "close enough."
+- [ ] It was tested on a real phone, not just resized in a desktop browser.
+
+**It performs and works, not just looks right in a screenshot:**
+- [ ] Keyboard-only navigation reaches and operates everything.
+- [ ] `prefers-reduced-motion` is respected and the experience is still complete with motion off.
+- [ ] Lighthouse mobile performance and the project's stated budget are met — understood as lab evidence, not proof of real-user experience (Section 17).
+- [ ] WCAG 2.2 AA automated (axe) and manual checks both pass (Section 13) — a clean automated scan alone is not the bar.
+- [ ] Forms and any real interactions actually work end to end, not just visually.
+- [ ] No unexplained console or network errors.
+
+**Honest check, not a popularity contest:** looking impressive in a short clip or matching whatever style is trending is not on this list, and is not a substitute for it. A site can look extraordinary and fail every item above; that is not this playbook's bar.
+
 ### Beginner defaults
 
 - One meaningful task at a time.
@@ -365,6 +388,8 @@ Supply screenshots or links and explain exactly what you like:
 - “I like the warm material treatment and restrained motion.”
 
 Avoid only saying “make it pop” or “make it premium.”
+
+`[REQUIRED]` **A trend name is not a reference.** "The animated/3D/vibe-coding look people share on X or Reddit" is a category, not something a model can build toward — it fails the same rule as "premium" or "modern," just dressed up as current. That genre is also already homogeneous enough that asking for "the vibe" tends to produce the generic average of it, which is the opposite of what references are for. If that visual direction genuinely appeals to you — animated, immersive, 3D, scroll-driven — it is fully supported (Phase 6, Section 14); the requirement is the same as for any other direction: name 3–5 **specific real sites**, screenshot the **specific moments** you want (one scroll reveal, one camera move — not "the vibe"), and hold the result to the full quality bar below, not just how it looks in a ten-second clip. A lot of what goes viral in that style is optimized for looking impressive briefly, not for working on a real phone, staying keyboard-accessible, or submitting a form — those remain non-negotiable regardless of how popular the aesthetic is.
 
 #### Step 6 — Scaffold safely
 
